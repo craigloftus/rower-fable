@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { mat, makeLimb, setLimb, ik2, clamp, rng } from './util.js';
+import { jitterGeo } from './scenery.js';
 import { G } from './stroke.js';
 
 const COL = {
@@ -95,31 +96,50 @@ function ringsMesh(parent, rings, material, jitter = 0) {
 // ----------------------------------------------------------------- head ----
 // loops from chin to crown carve the jaw, cheekbones, brow ledge and skull
 const HEAD_RINGS = [
-  { y: 0.054, xF: -0.040, xB: 0.028, w: 0.020 },  // under the chin
-  { y: 0.072, xF: -0.068, xB: 0.058, w: 0.050 },  // jaw line
-  { y: 0.108, xF: -0.068, xB: 0.084, w: 0.066 },  // mouth / lower cheeks
-  { y: 0.144, xF: -0.065, xB: 0.096, w: 0.079 },  // cheekbones
-  { y: 0.176, xF: -0.072, xB: 0.098, w: 0.076 },  // brow ledge
-  { y: 0.210, xF: -0.059, xB: 0.094, w: 0.070 },  // forehead
-  { y: 0.240, xF: -0.028, xB: 0.068, w: 0.048 },  // crown
-  { y: 0.254, xF: 0.002, xB: 0.036, w: 0.020 },   // apex
+  { y: 0.054, xF: -0.042, xB: 0.028, w: 0.022 },  // under the chin
+  { y: 0.070, xF: -0.070, xB: 0.058, w: 0.052 },  // jaw line
+  { y: 0.102, xF: -0.070, xB: 0.084, w: 0.068 },  // mouth / lower cheeks
+  { y: 0.138, xF: -0.066, xB: 0.096, w: 0.082 },  // cheekbones
+  { y: 0.162, xF: -0.061, xB: 0.098, w: 0.080 },  // eye line, recessed socket
+  { y: 0.186, xF: -0.080, xB: 0.098, w: 0.078 },  // brow ledge overhang
+  { y: 0.216, xF: -0.066, xB: 0.094, w: 0.071 },  // forehead
+  { y: 0.244, xF: -0.030, xB: 0.068, w: 0.048 },  // crown
+  { y: 0.258, xF: 0.002, xB: 0.036, w: 0.020 },   // apex
 ];
 
-// angular swept-back hair shell sitting just proud of the skull
+// hair: a close-fitting base cap; chunky swept strands are added on top
 const HAIR_RINGS = [
-  { y: 0.132, xF: -0.024, xB: 0.112, w: 0.088 },  // down over the ears
-  { y: 0.202, xF: -0.078, xB: 0.112, w: 0.086 },  // fringe above the brow
-  { y: 0.242, xF: -0.058, xB: 0.106, w: 0.075 },
-  { y: 0.284, xF: -0.004, xB: 0.066, w: 0.040 },
+  { y: 0.140, xF: -0.020, xB: 0.114, w: 0.090 },  // down over the ears
+  { y: 0.208, xF: -0.076, xB: 0.114, w: 0.086 },  // fringe above the brow
+  { y: 0.250, xF: -0.058, xB: 0.106, w: 0.074 },
+  { y: 0.286, xF: -0.004, xB: 0.066, w: 0.040 },
+];
+
+// angular tufts laid over the cap give the irregular low-poly silhouette:
+// a quiff swept up off the brow, side sweeps, and a mass feeding the bun
+const HAIR_TUFTS = [
+  // [x, y, z,  sx, sy, sz,  rx, ry, rz]
+  [-0.055, 0.262, 0.014, 0.052, 0.034, 0.046, 0.2, 0.3, 0.5],
+  [-0.062, 0.240, -0.030, 0.046, 0.030, 0.042, -0.3, -0.4, 0.6],
+  [-0.012, 0.282, -0.008, 0.058, 0.034, 0.054, 0.1, 1.1, 0.15],
+  [0.020, 0.276, 0.040, 0.048, 0.030, 0.044, 0.5, 0.6, -0.2],
+  [0.030, 0.272, -0.044, 0.050, 0.028, 0.046, -0.4, 0.2, -0.25],
+  [-0.044, 0.184, 0.080, 0.034, 0.050, 0.030, 0.2, 0.4, 0.3],   // temple sweep
+  [-0.044, 0.184, -0.080, 0.034, 0.050, 0.030, -0.2, -0.4, 0.3],
+  [-0.060, 0.222, 0.052, 0.034, 0.026, 0.032, 0.3, 0.5, 0.4],   // fringe corners
+  [-0.060, 0.222, -0.052, 0.034, 0.026, 0.032, -0.3, -0.5, 0.4],
+  [0.082, 0.252, 0.030, 0.052, 0.034, 0.050, 0.3, -0.5, -0.3],  // back mass
+  [0.086, 0.248, -0.036, 0.050, 0.032, 0.048, -0.3, 0.7, 0.2],
+  [0.108, 0.226, 0.000, 0.044, 0.036, 0.044, 0.1, 0.9, -0.4],
 ];
 
 function makeNose(parent, material) {
   const v = {
-    bridge: [-0.067, 0.186, 0],
-    bL: [-0.058, 0.182, 0.014], bR: [-0.058, 0.182, -0.014],
-    tip: [-0.099, 0.124, 0],
-    baL: [-0.054, 0.106, 0.018], baR: [-0.054, 0.106, -0.018],
-    base: [-0.062, 0.102, 0],
+    bridge: [-0.076, 0.184, 0],
+    bL: [-0.062, 0.178, 0.016], bR: [-0.062, 0.178, -0.016],
+    tip: [-0.104, 0.120, 0],
+    baL: [-0.056, 0.102, 0.020], baR: [-0.056, 0.102, -0.020],
+    base: [-0.064, 0.098, 0],
   };
   const pos = [];
   const tri = (a, b, c) => pos.push(...v[a], ...v[b], ...v[c]);
@@ -145,9 +165,10 @@ const LOWER_RINGS = [
 ];
 const CHEST_RINGS = [
   { y: 0.000, xF: -0.098, xB: 0.098, w: 0.148 },  // joins the lower torso
-  { y: 0.120, xF: -0.108, xB: 0.106, w: 0.172 },  // chest
-  { y: 0.230, xF: -0.092, xB: 0.094, w: 0.184 },  // shoulder line
-  { y: 0.305, xF: -0.054, xB: 0.058, w: 0.082 },  // trapezius slope to neck
+  { y: 0.115, xF: -0.108, xB: 0.106, w: 0.176 },  // chest
+  { y: 0.225, xF: -0.094, xB: 0.096, w: 0.190 },  // shoulder line
+  { y: 0.272, xF: -0.078, xB: 0.082, w: 0.142 },  // trapezius mass
+  { y: 0.312, xF: -0.048, xB: 0.054, w: 0.072 },  // neck base
 ];
 
 export class Rower {
@@ -187,33 +208,48 @@ export class Rower {
     this.headG = new THREE.Group();
     this.headG.position.y = 0.30;
     this.chestG.add(this.headG);
-    const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.060, 0.11, 7), skin);
-    neck.position.y = 0.030;
+    // collar at the neck base
+    const collar = new THREE.Mesh(new THREE.CylinderGeometry(0.072, 0.082, 0.034, 8), mat(0xd6ccb2));
+    collar.position.y = 0.318;
+    this.chestG.add(collar);
+
+    const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.050, 0.064, 0.09, 7), skin);
+    neck.position.y = 0.025;
     this.headG.add(neck);
 
     ringsMesh(this.headG, HEAD_RINGS, skin, 0.006);
     makeNose(this.headG, skin);
     ringsMesh(this.headG, HAIR_RINGS, hairM, 0.010);
+    // chunky strands over the cap
+    const tuftR = rng(909);
+    for (const [x, y, z, sx, sy, sz, rx, ry, rz] of HAIR_TUFTS) {
+      const tuft = new THREE.Mesh(jitterGeo(new THREE.IcosahedronGeometry(1, 0), tuftR, 0.35), hairM);
+      tuft.scale.set(sx, sy, sz);
+      tuft.position.set(x, y, z);
+      tuft.rotation.set(rx, ry, rz);
+      this.headG.add(tuft);
+    }
     // bun at the back
-    const bun = new THREE.Mesh(new THREE.IcosahedronGeometry(0.042, 0), hairM);
-    bun.position.set(0.118, 0.212, 0);
+    const bun = new THREE.Mesh(new THREE.IcosahedronGeometry(0.044, 0), hairM);
+    bun.position.set(0.126, 0.216, 0);
     this.headG.add(bun);
     const wisp = new THREE.Mesh(new THREE.IcosahedronGeometry(0.024, 0), hairM);
-    wisp.position.set(0.124, 0.166, 0);
+    wisp.position.set(0.130, 0.168, 0);
     this.headG.add(wisp);
 
-    // eyes, brows and a hint of mouth
+    // eyes set into the sockets under the brow, heavier brows, mouth hint
     for (const s of [-1, 1]) {
-      const eye = new THREE.Mesh(new THREE.SphereGeometry(0.0105, 5, 4), mat(COL.dark, { roughness: 0.4 }));
-      eye.position.set(-0.0635, 0.160, s * 0.033);
+      const eye = new THREE.Mesh(new THREE.SphereGeometry(0.0130, 6, 5), mat(COL.dark, { roughness: 0.35 }));
+      eye.position.set(-0.0560, 0.162, s * 0.034);
       this.headG.add(eye);
-      const brow = new THREE.Mesh(new THREE.BoxGeometry(0.010, 0.0075, 0.036), mat(0xa07b3e));
-      brow.position.set(-0.0685, 0.183, s * 0.034);
-      brow.rotation.x = s * 0.14;
+      const brow = new THREE.Mesh(new THREE.BoxGeometry(0.011, 0.009, 0.031), mat(0x8a6a36));
+      brow.position.set(-0.0745, 0.190, s * 0.030);
+      brow.rotation.x = s * 0.10;
+      brow.rotation.y = -s * 0.15;
       this.headG.add(brow);
     }
-    const mouth = new THREE.Mesh(new THREE.BoxGeometry(0.006, 0.004, 0.028), mat(COL.skinShade));
-    mouth.position.set(-0.066, 0.084, 0);
+    const mouth = new THREE.Mesh(new THREE.BoxGeometry(0.006, 0.0045, 0.030), mat(COL.skinShade));
+    mouth.position.set(-0.0665, 0.080, 0);
     this.headG.add(mouth);
 
     // limbs (stretched between IK joints every frame)
