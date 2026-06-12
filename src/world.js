@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import { mat, rng, lerp } from './util.js';
 
 export const FOG_COLOR = 0xdfe5d4;
@@ -102,6 +103,11 @@ function makeSky(scene) {
 
 // ------------------------------------------------------------- scenery -----
 function jitterGeo(geo, r, amt) {
+  // polyhedron/cone geometries duplicate vertices per face; weld them first
+  // so the jitter moves shared corners together instead of tearing the mesh
+  geo.deleteAttribute('normal');
+  geo.deleteAttribute('uv');
+  geo = mergeVertices(geo);
   const pos = geo.attributes.position;
   for (let i = 0; i < pos.count; i++) {
     pos.setXYZ(i,
@@ -140,6 +146,14 @@ function makeTile(variant) {
   const g = new THREE.Group();
 
   for (const s of [-1, 1]) {
+    // continuous ground bands behind the mounds so gaps between them read
+    // as land rather than water or sky
+    const bank = new THREE.Mesh(new THREE.BoxGeometry(TILE, 3, 70), mat(0x84ad62));
+    bank.position.set(0, -1.25, s * 79);
+    g.add(bank);
+    const back = new THREE.Mesh(new THREE.BoxGeometry(TILE, 6, 110), mat(0x648f55));
+    back.position.set(0, -2.0, s * 158);
+    g.add(back);
     // grassy bank mounds
     for (let i = 0; i < 7; i++) {
       const mound = new THREE.Mesh(

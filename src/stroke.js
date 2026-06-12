@@ -10,16 +10,17 @@ export const G = {
   leanFinish: -0.36,  // layback
   oarCatch: 0.99,     // oar sweep angle, + = blade toward bow
   oarFinish: -0.62,
-  pinX: 0.05, pinY: 0.30, pinZ: 0.80,   // oarlock pin
+  oarRest: -0.12,     // hands-away angle, handles in front of the body at rest
+  pinX: 0.05, pinY: 0.345, pinZ: 0.80,  // oarlock pin
   inboard: 0.86, outboard: 2.03,        // scull dimensions either side of pin
   bladeDrive: -0.075, // blade height in the water during the drive
-  bladeRec: 0.26,     // blade height on the recovery
+  bladeRec: 0.16,     // blade skims just clear of the water on the recovery
   driveDur: 0.85,
   recDur: 1.65,
   restPoint: 0.24,    // recovery fraction where the rower pauses, "easy oars"
   hipY: 0.40,
-  ankle: { x: -0.50, y: 0.215, z: 0.115 },
-  thigh: 0.46, shin: 0.44,
+  ankle: { x: -0.47, y: 0.215, z: 0.115 },
+  thigh: 0.44, shin: 0.43,
   upperArm: 0.30, foreArm: 0.32,
 };
 
@@ -83,7 +84,8 @@ export class Stroke {
     let seat, lean, oar, blade, feather, thrust;
     if (this.mode === 'drive') {
       const d = this.p;
-      seat = lerp(g.seatCatch, g.seatFinish, smooth(0.0, 0.80, d));
+      // legs finish early so the hands sweep back over knees already down
+      seat = lerp(g.seatCatch, g.seatFinish, smooth(0.0, 0.62, d));
       lean = lerp(g.leanCatch, g.leanFinish, smooth(0.20, 0.97, d));
       oar = lerp(g.oarCatch, g.oarFinish, easeSin(d));
       blade = lerp(-0.02, g.bladeDrive, smooth(0, 0.12, d));
@@ -91,9 +93,13 @@ export class Stroke {
       thrust = Math.pow(Math.sin(Math.PI * Math.min(d * 1.05, 1)), 1.15);
     } else {
       const r = this.p;
-      seat = lerp(g.seatFinish, g.seatCatch, smooth(0.38, 0.96, r));
-      lean = lerp(g.leanFinish, g.leanCatch, smooth(0.12, 0.62, r));
-      oar = lerp(g.oarFinish, g.oarCatch, easeSin(smooth(0.06, 0.93, r)));
+      // hands away first, then body over, then slide -- the seat (and the
+      // knees with it) only moves once the handles have cleared the legs
+      seat = lerp(g.seatFinish, g.seatCatch, smooth(0.50, 0.97, r));
+      lean = lerp(g.leanFinish, g.leanCatch, smooth(0.05, 0.45, r));
+      const away = smooth(0.02, 0.22, r);
+      oar = lerp(lerp(g.oarFinish, g.oarRest, away), g.oarCatch,
+        easeSin(smooth(0.28, 0.93, r)));
       const out = smooth(0, 0.08, r);     // extraction
       const drop = smooth(0.94, 1, r);    // blade entry at the catch
       blade = lerp(lerp(g.bladeDrive, g.bladeRec, out), -0.02, drop);

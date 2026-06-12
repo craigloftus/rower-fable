@@ -100,19 +100,20 @@ function makeSeatAndStretcher(group) {
   }
   group.add(seat);
 
-  // foot stretcher: angled board + fixed shoes (the rower's feet)
+  // foot stretcher: the board's top leans away from the rower (sternward),
+  // soles toward them; shoes lie flush on the board face, toes up
   const st = new THREE.Group();
-  const board = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.30, 0.34), mat(COL.wood));
-  board.position.set(-0.52, 0.19, 0);
-  board.rotation.z = -0.65;
+  const board = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.24, 0.30), mat(COL.wood));
+  board.position.set(-0.56, 0.21, 0);
+  board.rotation.z = 0.65;
   st.add(board);
   const beam = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.06, 0.30), mat(COL.gunwale));
-  beam.position.set(-0.44, 0.21, 0);
+  beam.position.set(-0.48, 0.20, 0);
   st.add(beam);
   for (const s of [-1, 1]) {
     const shoe = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.055, 0.085), mat(0x6b4a33));
-    shoe.position.set(G.ankle.x - 0.045, G.ankle.y - 0.02, s * G.ankle.z);
-    shoe.rotation.z = -0.65;
+    shoe.position.set(G.ankle.x - 0.062, G.ankle.y + 0.016, s * G.ankle.z);
+    shoe.rotation.z = -(Math.PI / 2 - 0.65);
     st.add(shoe);
   }
   group.add(st);

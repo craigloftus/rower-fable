@@ -122,7 +122,7 @@ export class Rower {
       const hand = side > 0 ? handL : handR;
 
       // legs: hip on the seat, ankle strapped into the stretcher shoes
-      _hip.set(seatX - 0.03, G.hipY - 0.02, side * 0.095);
+      _hip.set(seatX - 0.03, G.hipY - 0.02, side * 0.105);
       _ankle.set(G.ankle.x, G.ankle.y, side * G.ankle.z);
       ik2(_hip, _ankle, G.thigh, G.shin, POLE_UP, _knee, _foot);
       setLimb(this.parts['thigh' + k], _hip, _knee);
