@@ -1,17 +1,17 @@
 import * as THREE from 'three';
-import { mat, makeLimb, setLimb, ik2, clamp, rng } from './util.js';
-import { jitterGeo } from './scenery.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { ik2, clamp } from './util.js';
 import { G } from './stroke.js';
 
-const COL = {
-  skin: 0xd9a878,
-  skinShade: 0xb9855f,
-  shirt: 0xe6deca,
-  trouser: 0x6e6553,
-  hair: 0xc9a14e,
-  belt: 0x5a4632,
-  dark: 0x3a352c,
-};
+// The rower is Quaternius' CC0 "Casual" modular woman (quaternius.com),
+// posed every frame by retargeting our stroke IK onto her skeleton:
+// spine bones take lean/hunch, arms and legs are aimed at the same oar
+// handle / foot stretcher targets the procedural figure used.
+
+const HIP_Y = 0.395;          // upper-leg joints sit here when seated
+const LEG_REACH = 0.875;      // scale the model so thigh+shin match the boat
+const HAND_LEN = 0.075;       // grip length beyond the wrist
+const FOOT_PITCH = -0.88;     // toes-up tilt against the stretcher
 
 const _hip = new THREE.Vector3();
 const _ankle = new THREE.Vector3();
@@ -21,294 +21,227 @@ const _sh = new THREE.Vector3();
 const _elbow = new THREE.Vector3();
 const _handEnd = new THREE.Vector3();
 const _pole = new THREE.Vector3();
-const _armDir = new THREE.Vector3();
-const UP = new THREE.Vector3(0, 1, 0);
+const _v = new THREE.Vector3();
+const _dw = new THREE.Vector3();
+const _bend = new THREE.Vector3();
+const _line = new THREE.Vector3();
+const _a = new THREE.Vector3();
+const _c = new THREE.Vector3();
+const _x = new THREE.Vector3();
+const _m0 = new THREE.Matrix4();
+const _mt = new THREE.Matrix4();
+const _qp = new THREE.Quaternion();
+const _qi = new THREE.Quaternion();
+const _dq = new THREE.Quaternion();
+const _qz = new THREE.Quaternion();
+const _qBoat = new THREE.Quaternion();
+const Z_AXIS = new THREE.Vector3(0, 0, 1);
 const POLE_UP = new THREE.Vector3(0.18, 1, 0).normalize();
-
-function ball(parent, r, material) {
-  const m = new THREE.Mesh(new THREE.IcosahedronGeometry(r, 1), material);
-  parent.add(m);
-  return m;
-}
-
-// ------------------------------------------------------- ring modelling ----
-// A body part is described by horizontal "edge loops" (front toward -X):
-// { y, xF (front), xB (back), w (half width) }. Each loop becomes 8 points
-// and consecutive loops are skinned with quads; flat shading does the rest.
-const ST_X = [0, 0.26, 0.55, 0.82, 1];   // front-to-back blend per station
-const ST_Z = [0, 0.80, 1, 0.86, 0];      // width factor per station
-
-function ringPoints(rg) {
-  const pts = [];
-  for (let i = 0; i < 8; i++) {
-    const st = i <= 4 ? i : 8 - i;
-    pts.push(new THREE.Vector3(
-      rg.xF + (rg.xB - rg.xF) * ST_X[st],
-      rg.y,
-      (i <= 4 ? 1 : -1) * rg.w * ST_Z[st]));
-  }
-  return pts;
-}
-
-function ringsMesh(parent, rings, material, jitter = 0) {
-  const loops = rings.map(ringPoints);
-  if (jitter) {
-    const r = rng(5511);
-    for (const lp of loops) {
-      for (let i = 0; i < 8; i++) {
-        // mirror the jitter so the face stays symmetric
-        if (i > 4) continue;
-        const dx = (r() - 0.5) * jitter, dy = (r() - 0.5) * jitter, dz = (r() - 0.5) * jitter;
-        lp[i].x += dx; lp[i].y += dy;
-        if (i > 0 && i < 4) {
-          lp[i].z += dz;
-          lp[8 - i].set(lp[i].x, lp[i].y, -lp[i].z);
-        }
-      }
-    }
-  }
-  const pos = [];
-  const tri = (a, b, c) => pos.push(a.x, a.y, a.z, b.x, b.y, b.z, c.x, c.y, c.z);
-  for (let rI = 0; rI < loops.length - 1; rI++) {
-    const lo = loops[rI], hi = loops[rI + 1];
-    for (let i = 0; i < 8; i++) {
-      const j = (i + 1) % 8;
-      tri(lo[i], lo[j], hi[j]);
-      tri(lo[i], hi[j], hi[i]);
-    }
-  }
-  // caps
-  const bot = loops[0], top = loops[loops.length - 1];
-  const bc = bot.reduce((v, p) => v.add(p), new THREE.Vector3()).multiplyScalar(1 / 8);
-  const tc = top.reduce((v, p) => v.add(p), new THREE.Vector3()).multiplyScalar(1 / 8);
-  for (let i = 0; i < 8; i++) {
-    const j = (i + 1) % 8;
-    tri(bot[j], bot[i], bc);
-    tri(top[i], top[j], tc);
-  }
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-  geo.computeVertexNormals();
-  const m = new THREE.Mesh(geo, material);
-  parent.add(m);
-  return m;
-}
-
-// ----------------------------------------------------------------- head ----
-// loops from chin to crown carve the jaw, cheekbones, brow ledge and skull
-const HEAD_RINGS = [
-  { y: 0.064, xF: -0.054, xB: 0.030, w: 0.031 },  // under the chin: short + square
-  { y: 0.080, xF: -0.073, xB: 0.058, w: 0.057 },  // jaw line
-  { y: 0.106, xF: -0.071, xB: 0.084, w: 0.070 },  // mouth / lower cheeks
-  { y: 0.138, xF: -0.066, xB: 0.096, w: 0.082 },  // cheekbones
-  { y: 0.162, xF: -0.061, xB: 0.098, w: 0.080 },  // eye line, recessed socket
-  { y: 0.186, xF: -0.080, xB: 0.098, w: 0.078 },  // brow ledge overhang
-  { y: 0.216, xF: -0.066, xB: 0.094, w: 0.071 },  // forehead
-  { y: 0.244, xF: -0.030, xB: 0.068, w: 0.048 },  // crown
-  { y: 0.258, xF: 0.002, xB: 0.036, w: 0.020 },   // apex
-];
-
-// hair: a close-fitting base cap; chunky swept strands are added on top
-const HAIR_RINGS = [
-  { y: 0.140, xF: -0.020, xB: 0.114, w: 0.090 },  // down over the ears
-  { y: 0.208, xF: -0.076, xB: 0.114, w: 0.086 },  // fringe above the brow
-  { y: 0.250, xF: -0.058, xB: 0.106, w: 0.074 },
-  { y: 0.286, xF: -0.004, xB: 0.066, w: 0.040 },
-];
-
-// angular tufts laid over the cap give the irregular low-poly silhouette:
-// a quiff swept up off the brow, side sweeps, and a mass feeding the bun
-const HAIR_TUFTS = [
-  // [x, y, z,  sx, sy, sz,  rx, ry, rz]
-  [-0.055, 0.262, 0.014, 0.052, 0.034, 0.046, 0.2, 0.3, 0.5],
-  [-0.062, 0.240, -0.030, 0.046, 0.030, 0.042, -0.3, -0.4, 0.6],
-  [-0.012, 0.282, -0.008, 0.058, 0.034, 0.054, 0.1, 1.1, 0.15],
-  [0.020, 0.276, 0.040, 0.048, 0.030, 0.044, 0.5, 0.6, -0.2],
-  [0.030, 0.272, -0.044, 0.050, 0.028, 0.046, -0.4, 0.2, -0.25],
-  [-0.044, 0.184, 0.080, 0.034, 0.050, 0.030, 0.2, 0.4, 0.3],   // temple sweep
-  [-0.044, 0.184, -0.080, 0.034, 0.050, 0.030, -0.2, -0.4, 0.3],
-  [-0.060, 0.222, 0.052, 0.034, 0.026, 0.032, 0.3, 0.5, 0.4],   // fringe corners
-  [-0.060, 0.222, -0.052, 0.034, 0.026, 0.032, -0.3, -0.5, 0.4],
-  [0.082, 0.252, 0.030, 0.052, 0.034, 0.050, 0.3, -0.5, -0.3],  // back mass
-  [0.086, 0.248, -0.036, 0.050, 0.032, 0.048, -0.3, 0.7, 0.2],
-  [0.108, 0.226, 0.000, 0.044, 0.036, 0.044, 0.1, 0.9, -0.4],
-];
-
-function makeNose(parent, material) {
-  const v = {
-    bridge: [-0.076, 0.184, 0],
-    bL: [-0.062, 0.178, 0.016], bR: [-0.062, 0.178, -0.016],
-    tip: [-0.104, 0.120, 0],
-    baL: [-0.056, 0.102, 0.020], baR: [-0.056, 0.102, -0.020],
-    base: [-0.064, 0.098, 0],
-  };
-  const pos = [];
-  const tri = (a, b, c) => pos.push(...v[a], ...v[b], ...v[c]);
-  tri('bridge', 'tip', 'bL');
-  tri('bridge', 'bR', 'tip');
-  tri('bL', 'tip', 'baL');
-  tri('bR', 'baR', 'tip');
-  tri('tip', 'base', 'baL');
-  tri('tip', 'baR', 'base');
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-  geo.computeVertexNormals();
-  const m = new THREE.Mesh(geo, material);
-  parent.add(m);
-  return m;
-}
-
-// ---------------------------------------------------------------- torso ----
-const LOWER_RINGS = [
-  { y: -0.005, xF: -0.104, xB: 0.104, w: 0.150 }, // hips at the belt
-  { y: 0.110, xF: -0.090, xB: 0.090, w: 0.128 },  // waist
-  { y: 0.270, xF: -0.099, xB: 0.099, w: 0.149 },  // lower ribs
-];
-const CHEST_RINGS = [
-  { y: 0.000, xF: -0.098, xB: 0.098, w: 0.148 },  // joins the lower torso
-  { y: 0.115, xF: -0.108, xB: 0.106, w: 0.176 },  // chest
-  { y: 0.225, xF: -0.094, xB: 0.096, w: 0.190 },  // shoulder line
-  { y: 0.272, xF: -0.078, xB: 0.082, w: 0.142 },  // trapezius mass
-  { y: 0.312, xF: -0.048, xB: 0.054, w: 0.072 },  // neck base
-];
 
 export class Rower {
   constructor(parent) {
-    const g = new THREE.Group();
-    parent.add(g);
-    this.group = g;
+    this.group = new THREE.Group();
+    parent.add(this.group);
+    this.ready = false;
+    new GLTFLoader().load(`${import.meta.env.BASE_URL}models/rower.glb`, (gltf) => this.build(gltf));
+  }
 
-    const skin = mat(COL.skin);
-    const shirt = mat(COL.shirt);
-    const trouser = mat(COL.trouser);
-    const hairM = mat(COL.hair);
+  build(gltf) {
+    const model = gltf.scene;
+    this.bones = {};
+    model.traverse((o) => {
+      if (o.isBone) this.bones[o.name] = o;
+      if (o.isMesh) {
+        o.frustumCulled = false; // skinned bounds don't follow the pose
+        o.material.metalness = 0;
+        o.material.roughness = 0.95;
+      }
+    });
+    const b = this.bones;
 
-    // pelvis sits on the seat
-    this.pelvis = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.13, 0.30), trouser);
-    g.add(this.pelvis);
+    // mount facing the stern (-X); model forward is +Z
+    this.mount = new THREE.Group();
+    this.mount.rotation.y = -Math.PI / 2;
+    this.mount.add(model);
+    this.group.add(this.mount);
 
-    // torso: lower segment pivots at the hip, chest segment adds hunch
-    this.torso = new THREE.Group();
-    g.add(this.torso);
-    ringsMesh(this.torso, LOWER_RINGS, shirt);
-    const belt = new THREE.Mesh(new THREE.BoxGeometry(0.205, 0.06, 0.305), mat(COL.belt));
-    belt.position.y = 0.015;
-    this.torso.add(belt);
+    // the model loads async, so the boat may already be mid-bob/heading:
+    // measure everything boat-local (this.group's frame), not world
+    this.group.updateWorldMatrix(true, true);
+    this.group.parent.getWorldQuaternion(_qBoat);
+    const qBoatInv = _qBoat.clone().invert();
+    const local = (bone) => this.group.worldToLocal(bone.getWorldPosition(new THREE.Vector3()));
 
-    this.chestG = new THREE.Group();
-    this.chestG.position.y = 0.26;
-    this.torso.add(this.chestG);
-    ringsMesh(this.chestG, CHEST_RINGS, shirt);
+    // scale so the legs span the seat-to-stretcher geometry
+    const hipW = local(b.UpperLegL);
+    const kneeW = local(b.LowerLegL);
+    const footW = local(b.FootL);
+    this.thigh = hipW.distanceTo(kneeW);
+    this.shin = kneeW.distanceTo(footW);
+    const s = LEG_REACH / (this.thigh + this.shin);
+    this.mount.scale.setScalar(s);
+    this.thigh *= s;
+    this.shin *= s;
+    const uaW = local(b.UpperArmL);
+    const laW = local(b.LowerArmL);
+    const wrW = local(b.WristL);
+    this.upperArm = uaW.distanceTo(laW) * s;
+    this.foreArm = laW.distanceTo(wrW) * s + HAND_LEN;
 
-    // head group counter-rotates to keep the gaze level
-    this.headG = new THREE.Group();
-    this.headG.position.y = 0.30;
-    this.chestG.add(this.headG);
-    // collar at the neck base
-    const collar = new THREE.Mesh(new THREE.CylinderGeometry(0.072, 0.082, 0.034, 8), mat(0xd6ccb2));
-    collar.position.y = 0.318;
-    this.chestG.add(collar);
+    // leg-root offset from the Body bone, in boat space, for seating
+    this.group.updateWorldMatrix(true, true);
+    const bodyW = local(b.Body);
+    const legW = local(b.UpperLegL);
+    this.legOffX = legW.x - bodyW.x;
+    this.legOffY = legW.y - bodyW.y;
 
-    const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.050, 0.064, 0.09, 7), skin);
-    neck.position.y = 0.025;
-    this.headG.add(neck);
-
-    ringsMesh(this.headG, HEAD_RINGS, skin, 0.006);
-    makeNose(this.headG, skin);
-    ringsMesh(this.headG, HAIR_RINGS, hairM, 0.010);
-    // chunky strands over the cap
-    const tuftR = rng(909);
-    for (const [x, y, z, sx, sy, sz, rx, ry, rz] of HAIR_TUFTS) {
-      const tuft = new THREE.Mesh(jitterGeo(new THREE.IcosahedronGeometry(1, 0), tuftR, 0.35), hairM);
-      tuft.scale.set(sx, sy, sz);
-      tuft.position.set(x, y, z);
-      tuft.rotation.set(rx, ry, rz);
-      this.headG.add(tuft);
+    // rest pose snapshots: local quats, child directions (for aiming) and
+    // boat-local world quats (for spine/head/foot orientation targets)
+    this.rest = {};
+    const snap = (name, childName) => {
+      const bone = b[name];
+      const r = {
+        q: bone.quaternion.clone(),
+        q0: bone.getWorldQuaternion(new THREE.Quaternion()).premultiply(qBoatInv),
+      };
+      if (childName) r.dir = b[childName].position.clone().normalize();
+      this.rest[name] = r;
+    };
+    snap('Body'); snap('Hips'); snap('Abdomen', 'Torso'); snap('Torso', 'Chest');
+    snap('Chest', 'Neck'); snap('Neck', 'Head'); snap('Head');
+    for (const sd of ['L', 'R']) {
+      snap(`UpperArm${sd}`, `LowerArm${sd}`);
+      snap(`LowerArm${sd}`, `Wrist${sd}`);
+      snap(`UpperLeg${sd}`, `LowerLeg${sd}`);
+      snap(`LowerLeg${sd}`);
+      snap(`Foot${sd}`);
     }
-    // bun at the back
-    const bun = new THREE.Mesh(new THREE.IcosahedronGeometry(0.044, 0), hairM);
-    bun.position.set(0.126, 0.216, 0);
-    this.headG.add(bun);
-    const wisp = new THREE.Mesh(new THREE.IcosahedronGeometry(0.024, 0), hairM);
-    wisp.position.set(0.130, 0.168, 0);
-    this.headG.add(wisp);
+    // the shin bone's "toward ankle" direction: same convention as its parent
+    this.rest.LowerLegL.dir = this.rest.UpperLegL.dir;
+    this.rest.LowerLegR.dir = this.rest.UpperLegR.dir;
 
-    // eyes set into the sockets under the brow, heavier brows, mouth hint
-    for (const s of [-1, 1]) {
-      const eye = new THREE.Mesh(new THREE.SphereGeometry(0.0130, 6, 5), mat(COL.dark, { roughness: 0.35 }));
-      eye.position.set(-0.0560, 0.162, s * 0.034);
-      this.headG.add(eye);
-      const brow = new THREE.Mesh(new THREE.BoxGeometry(0.011, 0.009, 0.031), mat(0x8a6a36));
-      brow.position.set(-0.0745, 0.190, s * 0.030);
-      brow.rotation.x = s * 0.10;
-      brow.rotation.y = -s * 0.15;
-      this.headG.add(brow);
+    // bend-reference axes (bone-local): kneecaps face the stern (-X) at
+    // rest, elbow points face the bow (+X); aiming keeps them tracking the
+    // IK bend plane so limbs can't roll arbitrarily
+    for (const sd of ['L', 'R']) {
+      for (const [name, axis] of [
+        [`UpperLeg${sd}`, [-1, 0, 0]], [`LowerLeg${sd}`, [-1, 0, 0]],
+        [`UpperArm${sd}`, [1, 0, 0]], [`LowerArm${sd}`, [1, 0, 0]],
+      ]) {
+        const r = this.rest[name];
+        r.c0 = new THREE.Vector3(...axis).applyQuaternion(r.q0.clone().invert());
+        // orthonormalise against the child axis
+        r.c0.addScaledVector(r.dir, -r.c0.dot(r.dir)).normalize();
+      }
     }
-    const mouth = new THREE.Mesh(new THREE.BoxGeometry(0.006, 0.0045, 0.030), mat(COL.skinShade));
-    mouth.position.set(-0.0680, 0.088, 0);
-    this.headG.add(mouth);
 
-    // limbs (stretched between IK joints every frame)
-    this.parts = {};
-    for (const side of ['L', 'R']) {
-      this.parts['thigh' + side] = makeLimb(g, 0.062, 0.052, trouser);
-      this.parts['shin' + side] = makeLimb(g, 0.05, 0.042, trouser);
-      this.parts['knee' + side] = ball(g, 0.06, trouser);
-      this.parts['uarm' + side] = makeLimb(g, 0.056, 0.042, shirt);
-      this.parts['farm' + side] = makeLimb(g, 0.04, 0.034, skin);
-      this.parts['elbow' + side] = ball(g, 0.046, skin);
-      this.parts['hand' + side] = ball(g, 0.048, skin);
-      // deltoid sleeve cap, re-aimed along the arm every frame so the
-      // arm root merges into the torso shoulder
-      const delt = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 1), shirt);
-      delt.scale.set(0.057, 0.047, 0.057);
-      g.add(delt);
-      this.parts['delt' + side] = delt;
+    // a relaxed grip: curl the fingers around the oar handle
+    for (const sd of ['L', 'R']) {
+      for (const f of ['Index', 'Middle', 'Ring', 'Pinky']) {
+        for (let k = 1; k <= 3; k++) {
+          b[`${f}${k}${sd}`]?.rotateX(0.55);
+        }
+      }
+      b[`Thumb2${sd}`]?.rotateX(0.4);
     }
+
+    this.ready = true;
+  }
+
+  // orient a bone so its child axis follows dirBoat and its bend-reference
+  // axis (kneecap / elbow point) follows bendBoat; both are boat-local
+  aim(name, dirBoat, bendBoat) {
+    const bone = this.bones[name];
+    const r = this.rest[name];
+    bone.parent.getWorldQuaternion(_qp);
+    _a.copy(dirBoat).normalize();
+    _c.copy(bendBoat).addScaledVector(_a, -bendBoat.dot(_a)).normalize();
+    _x.crossVectors(_a, _c);
+    _mt.makeBasis(_a, _c, _x);
+    _x.crossVectors(r.dir, r.c0);
+    _m0.makeBasis(r.dir, r.c0, _x);
+    // local -> boat-local rotation, then into the parent's frame
+    _dq.setFromRotationMatrix(_mt.multiply(_m0.transpose()));
+    bone.quaternion.copy(_dq)
+      .premultiply(_qBoat)
+      .premultiply(_qi.copy(_qp).invert());
+    bone.updateWorldMatrix(false, false);
+  }
+
+  // bone world quat = boatQuat * zRot(angle) * boat-local rest quat
+  setLean(name, angle) {
+    const bone = this.bones[name];
+    const r = this.rest[name];
+    bone.parent.getWorldQuaternion(_qp);
+    _qz.setFromAxisAngle(Z_AXIS, angle);
+    bone.quaternion.copy(r.q0)
+      .premultiply(_qz)
+      .premultiply(_qBoat)
+      .premultiply(_qi.copy(_qp).invert());
+    bone.updateWorldMatrix(false, false);
+  }
+
+  boneBoatPos(name, out) {
+    return this.group.worldToLocal(this.bones[name].getWorldPosition(out));
   }
 
   update(pose, handL, handR, time) {
+    if (!this.ready) return;
+    const b = this.bones;
     const seatX = pose.seat;
     const lean = pose.lean + Math.sin(time * 1.4) * 0.012; // breath
     const ln = clamp((lean - G.leanFinish) / (G.leanCatch - G.leanFinish), 0, 1);
     const hunch = 0.05 + 0.30 * ln * ln;
 
-    this.pelvis.position.set(seatX, 0.385, 0);
-    this.torso.position.set(seatX, G.hipY, 0);
-    this.torso.rotation.z = lean;
-    this.chestG.rotation.z = hunch;
-    this.headG.rotation.z = -(lean + hunch) * 0.55;
+    // keep this subtree's world matrices in sync with the boat this frame
+    this.group.parent.getWorldQuaternion(_qBoat);
+    this.group.updateWorldMatrix(true, true);
 
-    // shoulder anchors via the same 2D rotations as the torso meshes
-    const lt = lean + hunch;
-    const shX = seatX - Math.sin(lean) * 0.26 - Math.sin(lt) * 0.27;
-    const shY = G.hipY + Math.cos(lean) * 0.26 + Math.cos(lt) * 0.27;
+    // pelvis on the seat: place the Body bone so the leg roots sit at the hip
+    _v.set(seatX - 0.025 - this.legOffX, HIP_Y - this.legOffY, 0);
+    _v.applyMatrix4(this.group.matrixWorld);
+    b.Body.parent.worldToLocal(_v);
+    b.Body.position.copy(_v);
 
-    for (const side of [1, -1]) {
-      const k = side > 0 ? 'L' : 'R';
-      const hand = side > 0 ? handL : handR;
+    // spine: pelvis takes a share of the lean, the rest rolls up the chain
+    this.setLean('Body', lean * 0.30);
+    this.setLean('Abdomen', lean * 0.65);
+    this.setLean('Torso', lean * 0.95 + hunch * 0.35);
+    this.setLean('Chest', lean + hunch);
+    this.setLean('Neck', (lean + hunch) * 0.55);
+    this.setLean('Head', (lean + hunch) * 0.30);
 
-      // legs: hip on the seat, ankle strapped into the stretcher shoes
-      _hip.set(seatX - 0.03, G.hipY - 0.02, side * 0.105);
-      _ankle.set(G.ankle.x, G.ankle.y, side * G.ankle.z);
-      ik2(_hip, _ankle, G.thigh, G.shin, POLE_UP, _knee, _foot);
-      setLimb(this.parts['thigh' + k], _hip, _knee);
-      setLimb(this.parts['shin' + k], _knee, _foot);
-      this.parts['knee' + k].position.copy(_knee);
+    for (const sd of [1, -1]) {
+      const k = sd > 0 ? 'L' : 'R';
+      const hand = sd > 0 ? handL : handR;
 
-      // arms: shoulder to oar handle, elbows bend out / back / slightly down
-      _sh.set(shX, shY, side * 0.185);
-      _pole.set(0.55, -0.35, side * 1.0).normalize();
-      ik2(_sh, hand, G.upperArm, G.foreArm, _pole, _elbow, _handEnd);
-      setLimb(this.parts['uarm' + k], _sh, _elbow);
-      setLimb(this.parts['farm' + k], _elbow, _handEnd);
-      this.parts['elbow' + k].position.copy(_elbow);
-      this.parts['hand' + k].position.copy(_handEnd);
-      _armDir.subVectors(_elbow, _sh).normalize();
-      const delt = this.parts['delt' + k];
-      delt.position.copy(_sh).addScaledVector(_armDir, 0.034);
-      delt.position.z -= side * 0.014; // tuck into the torso shoulder
-      delt.quaternion.setFromUnitVectors(UP, _armDir);
+      // legs: from wherever the posed pelvis put the hip, drive to the shoes
+      this.boneBoatPos(`UpperLeg${k}`, _hip);
+      _ankle.set(G.ankle.x, G.ankle.y + 0.02, sd * G.ankle.z);
+      ik2(_hip, _ankle, this.thigh, this.shin, POLE_UP, _knee, _foot);
+      // kneecaps face out of the hip-ankle line, toward the raised knee
+      _line.subVectors(_ankle, _hip).normalize();
+      _bend.subVectors(_knee, _hip);
+      _bend.addScaledVector(_line, -_bend.dot(_line));
+      if (_bend.lengthSq() < 1e-6) _bend.set(-0.3, 1, 0);
+      this.aim(`UpperLeg${k}`, _dw.subVectors(_knee, _hip), _bend);
+      this.aim(`LowerLeg${k}`, _dw.subVectors(_foot, _knee), _bend);
+      // feet planted on the stretcher, toes up
+      _v.copy(_ankle).applyMatrix4(this.group.matrixWorld);
+      b[`Foot${k}`].parent.worldToLocal(_v);
+      b[`Foot${k}`].position.copy(_v);
+      this.setLean(`Foot${k}`, FOOT_PITCH);
+
+      // arms: shoulder to oar handle, elbows out toward the IK pole
+      this.boneBoatPos(`UpperArm${k}`, _sh);
+      _pole.set(0.55, -0.35, sd * 1.0).normalize();
+      ik2(_sh, hand, this.upperArm, this.foreArm, _pole, _elbow, _handEnd);
+      _line.subVectors(_handEnd, _sh).normalize();
+      _bend.subVectors(_elbow, _sh);
+      _bend.addScaledVector(_line, -_bend.dot(_line));
+      if (_bend.lengthSq() < 1e-6) _bend.set(0.3, -0.5, sd);
+      this.aim(`UpperArm${k}`, _dw.subVectors(_elbow, _sh), _bend);
+      this.aim(`LowerArm${k}`, _dw.subVectors(_handEnd, _elbow), _bend);
     }
   }
 }
