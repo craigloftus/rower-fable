@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { mat, rng } from './util.js';
-import { jitterGeo, makeTree, GREENS, DARKGREENS } from './scenery.js';
+import { jitterGeo, makeTree, cmat, GREENS, DARKGREENS } from './scenery.js';
 
 // The river: a meandering centreline parameterised by distance rowed (s).
 // The boat travels through a static world; bank scenery is generated in
@@ -83,8 +83,11 @@ function ribbon(side, s0, s1, latA, latB, yFn, color) {
   g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
   g.setIndex(idx);
   g.computeVertexNormals();
-  return new THREE.Mesh(g, mat(color, { side: THREE.DoubleSide }));
+  let m = ribbonMats.get(color);
+  if (!m) { m = mat(color, { side: THREE.DoubleSide }); ribbonMats.set(color, m); }
+  return new THREE.Mesh(g, m);
 }
+const ribbonMats = new Map();
 
 // reeds are instanced: one mesh per chunk keeps draw calls sane
 const reedGeo = new THREE.ConeGeometry(0.045, 1, 4);
@@ -119,7 +122,7 @@ function buildChunk(ci) {
     for (let i = 0; i < 4; i++) {
       const mound = new THREE.Mesh(
         jitterGeo(new THREE.IcosahedronGeometry(1, 1), r, 0.18),
-        mat(GREENS[(r() * GREENS.length) | 0]));
+        cmat(GREENS[(r() * GREENS.length) | 0]));
       mound.scale.set(9 + r() * 10, 2.2 + r() * 2.6, 5 + r() * 5);
       place(mound, s0 + (i + r() * 0.9) * (CHUNK / 4), side * (W + 5 + r() * 12), r() * Math.PI);
       mound.position.y = -0.5;
@@ -129,7 +132,7 @@ function buildChunk(ci) {
     for (let i = 0; i < 3; i++) {
       const mound = new THREE.Mesh(
         jitterGeo(new THREE.IcosahedronGeometry(1, 1), r, 0.2),
-        mat(DARKGREENS[(r() * DARKGREENS.length) | 0]));
+        cmat(DARKGREENS[(r() * DARKGREENS.length) | 0]));
       mound.scale.set(20 + r() * 20, 5 + r() * 6, 12 + r() * 10);
       place(mound, s0 + (i + r()) * (CHUNK / 3), side * (W + 45 + r() * 40));
       mound.position.y = -0.8;
@@ -150,7 +153,7 @@ function buildChunk(ci) {
     for (let i = 0; i < 4; i++) {
       const rock = new THREE.Mesh(
         jitterGeo(new THREE.IcosahedronGeometry(1, 0), r, 0.3),
-        mat(0x8d8f7e));
+        cmat(0x8d8f7e));
       rock.scale.setScalar(0.4 + r() * 1.3);
       place(rock, s0 + r() * CHUNK, side * (W - 3 + r() * 3.5));
       rock.position.y = -0.12 * rock.scale.x;
@@ -180,17 +183,23 @@ function buildChunk(ci) {
   return g;
 }
 
+// all chunk materials are shared module-level caches; only geometry (and
+// instance buffers) belong to the chunk
 function disposeGroup(g) {
   g.traverse((m) => {
     if (!m.isMesh) return;
+    if (m.isInstancedMesh) m.dispose();
     if (m.geometry !== reedGeo) m.geometry.dispose();
-    if (m.material !== reedMat) m.material.dispose();
   });
 }
 
 // -------------------------------------------------------------- markers ----
 // subtle floating course markers every 100 m along the centreline; they
 // pop (sound via callback) and dissolve as the boat passes
+const markerRingGeo = new THREE.RingGeometry(0.95, 1.14, 24);
+markerRingGeo.rotateX(-Math.PI / 2);
+const markerGemGeo = new THREE.OctahedronGeometry(0.16, 0);
+
 class Markers {
   constructor(parent, onPop) {
     this.parent = parent;
@@ -249,15 +258,13 @@ class Markers {
     const ringM = new THREE.MeshBasicMaterial({
       color: 0xfdf6e3, transparent: true, opacity: 0.32, depthWrite: false,
     });
-    const ringGeo = new THREE.RingGeometry(0.95, 1.14, 24);
-    ringGeo.rotateX(-Math.PI / 2);
-    const ring = new THREE.Mesh(ringGeo, ringM);
+    const ring = new THREE.Mesh(markerRingGeo, ringM);
     ring.position.y = 0.05;
     g.add(ring);
     const gemM = new THREE.MeshBasicMaterial({
       color: 0xf2c87e, transparent: true, opacity: 0.85, depthWrite: false,
     });
-    const gem = new THREE.Mesh(new THREE.OctahedronGeometry(0.16, 0), gemM);
+    const gem = new THREE.Mesh(markerGemGeo, gemM);
     gem.position.y = 0.5;
     g.add(gem);
     place(g, s + START, 0);
@@ -296,8 +303,8 @@ class Markers {
         const k = m.pop / 0.55;
         if (k >= 1) {
           this.parent.remove(m.g);
-          m.gem.geometry.dispose(); m.gem.material.dispose();
-          m.ring.geometry.dispose(); m.ring.material.dispose();
+          m.gem.material.dispose();
+          m.ring.material.dispose();
           this.list.splice(i, 1);
           continue;
         }
@@ -313,8 +320,8 @@ class Markers {
   reset() {
     for (const m of this.list) {
       this.parent.remove(m.g);
-      m.gem.geometry.dispose(); m.gem.material.dispose();
-      m.ring.geometry.dispose(); m.ring.material.dispose();
+      m.gem.material.dispose();
+      m.ring.material.dispose();
     }
     this.list = [];
     this.next = MARKER_EVERY;
