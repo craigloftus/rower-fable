@@ -10,7 +10,6 @@ const COL = {
   trouser: 0x6e6553,
   hair: 0xc9a14e,
   belt: 0x5a4632,
-  strap: 0x7a5f48,
   dark: 0x3a352c,
 };
 
@@ -22,6 +21,8 @@ const _sh = new THREE.Vector3();
 const _elbow = new THREE.Vector3();
 const _handEnd = new THREE.Vector3();
 const _pole = new THREE.Vector3();
+const _armDir = new THREE.Vector3();
+const UP = new THREE.Vector3(0, 1, 0);
 const POLE_UP = new THREE.Vector3(0.18, 1, 0).normalize();
 
 function ball(parent, r, material) {
@@ -96,9 +97,9 @@ function ringsMesh(parent, rings, material, jitter = 0) {
 // ----------------------------------------------------------------- head ----
 // loops from chin to crown carve the jaw, cheekbones, brow ledge and skull
 const HEAD_RINGS = [
-  { y: 0.054, xF: -0.042, xB: 0.028, w: 0.022 },  // under the chin
-  { y: 0.070, xF: -0.070, xB: 0.058, w: 0.052 },  // jaw line
-  { y: 0.102, xF: -0.070, xB: 0.084, w: 0.068 },  // mouth / lower cheeks
+  { y: 0.064, xF: -0.054, xB: 0.030, w: 0.031 },  // under the chin: short + square
+  { y: 0.080, xF: -0.073, xB: 0.058, w: 0.057 },  // jaw line
+  { y: 0.106, xF: -0.071, xB: 0.084, w: 0.070 },  // mouth / lower cheeks
   { y: 0.138, xF: -0.066, xB: 0.096, w: 0.082 },  // cheekbones
   { y: 0.162, xF: -0.061, xB: 0.098, w: 0.080 },  // eye line, recessed socket
   { y: 0.186, xF: -0.080, xB: 0.098, w: 0.078 },  // brow ledge overhang
@@ -198,11 +199,6 @@ export class Rower {
     this.chestG.position.y = 0.26;
     this.torso.add(this.chestG);
     ringsMesh(this.chestG, CHEST_RINGS, shirt);
-    // satchel strap, a nod to the reference image
-    const strap = new THREE.Mesh(new THREE.BoxGeometry(0.012, 0.36, 0.06), mat(COL.strap));
-    strap.position.set(-0.115, 0.13, 0.02);
-    strap.rotation.x = 0.6;
-    this.chestG.add(strap);
 
     // head group counter-rotates to keep the gaze level
     this.headG = new THREE.Group();
@@ -249,7 +245,7 @@ export class Rower {
       this.headG.add(brow);
     }
     const mouth = new THREE.Mesh(new THREE.BoxGeometry(0.006, 0.0045, 0.030), mat(COL.skinShade));
-    mouth.position.set(-0.0665, 0.080, 0);
+    mouth.position.set(-0.0680, 0.088, 0);
     this.headG.add(mouth);
 
     // limbs (stretched between IK joints every frame)
@@ -258,10 +254,16 @@ export class Rower {
       this.parts['thigh' + side] = makeLimb(g, 0.062, 0.052, trouser);
       this.parts['shin' + side] = makeLimb(g, 0.05, 0.042, trouser);
       this.parts['knee' + side] = ball(g, 0.06, trouser);
-      this.parts['uarm' + side] = makeLimb(g, 0.058, 0.042, shirt);
+      this.parts['uarm' + side] = makeLimb(g, 0.056, 0.042, shirt);
       this.parts['farm' + side] = makeLimb(g, 0.04, 0.034, skin);
       this.parts['elbow' + side] = ball(g, 0.046, skin);
       this.parts['hand' + side] = ball(g, 0.048, skin);
+      // deltoid sleeve cap, re-aimed along the arm every frame so the
+      // arm root merges into the torso shoulder
+      const delt = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 1), shirt);
+      delt.scale.set(0.057, 0.047, 0.057);
+      g.add(delt);
+      this.parts['delt' + side] = delt;
     }
   }
 
@@ -302,6 +304,11 @@ export class Rower {
       setLimb(this.parts['farm' + k], _elbow, _handEnd);
       this.parts['elbow' + k].position.copy(_elbow);
       this.parts['hand' + k].position.copy(_handEnd);
+      _armDir.subVectors(_elbow, _sh).normalize();
+      const delt = this.parts['delt' + k];
+      delt.position.copy(_sh).addScaledVector(_armDir, 0.034);
+      delt.position.z -= side * 0.014; // tuck into the torso shoulder
+      delt.quaternion.setFromUnitVectors(UP, _armDir);
     }
   }
 }
