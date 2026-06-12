@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { mat, rng } from './util.js';
+import { mat, rng, clamp, lerp } from './util.js';
 import { jitterGeo } from './scenery.js';
 
 export const FOG_COLOR = 0xdfe5d4;
@@ -100,9 +100,41 @@ function makeSky(scene) {
 }
 
 // ------------------------------------------------------------- backdrop ----
+const ROCK_DARK = new THREE.Color(0x4a525c);
+const ROCK_LIGHT = new THREE.Color(0x7b8691);
+const SNOW = new THREE.Color(0xf1f4f6);
+const _fc = new THREE.Color();
+
+// rugged peak: cone with height rings to displace (so slopes bow and ridge
+// instead of running straight), coloured per facet — rock shading lighter
+// with altitude, snow above a noisy snowline on peaks tall enough to carry it
+function peakGeo(r, base, h) {
+  let geo = jitterGeo(new THREE.ConeGeometry(base, h, 6 + ((r() * 3) | 0), 4), r, 0.3);
+  geo = geo.toNonIndexed(); // per-facet colour needs unshared corners
+  const pos = geo.attributes.position;
+  const col = new Float32Array(pos.count * 3);
+  const snowline = h > 75 ? lerp(0.8, 0.55, (h - 75) / 50) : 2;
+  for (let i = 0; i < pos.count; i += 3) {
+    const cy = (pos.getY(i) + pos.getY(i + 1) + pos.getY(i + 2)) / 3;
+    const t = clamp((cy + h / 2) / h, 0, 1);
+    if (t > snowline + (r() - 0.5) * 0.12) {
+      _fc.copy(SNOW).offsetHSL(0, 0, (r() - 0.5) * 0.05);
+    } else {
+      _fc.lerpColors(ROCK_DARK, ROCK_LIGHT, t).offsetHSL(0, 0, (r() - 0.5) * 0.06);
+    }
+    for (let k = 0; k < 3; k++) col.set([_fc.r, _fc.g, _fc.b], (i + k) * 3);
+  }
+  geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  geo.computeVertexNormals();
+  return geo;
+}
+
 function makeMountains(scene) {
   const r = rng(99);
   const g = new THREE.Group();
+  const rock = new THREE.MeshStandardMaterial({
+    vertexColors: true, roughness: 0.95, metalness: 0, flatShading: true,
+  });
   for (let i = 0; i < 14; i++) {
     let a = r() * Math.PI * 2;
     // keep fore/aft corridors clear so the river reads as long
@@ -110,18 +142,35 @@ function makeMountains(scene) {
     const dist = 240 + r() * 90;
     const h = 45 + r() * 75;
     const base = 40 + r() * 40;
-    const geo = jitterGeo(new THREE.ConeGeometry(base, h, 6 + ((r() * 3) | 0)), r, 0.24);
-    const peak = new THREE.Mesh(geo, mat(0x5f6b76));
-    peak.position.set(Math.cos(a) * dist, h * 0.42, Math.sin(a) * dist);
+    const massif = new THREE.Group();
+    const peak = new THREE.Mesh(peakGeo(r, base, h), rock);
+    peak.position.y = h * 0.42;
     peak.rotation.y = r() * Math.PI;
-    g.add(peak);
+    massif.add(peak);
+    // shoulder peaks break the lone-triangle silhouette
+    const shoulders = 1 + ((r() * 2) | 0);
+    for (let s = 0; s < shoulders; s++) {
+      const sh = h * (0.4 + r() * 0.3);
+      const sb = base * (0.5 + r() * 0.3);
+      const sa = r() * Math.PI * 2;
+      const shoulder = new THREE.Mesh(peakGeo(r, sb, sh), rock);
+      shoulder.position.set(
+        Math.cos(sa) * base * (0.6 + r() * 0.4), sh * 0.38,
+        Math.sin(sa) * base * (0.6 + r() * 0.4));
+      shoulder.rotation.y = r() * Math.PI;
+      massif.add(shoulder);
+    }
+    massif.position.set(Math.cos(a) * dist, 0, Math.sin(a) * dist);
+    g.add(massif);
   }
   // nearer green hills
+  const hillMats = [mat(0x7a9a64), mat(0x88a868)];
   for (let i = 0; i < 8; i++) {
     let a = r() * Math.PI * 2;
     if (Math.abs(Math.sin(a)) < 0.35) a += 0.5;
     const dist = 160 + r() * 60;
-    const hill = new THREE.Mesh(jitterGeo(new THREE.IcosahedronGeometry(1, 1), r, 0.15), mat(0x7a9a64));
+    const hill = new THREE.Mesh(
+      jitterGeo(new THREE.IcosahedronGeometry(1, 1), r, 0.15), hillMats[i % 2]);
     hill.scale.set(40 + r() * 35, 12 + r() * 14, 30 + r() * 25);
     hill.position.set(Math.cos(a) * dist, -2, Math.sin(a) * dist);
     g.add(hill);
@@ -130,23 +179,55 @@ function makeMountains(scene) {
   return g;
 }
 
+// puff with a flattened underside so clouds read as cumulus, not saucers
+function puffGeo(r, rad) {
+  const geo = jitterGeo(new THREE.IcosahedronGeometry(rad, 1), r, 0.22);
+  const pos = geo.attributes.position;
+  const floor = -rad * 0.32;
+  for (let i = 0; i < pos.count; i++) {
+    if (pos.getY(i) < floor) pos.setY(i, floor + (r() - 0.5) * rad * 0.05);
+  }
+  geo.computeVertexNormals();
+  return geo;
+}
+
 function makeClouds(scene) {
   const r = rng(7);
-  const cm = mat(0xf4f6ef, { roughness: 1 });
+  // emissive lift keeps the shaded undersides white instead of picking up
+  // the green ground bounce from the hemisphere light
+  const cm = mat(0xfbfdff, { roughness: 1, emissive: 0x8d99a4, emissiveIntensity: 0.22 });
   const g = new THREE.Group();
   const clouds = [];
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 10; i++) {
     const c = new THREE.Group();
-    const n = 2 + ((r() * 3) | 0);
+    const n = 3 + ((r() * 3) | 0);
+    const rad = 5 + r() * 5;
     for (let k = 0; k < n; k++) {
-      const blob = new THREE.Mesh(new THREE.IcosahedronGeometry(6 + r() * 9, 1), cm);
-      blob.scale.set(1.6, 0.45, 1);
-      blob.position.set(k * 9 + (r() - 0.5) * 6, (r() - 0.5) * 3, (r() - 0.5) * 6);
-      c.add(blob);
+      // big puffs amidships, smaller toward the ends, bases on one plane
+      const t = k / (n - 1);
+      const pr = rad * (0.55 + Math.sin(t * Math.PI) * 0.45) * (0.9 + r() * 0.2);
+      const puff = new THREE.Mesh(puffGeo(r, pr), cm);
+      puff.scale.set(1.15, 0.62 + r() * 0.16, 0.9 + r() * 0.25);
+      puff.position.set(
+        (t - 0.5) * n * rad * 1.05 + (r() - 0.5) * rad * 0.4,
+        pr * 0.32 * puff.scale.y,
+        (r() - 0.5) * rad * 0.8);
+      puff.rotation.y = r() * Math.PI;
+      c.add(puff);
+      // the odd topper puff gives the middle some cumulus height
+      if (k > 0 && k < n - 1 && r() < 0.55) {
+        const tr = pr * (0.45 + r() * 0.25);
+        const top = new THREE.Mesh(puffGeo(r, tr), cm);
+        top.position.set(puff.position.x + (r() - 0.5) * pr * 0.6,
+          pr * 0.75, (r() - 0.5) * pr * 0.5);
+        top.rotation.y = r() * Math.PI;
+        c.add(top);
+      }
     }
     const a = r() * Math.PI * 2;
     const d = 120 + r() * 160;
-    c.position.set(Math.cos(a) * d, 55 + r() * 55, Math.sin(a) * d);
+    c.position.set(Math.cos(a) * d, 50 + r() * 60, Math.sin(a) * d);
+    c.scale.setScalar(0.8 + r() * 0.6);
     g.add(c);
     clouds.push(c);
   }
