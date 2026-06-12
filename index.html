@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <title>Morning Row — a low-poly sculling study</title>
+  <title>Morning Row — a low-poly sculling game</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Sometype+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -15,6 +15,7 @@
       --hairline: rgba(46, 59, 51, 0.35);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    [hidden] { display: none !important; }
     html, body { height: 100%; overflow: hidden; background: #dfe5d4; }
     #app { position: fixed; inset: 0; }
     #app canvas { display: block; touch-action: none; }
@@ -27,20 +28,22 @@
       z-index: 2;
     }
 
-    /* title */
-    .title {
+    /* goal readout, top-left while rowing */
+    .goalhud {
       position: absolute; top: 28px; left: 34px;
       text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+      opacity: 0; transition: opacity 0.9s ease;
     }
-    .title h1 {
-      font-size: 21px; font-weight: 400;
-      letter-spacing: 0.34em; text-transform: uppercase;
+    .goalhud.show { opacity: 1; }
+    .goalhud h2 {
+      font-size: 19px; font-weight: 400;
+      letter-spacing: 0.30em; text-transform: uppercase;
     }
-    .title .rule {
+    .goalhud .rule {
       width: 64px; height: 1px; background: var(--hairline);
       margin: 9px 0 7px;
     }
-    .title p {
+    .goalhud p {
       font-family: 'Sometype Mono', monospace;
       font-size: 10px; letter-spacing: 0.22em;
       text-transform: uppercase; color: var(--ink-soft);
@@ -96,7 +99,7 @@
       text-transform: uppercase;
     }
 
-    /* hint */
+    /* hint / state pill */
     #hint {
       position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%);
       display: flex; align-items: center; gap: 10px;
@@ -109,6 +112,7 @@
       transition: opacity 1.6s ease;
     }
     #hint.dim { opacity: 0.22; }
+    #hint.gone { opacity: 0; }
     #hint kbd {
       font-family: inherit; font-size: 9px;
       border: 1px solid rgba(46,59,51,0.35);
@@ -122,6 +126,97 @@
       font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
       color: var(--ink-soft); line-height: 2;
       text-shadow: 0 1px 0 rgba(255,255,255,0.3);
+    }
+
+    /* goal overlay */
+    #overlay {
+      position: fixed; inset: 0; z-index: 3;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(38, 52, 46, 0.10);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.9s ease;
+      font-family: 'Marcellus', serif; color: var(--ink);
+    }
+    #overlay.show { opacity: 1; pointer-events: auto; }
+    .card {
+      width: min(430px, 92vw);
+      background: rgba(244, 243, 230, 0.85);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(46,59,51,0.18);
+      border-radius: 18px;
+      padding: 32px 36px 28px;
+      box-shadow: 0 18px 60px rgba(28, 46, 38, 0.18);
+    }
+    .card h1 {
+      font-size: 21px; font-weight: 400;
+      letter-spacing: 0.34em; text-transform: uppercase;
+    }
+    .card .rule {
+      width: 64px; height: 1px; background: var(--hairline);
+      margin: 9px 0 7px;
+    }
+    .card .tag {
+      font-family: 'Sometype Mono', monospace;
+      font-size: 10px; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--ink-soft);
+    }
+    .frow {
+      display: flex; align-items: baseline; gap: 14px;
+      margin-top: 18px;
+    }
+    .frow .lbl {
+      font-family: 'Sometype Mono', monospace;
+      font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase;
+      color: var(--ink-soft); width: 62px; flex: none;
+    }
+    .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .chips button {
+      font-family: 'Sometype Mono', monospace;
+      font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ink);
+      padding: 7px 13px; border-radius: 999px;
+      border: 1px solid rgba(46,59,51,0.25);
+      background: rgba(255,255,255,0.35);
+      cursor: pointer;
+    }
+    .chips button.sel {
+      background: var(--ink); color: #f4f3e6; border-color: var(--ink);
+    }
+    .actions {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin-top: 28px;
+    }
+    .bt { display: flex; flex-direction: column; gap: 5px; }
+    .ghost {
+      font-family: 'Sometype Mono', monospace;
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--ink-soft);
+      background: none; border: 1px solid rgba(46,59,51,0.25);
+      border-radius: 999px; padding: 8px 14px; cursor: pointer;
+    }
+    .ghost:disabled { opacity: 0.45; cursor: default; }
+    #btStatus {
+      font-family: 'Sometype Mono', monospace;
+      font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-soft); min-height: 10px;
+    }
+    .primary {
+      font-family: 'Marcellus', serif;
+      font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase;
+      background: var(--ink); color: #f4f3e6;
+      border: none; border-radius: 999px;
+      padding: 13px 30px; cursor: pointer;
+    }
+    .sums { display: flex; gap: 36px; margin: 22px 0 4px; }
+    .sums .label {
+      font-family: 'Sometype Mono', monospace;
+      font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase;
+      color: var(--ink-soft); margin-bottom: 5px;
+    }
+    .sums .value {
+      font-family: 'Sometype Mono', monospace;
+      font-size: 24px; font-weight: 500;
+      font-variant-numeric: tabular-nums;
     }
 
     /* atmosphere: vignette + grain */
@@ -141,6 +236,9 @@
       .keys, .slide { display: none; }
       .stats { gap: 26px; }
       .stat .value { font-size: 22px; }
+      .card { padding: 24px 22px 20px; }
+      .sums { gap: 22px; }
+      .sums .value { font-size: 18px; }
     }
   </style>
 </head>
@@ -150,16 +248,16 @@
   <div class="grain"></div>
 
   <div class="hud">
-    <div class="title">
-      <h1>Morning Row</h1>
+    <div class="goalhud" id="goalhud">
+      <h2 id="goalName">free row</h2>
       <div class="rule"></div>
-      <p>a low-poly sculling study</p>
+      <p id="goalSub"></p>
     </div>
 
     <div class="keys">
       space — row<br />
       drag — orbit &nbsp;·&nbsp; scroll — zoom<br />
-      r — reset
+      r — change goal
     </div>
 
     <div class="stats">
@@ -183,7 +281,66 @@
       <div class="ends"><span>finish</span><span>catch</span></div>
     </div>
 
-    <div id="hint"><span>Hold</span><kbd>space</kbd><span>to row</span></div>
+    <div id="hint" class="gone"><span>Hold</span><kbd>space</kbd><span>to row</span></div>
+  </div>
+
+  <div id="overlay">
+    <div class="card" id="setupCard">
+      <h1>Morning Row</h1>
+      <div class="rule"></div>
+      <p class="tag">a low-poly sculling game</p>
+
+      <div class="frow">
+        <span class="lbl">goal</span>
+        <div class="chips" id="modeChips"></div>
+      </div>
+      <div class="frow" id="targetRow">
+        <span class="lbl">target</span>
+        <div class="chips" id="targetChips"></div>
+      </div>
+      <div class="frow" id="repeatRow">
+        <span class="lbl">repeats</span>
+        <div class="chips" id="repeatChips"></div>
+      </div>
+      <div class="frow" id="restRow">
+        <span class="lbl">rest</span>
+        <div class="chips" id="restChips"></div>
+      </div>
+
+      <div class="actions">
+        <div class="bt">
+          <button class="ghost" id="btConnect">connect monitor</button>
+          <span id="btStatus"></span>
+        </div>
+        <button class="primary" id="begin">begin</button>
+      </div>
+    </div>
+
+    <div class="card" id="doneCard" hidden>
+      <h1>Well rowed</h1>
+      <div class="rule"></div>
+      <p class="tag">workout complete</p>
+
+      <div class="sums">
+        <div>
+          <div class="label">Distance</div>
+          <div class="value" id="sumDist">0 m</div>
+        </div>
+        <div>
+          <div class="label">Time</div>
+          <div class="value" id="sumTime">0:00</div>
+        </div>
+        <div>
+          <div class="label">Avg split</div>
+          <div class="value" id="sumSplit">–:––</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="ghost" id="change">change goal</button>
+        <button class="primary" id="again">row again</button>
+      </div>
+    </div>
   </div>
 
   <script type="module" src="/src/main.js"></script>

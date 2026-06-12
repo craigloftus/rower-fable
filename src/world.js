@@ -1,21 +1,19 @@
 import * as THREE from 'three';
-import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
-import { mat, rng, lerp } from './util.js';
+import { mat, rng } from './util.js';
+import { jitterGeo } from './scenery.js';
 
 export const FOG_COLOR = 0xdfe5d4;
-const TILE = 200;        // shoreline tile length; two variants -> 400 m period
-const SCROLL_WRAP = 400;
 
 // ---------------------------------------------------------------- water ----
 // CPU-cheap GPU water: sine displacement in the vertex shader, flat-facet
-// normals from screen-space derivatives in the fragment shader.
-// Wave numbers along X are multiples of 2*pi/512 so the scroll wraps cleanly.
+// normals from screen-space derivatives in the fragment shader. Waves are
+// computed from world-space position, so the plane can be recentred on the
+// boat each frame without the pattern swimming.
 function makeWater(scene) {
   const geo = new THREE.PlaneGeometry(1000, 1000, 150, 150);
   geo.rotateX(-Math.PI / 2);
   const uniforms = {
     uTime: { value: 0 },
-    uScroll: { value: 0 },
     uDeep: { value: new THREE.Color(0x2f6470) },
     uShallow: { value: new THREE.Color(0x6fa8a4) },
     uSky: { value: new THREE.Color(0xcfe3da) },
@@ -27,18 +25,17 @@ function makeWater(scene) {
   const matw = new THREE.ShaderMaterial({
     uniforms,
     vertexShader: /* glsl */`
-      uniform float uTime; uniform float uScroll;
+      uniform float uTime;
       varying vec3 vW;
       void main(){
-        vec3 p = position;
-        float X = p.x + uScroll;
-        float Z = p.z;
-        p.y =
+        vec4 w = modelMatrix * vec4(position, 1.0);
+        float X = w.x;
+        float Z = w.z;
+        w.y +=
           0.036*sin(X*0.11045 + Z*0.21  + uTime*0.9)
         + 0.050*sin(X*0.04909 - Z*0.117 + uTime*0.55)
         + 0.030*sin(X*0.28225 + Z*0.04  - uTime*1.25)
         + 0.016*sin(X*0.49087 - Z*0.36  + uTime*1.7);
-        vec4 w = modelMatrix * vec4(p, 1.0);
         vW = w.xyz;
         gl_Position = projectionMatrix * viewMatrix * w;
       }`,
@@ -65,7 +62,7 @@ function makeWater(scene) {
   const mesh = new THREE.Mesh(geo, matw);
   mesh.frustumCulled = false;
   scene.add(mesh);
-  return uniforms;
+  return { uniforms, mesh };
 }
 
 // ------------------------------------------------------------------ sky ----
@@ -99,123 +96,16 @@ function makeSky(scene) {
   const mesh = new THREE.Mesh(geo, m);
   mesh.frustumCulled = false;
   scene.add(mesh);
+  return mesh;
 }
 
-// ------------------------------------------------------------- scenery -----
-function jitterGeo(geo, r, amt) {
-  // polyhedron/cone geometries duplicate vertices per face; weld them first
-  // so the jitter moves shared corners together instead of tearing the mesh
-  geo.deleteAttribute('normal');
-  geo.deleteAttribute('uv');
-  geo = mergeVertices(geo);
-  const pos = geo.attributes.position;
-  for (let i = 0; i < pos.count; i++) {
-    pos.setXYZ(i,
-      pos.getX(i) * (1 + (r() - 0.5) * amt),
-      pos.getY(i) * (1 + (r() - 0.5) * amt),
-      pos.getZ(i) * (1 + (r() - 0.5) * amt));
-  }
-  geo.computeVertexNormals();
-  return geo;
-}
-
-const GREENS = [0x7ca35f, 0x93b56e, 0x6f9d57, 0x84ad62];
-const DARKGREENS = [0x5d8a4c, 0x648f55];
-
-function makeTree(r, scale) {
-  const t = new THREE.Group();
-  const trunkH = (0.8 + r() * 0.6) * scale;
-  const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.07 * scale, 0.11 * scale, trunkH, 5), mat(0x7a5f48));
-  trunk.position.y = trunkH / 2;
-  t.add(trunk);
-  const n = 2 + ((r() * 2) | 0);
-  for (let i = 0; i < n; i++) {
-    const fr = (0.55 - i * 0.13 + r() * 0.12) * scale;
-    const blob = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(fr, 0),
-      mat(GREENS[(r() * GREENS.length) | 0]));
-    blob.position.set((r() - 0.5) * 0.3 * scale, trunkH + i * fr * 0.95, (r() - 0.5) * 0.3 * scale);
-    blob.rotation.y = r() * Math.PI;
-    t.add(blob);
-  }
-  return t;
-}
-
-function makeTile(variant) {
-  const r = rng(1234 + variant * 777);
-  const g = new THREE.Group();
-
-  for (const s of [-1, 1]) {
-    // continuous ground bands behind the mounds so gaps between them read
-    // as land rather than water or sky
-    const bank = new THREE.Mesh(new THREE.BoxGeometry(TILE, 3, 70), mat(0x84ad62));
-    bank.position.set(0, -1.25, s * 79);
-    g.add(bank);
-    const back = new THREE.Mesh(new THREE.BoxGeometry(TILE, 6, 110), mat(0x648f55));
-    back.position.set(0, -2.0, s * 158);
-    g.add(back);
-    // grassy bank mounds
-    for (let i = 0; i < 7; i++) {
-      const mound = new THREE.Mesh(
-        jitterGeo(new THREE.IcosahedronGeometry(1, 1), r, 0.18),
-        mat(GREENS[(r() * GREENS.length) | 0]));
-      mound.scale.set(16 + r() * 18, 3 + r() * 4, 9 + r() * 9);
-      mound.position.set((i + r() * 0.8) * (TILE / 7) - TILE / 2, -0.6, s * (56 + r() * 14));
-      g.add(mound);
-    }
-    // second darker band for depth
-    for (let i = 0; i < 5; i++) {
-      const mound = new THREE.Mesh(
-        jitterGeo(new THREE.IcosahedronGeometry(1, 1), r, 0.2),
-        mat(DARKGREENS[(r() * DARKGREENS.length) | 0]));
-      mound.scale.set(26 + r() * 26, 6 + r() * 8, 16 + r() * 12);
-      mound.position.set((i + r()) * (TILE / 5) - TILE / 2, -0.8, s * (95 + r() * 35));
-      g.add(mound);
-    }
-    // trees on the banks
-    for (let i = 0; i < 9; i++) {
-      const tree = makeTree(r, 2.2 + r() * 2.6);
-      tree.position.set(r() * TILE - TILE / 2, 1.2 + r() * 2.4, s * (50 + r() * 22));
-      tree.rotation.y = r() * Math.PI * 2;
-      g.add(tree);
-    }
-    // rocks at the waterline
-    for (let i = 0; i < 4; i++) {
-      const rock = new THREE.Mesh(
-        jitterGeo(new THREE.IcosahedronGeometry(1, 0), r, 0.3),
-        mat(0x8d8f7e));
-      rock.scale.setScalar(0.6 + r() * 1.6);
-      rock.position.set(r() * TILE - TILE / 2, 0, s * (42 + r() * 6));
-      g.add(rock);
-    }
-    // reed clusters
-    for (let i = 0; i < 6; i++) {
-      const cx = r() * TILE - TILE / 2, cz = s * (40 + r() * 5);
-      for (let k = 0; k < 5; k++) {
-        const reed = new THREE.Mesh(new THREE.ConeGeometry(0.045, 0.7 + r() * 0.7, 4), mat(0x87a06b));
-        reed.position.set(cx + (r() - 0.5) * 1.2, 0.3, cz + (r() - 0.5) * 1.2);
-        reed.rotation.z = (r() - 0.5) * 0.2;
-        g.add(reed);
-      }
-    }
-    // lane buoys
-    const buoyGeo = new THREE.IcosahedronGeometry(0.10, 0);
-    const buoyMat = mat(0xc97a4a);
-    for (let x = 0; x < TILE; x += 12.5) {
-      const b = new THREE.Mesh(buoyGeo, buoyMat);
-      b.position.set(x - TILE / 2, 0.02, s * 16);
-      g.add(b);
-    }
-  }
-  return g;
-}
-
+// ------------------------------------------------------------- backdrop ----
 function makeMountains(scene) {
   const r = rng(99);
   const g = new THREE.Group();
   for (let i = 0; i < 14; i++) {
     let a = r() * Math.PI * 2;
-    // keep fore/aft corridors clear so the lake reads as long
+    // keep fore/aft corridors clear so the river reads as long
     if (Math.abs(Math.sin(a)) < 0.3) a += 0.45;
     const dist = 240 + r() * 90;
     const h = 45 + r() * 75;
@@ -237,11 +127,13 @@ function makeMountains(scene) {
     g.add(hill);
   }
   scene.add(g);
+  return g;
 }
 
 function makeClouds(scene) {
   const r = rng(7);
   const cm = mat(0xf4f6ef, { roughness: 1 });
+  const g = new THREE.Group();
   const clouds = [];
   for (let i = 0; i < 8; i++) {
     const c = new THREE.Group();
@@ -255,10 +147,11 @@ function makeClouds(scene) {
     const a = r() * Math.PI * 2;
     const d = 120 + r() * 160;
     c.position.set(Math.cos(a) * d, 55 + r() * 55, Math.sin(a) * d);
-    scene.add(c);
+    g.add(c);
     clouds.push(c);
   }
-  return clouds;
+  scene.add(g);
+  return { group: g, clouds };
 }
 
 // ---------------------------------------------------------------- FX -------
@@ -313,14 +206,14 @@ class FXPools {
     p.life = p.max = life;
   }
 
-  update(dt, v) {
+  // splashes and rings are water-fixed; the boat moves through them
+  update(dt) {
     for (const p of this.splashes) {
       if (!p.m.visible) continue;
       p.life -= dt;
       if (p.life <= 0) { p.m.visible = false; continue; }
       p.vel.y -= 5.5 * dt;
       p.m.position.addScaledVector(p.vel, dt);
-      p.m.position.x -= v * dt; // water-fixed: drifts astern as the boat moves
       p.m.material.opacity = Math.min(1, p.life / p.max * 1.6);
       if (p.m.position.y < -0.15) p.m.visible = false;
     }
@@ -331,41 +224,35 @@ class FXPools {
       const t = 1 - p.life / p.max;
       p.m.scale.setScalar(p.m.scale.x + p.grow * dt);
       p.m.material.opacity = 0.55 * (1 - t) * (1 - t);
-      p.m.position.x -= v * dt;
     }
   }
 }
 
 // ---------------------------------------------------------------- world ----
+// Water, sky, distant mountains and clouds are a backdrop that recentres on
+// the boat each frame; the riverbanks themselves live in course.js.
 export class World {
   constructor(scene) {
-    this.waterU = makeWater(scene);
-    makeSky(scene);
-    makeMountains(scene);
-    this.clouds = makeClouds(scene);
-
-    this.scroll = new THREE.Group();
-    scene.add(this.scroll);
-    const variants = [makeTile(0), makeTile(1)];
-    for (let i = -2; i <= 4; i++) {
-      const tile = variants[((i % 2) + 2) % 2].clone();
-      tile.position.x = i * TILE;
-      this.scroll.add(tile);
-    }
-
+    this.water = makeWater(scene);
+    this.sky = makeSky(scene);
+    this.mountains = makeMountains(scene);
+    this.cloudsG = makeClouds(scene);
     this.fx = new FXPools(scene);
     this.time = 0;
   }
 
-  update(dt, dist, v) {
+  update(dt, anchor) {
     this.time += dt;
-    this.waterU.uTime.value = this.time;
-    this.waterU.uScroll.value = dist % 512;
-    this.scroll.position.x = -(dist % SCROLL_WRAP);
-    for (let i = 0; i < this.clouds.length; i++) {
-      this.clouds[i].position.x -= (0.3 + (i % 3) * 0.18) * dt;
-      if (this.clouds[i].position.x < -320) this.clouds[i].position.x = 320;
+    this.water.uniforms.uTime.value = this.time;
+    this.water.mesh.position.set(anchor.x, 0, anchor.z);
+    this.sky.position.set(anchor.x, 0, anchor.z);
+    this.mountains.position.set(anchor.x, 0, anchor.z);
+    this.cloudsG.group.position.set(anchor.x, 0, anchor.z);
+    for (let i = 0; i < this.cloudsG.clouds.length; i++) {
+      const c = this.cloudsG.clouds[i];
+      c.position.x -= (0.3 + (i % 3) * 0.18) * dt;
+      if (c.position.x < -320) c.position.x = 320;
     }
-    this.fx.update(dt, v);
+    this.fx.update(dt);
   }
 }

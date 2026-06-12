@@ -36,6 +36,7 @@ export class Stroke {
     this.time = 0;
     this.lastCatch = null;
     this.spm = 0;
+    this.tempo = 1; // duration multiplier, used to match a real machine's rate
   }
 
   reset() {
@@ -47,14 +48,15 @@ export class Stroke {
     const want = input.held || input.queued;
 
     if (this.mode === 'drive') {
-      this.p += dt / G.driveDur;
+      this.p += dt / (G.driveDur * this.tempo);
       if (this.p >= 1) { this.p = 0; this.mode = 'rec'; }
     } else {
+      const rec = G.recDur * this.tempo;
       if (this.p < G.restPoint) {
         // extraction + hands-away always completes
-        this.p = Math.min(this.p + dt / G.recDur, want ? 1 : G.restPoint);
+        this.p = Math.min(this.p + dt / rec, want ? 1 : G.restPoint);
       } else if (want) {
-        this.p += dt / G.recDur;
+        this.p += dt / rec;
       }
       if (this.p >= 1) {
         this.p = 0; this.mode = 'drive'; input.queued = false;
