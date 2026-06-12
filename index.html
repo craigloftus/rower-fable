@@ -28,33 +28,13 @@
       z-index: 2;
     }
 
-    /* goal readout, top-left while rowing */
-    .goalhud {
-      position: absolute; top: 28px; left: 34px;
-      text-shadow: 0 1px 0 rgba(255,255,255,0.35);
-      opacity: 0; transition: opacity 0.9s ease;
-    }
-    .goalhud.show { opacity: 1; }
-    .goalhud h2 {
-      font-size: 19px; font-weight: 400;
-      letter-spacing: 0.30em; text-transform: uppercase;
-    }
-    .goalhud .rule {
-      width: 64px; height: 1px; background: var(--hairline);
-      margin: 9px 0 7px;
-    }
-    .goalhud p {
-      font-family: 'Sometype Mono', monospace;
-      font-size: 10px; letter-spacing: 0.22em;
-      text-transform: uppercase; color: var(--ink-soft);
-    }
-
-    /* stats */
+    /* stats: hidden until a row begins */
     .stats {
       position: absolute; left: 34px; bottom: 30px;
       display: flex; gap: 42px;
-      text-shadow: 0 1px 0 rgba(255,255,255,0.3);
+      opacity: 0; transition: opacity 0.9s ease;
     }
+    .hud.started .stats, .hud.started .slide { opacity: 1; }
     .stat .label {
       font-family: 'Sometype Mono', monospace;
       font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase;
@@ -70,7 +50,7 @@
     /* slide indicator */
     .slide {
       position: absolute; right: 38px; bottom: 44px; width: 130px;
-      text-shadow: 0 1px 0 rgba(255,255,255,0.3);
+      opacity: 0; transition: opacity 0.9s ease;
     }
     .slide .label {
       font-family: 'Sometype Mono', monospace;
@@ -118,14 +98,6 @@
       border: 1px solid rgba(46,59,51,0.35);
       border-bottom-width: 2px; border-radius: 4px;
       padding: 3px 9px; background: rgba(255,255,255,0.4);
-    }
-
-    .keys {
-      position: absolute; top: 32px; right: 38px; text-align: right;
-      font-family: 'Sometype Mono', monospace;
-      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--ink-soft); line-height: 2;
-      text-shadow: 0 1px 0 rgba(255,255,255,0.3);
     }
 
     /* goal overlay */
@@ -247,19 +219,7 @@
   <div class="vignette"></div>
   <div class="grain"></div>
 
-  <div class="hud">
-    <div class="goalhud" id="goalhud">
-      <h2 id="goalName">free row</h2>
-      <div class="rule"></div>
-      <p id="goalSub"></p>
-    </div>
-
-    <div class="keys">
-      space — row<br />
-      drag — orbit &nbsp;·&nbsp; scroll — zoom<br />
-      r — change goal
-    </div>
-
+  <div class="hud" id="hud">
     <div class="stats">
       <div class="stat">
         <div class="label">Split</div>
@@ -272,6 +232,10 @@
       <div class="stat">
         <div class="label">Distance</div>
         <div class="value"><span id="dist">0 m</span></div>
+      </div>
+      <div class="stat" id="goalStat" hidden>
+        <div class="label" id="goalLabel">Goal</div>
+        <div class="value"><span id="goalVal">–</span></div>
       </div>
     </div>
 

@@ -86,23 +86,34 @@ function ribbon(side, s0, s1, latA, latB, yFn, color) {
   return new THREE.Mesh(g, mat(color, { side: THREE.DoubleSide }));
 }
 
-const buoyGeo = new THREE.IcosahedronGeometry(0.10, 0);
-const buoyMat = mat(0xc97a4a);
+// reeds are instanced: one mesh per chunk keeps draw calls sane
+const reedGeo = new THREE.ConeGeometry(0.045, 1, 4);
+reedGeo.translate(0, 0.5, 0);
+const reedMat = mat(0x87a06b);
+const _m4 = new THREE.Matrix4();
+const _q4 = new THREE.Quaternion();
+const _e4 = new THREE.Euler();
+const _s4 = new THREE.Vector3();
+const _p4 = new THREE.Vector3();
 
 function buildChunk(ci) {
   const r = rng(4242 + ci * 131);
   const g = new THREE.Group();
   const s0 = ci * CHUNK, s1 = s0 + CHUNK;
   const W = RIVER_HALF;
+  const reedXf = [];
 
   for (const side of [-1, 1]) {
-    // near grassy shelf and rising far band, continuous across chunks
-    g.add(ribbon(side, s0, s1, W - 3, W + 42,
-      (s, edge) => edge ? 1.5 + hash(s, side) * 1.4 : 0.22 + hash(s, side + 2) * 0.25,
-      0x86ac63));
+    // shore slope rises out of the water, then the near shelf and far band;
+    // shared edge expressions keep everything continuous across chunks
+    const shoreTop = (s) => 0.34 + hash(s, side + 2) * 0.22;
+    const shelfTop = (s) => 1.5 + hash(s, side) * 1.4;
+    g.add(ribbon(side, s0, s1, W - 4.5, W - 1,
+      (s, edge) => edge ? shoreTop(s) : -0.55, 0x7da25e));
+    g.add(ribbon(side, s0, s1, W - 1, W + 42,
+      (s, edge) => edge ? shelfTop(s) : shoreTop(s), 0x86ac63));
     g.add(ribbon(side, s0, s1, W + 42, W + 150,
-      (s, edge) => edge ? 4.0 + hash(s, side + 4) * 3.0 : 1.5 + hash(s, side) * 1.4,
-      0x6f9d57));
+      (s, edge) => edge ? 4.0 + hash(s, side + 4) * 3.0 : shelfTop(s), 0x6f9d57));
 
     // bank mounds
     for (let i = 0; i < 4; i++) {
@@ -124,50 +135,56 @@ function buildChunk(ci) {
       mound.position.y = -0.8;
       g.add(mound);
     }
-    // trees
-    for (let i = 0; i < 4; i++) {
-      const tree = makeTree(r, 1.8 + r() * 2.2);
-      place(tree, s0 + r() * CHUNK, side * (W + 4 + r() * 20), r() * Math.PI * 2);
-      tree.position.y = 0.5 + r() * 1.4;
+    // trees: a couple of denser groves plus scattered singles
+    const grove = [s0 + r() * CHUNK, s0 + r() * CHUNK];
+    for (let i = 0; i < 8; i++) {
+      const tree = makeTree(r, 1.6 + r() * 2.4);
+      const sT = i < 5
+        ? grove[i % 2] + (r() - 0.5) * 22
+        : s0 + r() * CHUNK;
+      place(tree, sT, side * (W + 3.5 + r() * 24), r() * Math.PI * 2);
+      tree.position.y = 0.5 + r() * 1.5;
       g.add(tree);
     }
-    // rocks at the waterline
-    for (let i = 0; i < 3; i++) {
+    // rocks settled into the shore slope, half in the water
+    for (let i = 0; i < 4; i++) {
       const rock = new THREE.Mesh(
         jitterGeo(new THREE.IcosahedronGeometry(1, 0), r, 0.3),
         mat(0x8d8f7e));
-      rock.scale.setScalar(0.5 + r() * 1.3);
-      place(rock, s0 + r() * CHUNK, side * (W - 1.5 + r() * 3));
-      rock.position.y = 0;
+      rock.scale.setScalar(0.4 + r() * 1.3);
+      place(rock, s0 + r() * CHUNK, side * (W - 3 + r() * 3.5));
+      rock.position.y = -0.12 * rock.scale.x;
       g.add(rock);
     }
-    // reed clusters
+    // reed beds: broad patches rooted in the shallows
     for (let i = 0; i < 4; i++) {
-      const sR = s0 + r() * CHUNK, latR = W - 2 + r() * 2.5;
-      for (let k = 0; k < 5; k++) {
-        const reed = new THREE.Mesh(new THREE.ConeGeometry(0.04, 0.6 + r() * 0.7, 4), mat(0x87a06b));
-        place(reed, sR + (r() - 0.5) * 1.4, side * (latR + (r() - 0.5) * 1.4));
-        reed.position.y = 0.28;
-        reed.rotation.z = (r() - 0.5) * 0.2;
-        g.add(reed);
+      const sR = s0 + (i + r()) * (CHUNK / 4);
+      const latR = W - 3 + r() * 2.5;
+      const along = 2.5 + r() * 4, deep = 1.2 + r() * 1.6;
+      const n = 12 + (r() * 10) | 0;
+      for (let k = 0; k < n; k++) {
+        rawFrame(sR + (r() - 0.5) * along, _f);
+        const l = side * (latR + (r() - 0.5) * deep);
+        _p4.set(_f.x + Math.sin(_f.th) * l, -0.1 + r() * 0.15, _f.z + Math.cos(_f.th) * l);
+        _e4.set((r() - 0.5) * 0.22, r() * Math.PI, (r() - 0.5) * 0.22);
+        _q4.setFromEuler(_e4);
+        _s4.setScalar(1).y = 0.6 + r() * 0.9;
+        reedXf.push(_m4.compose(_p4, _q4, _s4).clone());
       }
     }
-    // small buoys marking the river edges
-    for (let s = s0 + (side > 0 ? 0 : 9); s < s1; s += 18) {
-      const b = new THREE.Mesh(buoyGeo, buoyMat);
-      place(b, s, side * (W - 2));
-      b.position.y = 0.05;
-      g.add(b);
-    }
   }
+
+  const reeds = new THREE.InstancedMesh(reedGeo, reedMat, reedXf.length);
+  for (let i = 0; i < reedXf.length; i++) reeds.setMatrixAt(i, reedXf[i]);
+  g.add(reeds);
   return g;
 }
 
 function disposeGroup(g) {
   g.traverse((m) => {
     if (!m.isMesh) return;
-    if (m.geometry !== buoyGeo) m.geometry.dispose();
-    if (m.material !== buoyMat) m.material.dispose();
+    if (m.geometry !== reedGeo) m.geometry.dispose();
+    if (m.material !== reedMat) m.material.dispose();
   });
 }
 
@@ -180,6 +197,51 @@ class Markers {
     this.onPop = onPop;
     this.list = [];
     this.next = MARKER_EVERY;
+    this.finish = null;
+  }
+
+  // the goal line: paper poles with golden pennants either side of the
+  // course and a wide ring on the water; dissolves once crossed
+  setFinish(s) {
+    if (this.finish) this.disposeFinish();
+    if (s == null) return;
+    const g = new THREE.Group();
+    const fade = [];
+    const poleM = new THREE.MeshStandardMaterial({
+      color: 0xf2efe4, roughness: 0.9, flatShading: true, transparent: true,
+    });
+    const flagM = new THREE.MeshStandardMaterial({
+      color: 0xf2c87e, roughness: 0.8, flatShading: true, transparent: true,
+    });
+    const flags = [];
+    for (const sd of [-1, 1]) {
+      const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.028, 1.5, 6), poleM);
+      pole.position.set(0, 0.72, sd * 4);
+      g.add(pole);
+      const flag = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.13, 0.30), flagM);
+      flag.position.set(0, 1.36, sd * (4 - 0.17));
+      g.add(flag);
+      flags.push(flag);
+    }
+    const ringM = new THREE.MeshBasicMaterial({
+      color: 0xf2c87e, transparent: true, opacity: 0.30, depthWrite: false,
+    });
+    const ringGeo = new THREE.RingGeometry(3.4, 3.75, 36);
+    ringGeo.rotateX(-Math.PI / 2);
+    const ring = new THREE.Mesh(ringGeo, ringM);
+    ring.position.y = 0.05;
+    g.add(ring);
+    fade.push({ m: poleM, base: 1 }, { m: flagM, base: 1 }, { m: ringM, base: 0.30 });
+    place(g, s + START, 0);
+    this.parent.add(g);
+    this.finish = { g, s, flags, fade, pop: -1 };
+  }
+
+  disposeFinish() {
+    this.parent.remove(this.finish.g);
+    this.finish.g.traverse((m) => { if (m.isMesh) m.geometry.dispose(); });
+    for (const f of this.finish.fade) f.m.dispose();
+    this.finish = null;
   }
 
   spawn(s) {
@@ -205,6 +267,21 @@ class Markers {
 
   update(dt, dist, time) {
     while (this.next < dist + VIEW_AHEAD) { this.spawn(this.next); this.next += MARKER_EVERY; }
+    if (this.finish) {
+      const f = this.finish;
+      if (f.pop < 0) {
+        for (const fl of f.flags) fl.rotation.x = Math.sin(time * 2.2 + fl.position.z) * 0.14;
+        if (dist >= f.s - 1.5) { f.pop = 0; this.onPop?.(f.g.position); }
+      } else {
+        f.pop += dt;
+        const k = f.pop / 0.9;
+        if (k >= 1) this.disposeFinish();
+        else {
+          f.g.position.y = k * 0.8;
+          for (const fd of f.fade) fd.m.opacity = fd.base * (1 - k);
+        }
+      }
+    }
     for (let i = this.list.length - 1; i >= 0; i--) {
       const m = this.list[i];
       if (m.pop < 0) {
@@ -241,6 +318,7 @@ class Markers {
     }
     this.list = [];
     this.next = MARKER_EVERY;
+    if (this.finish) this.disposeFinish();
   }
 }
 
@@ -272,6 +350,11 @@ export class Course {
       }
     }
     this.markers.update(dt, dist, time);
+  }
+
+  // place (or clear, with null) the goal-line marker at a distance rowed
+  setFinish(dist) {
+    this.markers.setFinish(dist);
   }
 
   reset() {

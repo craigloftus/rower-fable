@@ -97,9 +97,9 @@ addEventListener('pointerup', () => {
 // ---------------------------------------------------------------- HUD ------
 const $ = (id) => document.getElementById(id);
 const elSplit = $('split'), elRate = $('rate'), elDist = $('dist');
-const elBead = $('bead'), elHint = $('hint');
+const elBead = $('bead'), elHint = $('hint'), elHud = $('hud');
 const elOverlay = $('overlay'), elSetup = $('setupCard'), elDone = $('doneCard');
-const elGoalHud = $('goalhud'), elGoalName = $('goalName'), elGoalSub = $('goalSub');
+const elGoalStat = $('goalStat'), elGoalLabel = $('goalLabel'), elGoalVal = $('goalVal');
 let smoothV = 0, strokes = 0;
 
 function fmtSplit(v) {
@@ -113,10 +113,6 @@ function fmtTime(s, dp = 0) {
   const ss = dp ? sec.toFixed(dp) : `${Math.floor(sec)}`;
   return `${m}:${sec < 10 ? '0' : ''}${ss}`;
 }
-function fmtTarget(cfg) {
-  return cfg.mode === 'time' ? fmtTime(cfg.target) : `${cfg.target} m`;
-}
-
 // ------------------------------------------------------- goals + overlay ---
 const cfg = { mode: 'distance', target: 1000, repeats: 1, rest: 60 };
 const TARGETS = {
@@ -162,7 +158,7 @@ function showSetup() {
   elSetup.hidden = false;
   elDone.hidden = true;
   elOverlay.classList.add('show');
-  elGoalHud.classList.remove('show');
+  elHud.classList.remove('started');
   elHint.classList.add('gone');
 }
 
@@ -172,11 +168,10 @@ function beginWorkout() {
   course.reset();
   workout = cfg.mode === 'just' ? null : new Workout({ ...cfg });
   workout?.start(0);
+  course.setFinish(cfg.mode === 'distance' ? cfg.target : null);
   elOverlay.classList.remove('show');
-  elGoalHud.classList.add('show');
-  elGoalName.textContent = cfg.mode === 'just'
-    ? 'free row'
-    : `${fmtTarget(cfg)}${cfg.repeats > 1 ? ` × ${cfg.repeats}` : ''}`;
+  elHud.classList.add('started');
+  elGoalStat.hidden = cfg.mode === 'just';
   setHint(ftms.connected ? '<span>row on your machine</span>' : '<span>Hold</span><kbd>space</kbd><span>to row</span>');
   strokes = 0;
 }
@@ -189,7 +184,7 @@ function showSummary() {
   elSetup.hidden = true;
   elDone.hidden = false;
   elOverlay.classList.add('show');
-  elGoalHud.classList.remove('show');
+  elHud.classList.remove('started');
   elHint.classList.add('gone');
 }
 
@@ -356,24 +351,25 @@ function tick() {
   if (workout) {
     const ev = workout.update(dt, stroke.dist, pose.mode === 'drive' && !window.__paused);
     if (ev === 'rest') { sounds.chime(); }
-    else if (ev === 'work') { sounds.chime(); setHint('<span>row</span>'); elHint.classList.add('dim'); }
+    else if (ev === 'work') {
+      sounds.chime();
+      setHint('<span>row</span>');
+      elHint.classList.add('dim');
+      if (cfg.mode === 'distance') course.setFinish(workout.intStart + cfg.target);
+    }
     else if (ev === 'done') { sounds.fanfare(); showSummary(); workout = null; }
     if (workout) {
+      elGoalLabel.textContent = cfg.repeats > 1
+        ? `Goal ${Math.min(workout.interval + 1, cfg.repeats)} of ${cfg.repeats}`
+        : 'Goal';
       if (workout.state === 'rest') {
-        elGoalSub.textContent = `interval ${workout.interval} of ${cfg.repeats} done`;
+        elGoalVal.textContent = '–';
         setHint(`<span>rest · ${fmtTime(workout.restT)}</span>`);
-      } else if (workout.state === 'work') {
-        const rem = workout.remaining(stroke.dist);
-        const remTxt = cfg.mode === 'time' ? fmtTime(rem) : `${rem.toFixed(0)} m`;
-        elGoalSub.textContent = cfg.repeats > 1
-          ? `interval ${workout.interval + 1} of ${cfg.repeats} · ${remTxt} to go`
-          : `${remTxt} to go`;
       } else {
-        elGoalSub.textContent = 'waiting for the first stroke';
+        const rem = workout.remaining(stroke.dist);
+        elGoalVal.textContent = cfg.mode === 'time' ? fmtTime(rem) : `${rem.toFixed(0)} m`;
       }
     }
-  } else if (elGoalHud.classList.contains('show')) {
-    elGoalSub.textContent = `${stroke.dist.toFixed(0)} m rowed`;
   }
 
   // HUD
