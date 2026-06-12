@@ -8,8 +8,11 @@ import { G } from './stroke.js';
 // spine bones take lean/hunch, arms and legs are aimed at the same oar
 // handle / foot stretcher targets the procedural figure used.
 
-const HIP_Y = 0.395;          // upper-leg joints sit here when seated
+const HIP_Y = 0.415;          // upper-leg joints sit here when seated
+const HIP_X = 0.065;          // hip joints ride this far ahead of seat centre
+const PELVIS_TILT = -0.22;    // posterior tilt: tuck the seat bones under
 const LEG_REACH = 0.875;      // scale the model so thigh+shin match the boat
+const ARM_STRETCH = 1.14;     // lengthen the stubby rig arms to reach the oars
 const HAND_LEN = 0.075;       // grip length beyond the wrist
 const FOOT_PITCH = -0.88;     // toes-up tilt against the stretcher
 
@@ -82,11 +85,15 @@ export class Rower {
     this.mount.scale.setScalar(s);
     this.thigh *= s;
     this.shin *= s;
+    // the rig's arms are short relative to the boat's oar geometry;
+    // stretching the bones lengthens (and slightly thickens) the meshes
+    b.UpperArmL.scale.setScalar(ARM_STRETCH);
+    b.UpperArmR.scale.setScalar(ARM_STRETCH);
     const uaW = local(b.UpperArmL);
     const laW = local(b.LowerArmL);
     const wrW = local(b.WristL);
-    this.upperArm = uaW.distanceTo(laW) * s;
-    this.foreArm = laW.distanceTo(wrW) * s + HAND_LEN;
+    this.upperArm = uaW.distanceTo(laW) * s * ARM_STRETCH;
+    this.foreArm = laW.distanceTo(wrW) * s * ARM_STRETCH + HAND_LEN;
 
     // leg-root offset from the Body bone, in boat space, for seating
     this.group.updateWorldMatrix(true, true);
@@ -112,6 +119,7 @@ export class Rower {
     for (const sd of ['L', 'R']) {
       snap(`UpperArm${sd}`, `LowerArm${sd}`);
       snap(`LowerArm${sd}`, `Wrist${sd}`);
+      snap(`Wrist${sd}`, `Middle1${sd}`);
       snap(`UpperLeg${sd}`, `LowerLeg${sd}`);
       snap(`LowerLeg${sd}`);
       snap(`Foot${sd}`);
@@ -127,6 +135,7 @@ export class Rower {
       for (const [name, axis] of [
         [`UpperLeg${sd}`, [-1, 0, 0]], [`LowerLeg${sd}`, [-1, 0, 0]],
         [`UpperArm${sd}`, [1, 0, 0]], [`LowerArm${sd}`, [1, 0, 0]],
+        [`Wrist${sd}`, [0, 1, 0]],  // back of the hand
       ]) {
         const r = this.rest[name];
         r.c0 = new THREE.Vector3(...axis).applyQuaternion(r.q0.clone().invert());
@@ -197,14 +206,17 @@ export class Rower {
     this.group.parent.getWorldQuaternion(_qBoat);
     this.group.updateWorldMatrix(true, true);
 
-    // pelvis on the seat: place the Body bone so the leg roots sit at the hip
-    _v.set(seatX - 0.025 - this.legOffX, HIP_Y - this.legOffY, 0);
+    // pelvis on the seat: the hip joints ride ahead of the seat centre so
+    // the buttocks land on the wood, not in front of it
+    _v.set(seatX + HIP_X - this.legOffX, HIP_Y - this.legOffY, 0);
     _v.applyMatrix4(this.group.matrixWorld);
     b.Body.parent.worldToLocal(_v);
     b.Body.position.copy(_v);
 
-    // spine: pelvis takes a share of the lean, the rest rolls up the chain
+    // spine: pelvis takes a share of the lean, the rest rolls up the chain;
+    // the hips tuck under (posterior tilt) as anyone seated does
     this.setLean('Body', lean * 0.30);
+    this.setLean('Hips', lean * 0.30 + PELVIS_TILT);
     this.setLean('Abdomen', lean * 0.65);
     this.setLean('Torso', lean * 0.95 + hunch * 0.35);
     this.setLean('Chest', lean + hunch);
@@ -232,9 +244,10 @@ export class Rower {
       b[`Foot${k}`].position.copy(_v);
       this.setLean(`Foot${k}`, FOOT_PITCH);
 
-      // arms: shoulder to oar handle, elbows out toward the IK pole
+      // arms: shoulder to oar handle; as the arms fold at the finish the
+      // elbows track back past the body, slightly out and down
       this.boneBoatPos(`UpperArm${k}`, _sh);
-      _pole.set(0.55, -0.35, sd * 1.0).normalize();
+      _pole.set(0.7, -0.3, sd * 0.8).normalize();
       ik2(_sh, hand, this.upperArm, this.foreArm, _pole, _elbow, _handEnd);
       _line.subVectors(_handEnd, _sh).normalize();
       _bend.subVectors(_elbow, _sh);
@@ -242,6 +255,10 @@ export class Rower {
       if (_bend.lengthSq() < 1e-6) _bend.set(0.3, -0.5, sd);
       this.aim(`UpperArm${k}`, _dw.subVectors(_elbow, _sh), _bend);
       this.aim(`LowerArm${k}`, _dw.subVectors(_handEnd, _elbow), _bend);
+      // hands drape down over the handles, knuckles up
+      _line.copy(_dw).normalize();
+      _line.y -= 0.7;
+      this.aim(`Wrist${k}`, _line, _v.set(0, 1, 0));
     }
   }
 }

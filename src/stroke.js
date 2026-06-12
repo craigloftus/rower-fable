@@ -6,12 +6,12 @@ import { lerp, smooth, easeSin, clamp } from './util.js';
 export const G = {
   seatCatch: -0.12,   // seat x at the catch (compressed)
   seatFinish: 0.36,   // seat x at the finish (legs down)
-  leanCatch: 0.46,    // torso pitch, + = forward (toward stern)
+  leanCatch: 0.50,    // torso pitch, + = forward (toward stern)
   leanFinish: -0.36,  // layback
-  oarCatch: 0.99,     // oar sweep angle, + = blade toward bow
-  oarFinish: -0.62,
+  oarCatch: 0.95,     // oar sweep angle, + = blade toward bow
+  oarFinish: -0.55,
   oarRest: -0.12,     // hands-away angle, handles in front of the body at rest
-  pinX: 0.05, pinY: 0.345, pinZ: 0.80,  // oarlock pin
+  pinX: 0.05, pinY: 0.325, pinZ: 0.80,  // oarlock pin
   inboard: 0.86, outboard: 2.03,        // scull dimensions either side of pin
   bladeDrive: -0.075, // blade height in the water during the drive
   bladeRec: 0.16,     // blade skims just clear of the water on the recovery
