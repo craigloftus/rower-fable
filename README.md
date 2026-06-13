@@ -12,10 +12,21 @@ npm run dev      # then open the printed localhost URL
 
 ## Playing
 
-Pick a goal on the opening card — just row, a distance, or a time, with
-optional repeats and rest periods — then row. Course markers float every
-100 m and pop as you pass; a flagged gate marks the finish of each
-interval. A summary card shows distance, time and average split.
+Pick a goal on the opening card — just row, a distance, a time (with
+optional repeats and rest periods), or a **plan** session — then row.
+Course markers float every 100 m and pop as you pass; a flagged gate marks
+the finish of each interval. A summary card shows distance, time and
+average split.
+
+The plan is British Rowing's
+[Go Row beginner training plan](https://www.britishrowing.org/indoor-rowing/go-row-indoor/):
+eight weeks, two sessions a week, building from 1:00 efforts to a 2000 m
+row. Pick a week and session and the game walks you through it — a stage
+strip across the top shows the shape of the session (taller segments are
+harder), chimes mark every stage change (rising into work, higher still
+for high intensity, falling into rest, with 3-2-1 ticks before work
+resumes), and the HUD shows the current stage, what's left of it, and the
+guide stroke rate for the target intensity.
 
 | Input | Action |
 | --- | --- |

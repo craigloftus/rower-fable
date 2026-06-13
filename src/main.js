@@ -6,9 +6,10 @@ import { Boat } from './boat.js';
 import { Rower } from './rower.js';
 import { Stroke, G } from './stroke.js';
 import { Workout } from './workout.js';
+import { PLAN, INTENSITY, customStages, stageSeconds, stageAmount } from './plan.js';
 import { FTMS } from './ftms.js';
 import { Sounds } from './audio.js';
-import { clamp, lerp } from './util.js';
+import { clamp, lerp, fmtTime } from './util.js';
 
 // ------------------------------------------------------------ renderer -----
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -97,29 +98,34 @@ addEventListener('pointerup', () => {
 // ---------------------------------------------------------------- HUD ------
 const $ = (id) => document.getElementById(id);
 const elSplit = $('split'), elRate = $('rate'), elDist = $('dist');
-const elBead = $('bead'), elHint = $('hint'), elHud = $('hud');
+const elHint = $('hint'), elHud = $('hud');
 const elOverlay = $('overlay'), elSetup = $('setupCard'), elDone = $('doneCard');
 const elGoalStat = $('goalStat'), elGoalLabel = $('goalLabel'), elGoalVal = $('goalVal');
+const elSession = $('session'), elSessName = $('sessName'), elSessStage = $('sessStage');
+const elRateAim = $('rateAim');
 let smoothV = 0, strokes = 0;
 
 function fmtSplit(v) {
   if (v < 0.35) return '–:––';
   return fmtTime(500 / v, 1);
 }
-function fmtTime(s, dp = 0) {
-  s = Math.max(0, s);
-  const m = Math.floor(s / 60);
-  const sec = s - m * 60;
-  const ss = dp ? sec.toFixed(dp) : `${Math.floor(sec)}`;
-  return `${m}:${sec < 10 ? '0' : ''}${ss}`;
-}
 // ------------------------------------------------------- goals + overlay ---
-const cfg = { mode: 'distance', target: 1000, repeats: 1, rest: 60 };
+const cfg = { mode: 'distance', target: 1000, repeats: 1, rest: 60, week: 1, session: 1 };
+try {
+  const saved = JSON.parse(localStorage.getItem('morningrow.cfg'));
+  if (saved && ['just', 'distance', 'time', 'plan'].includes(saved.mode)) Object.assign(cfg, saved);
+} catch { /* fresh start */ }
+cfg.week = clamp(cfg.week | 0, 1, PLAN.length);
+cfg.session = clamp(cfg.session | 0, 1, 2);
 const TARGETS = {
   distance: [[500, '500 m'], [1000, '1000 m'], [2000, '2000 m'], [5000, '5000 m']],
   time: [[120, '2:00'], [300, '5:00'], [600, '10:00'], [1200, '20:00']],
 };
 let workout = null;
+let sessFills = [];   // strip fill elements, one per stage
+let lastTick = 0;     // last rest-countdown second chirped
+let hintT = 0;        // auto-dim timer for stage hints
+let activeLabel = ''; // 'week 3 · session 1' while a plan session runs
 
 function buildChips(rowId, list, current, onPick) {
   const box = $(rowId);
@@ -136,20 +142,79 @@ function buildChips(rowId, list, current, onPick) {
   }
 }
 
+// a strip of segments mirroring the stage list: width ~ duration,
+// height (via class) = intensity; returns the fill elements for progress
+function renderStrip(box, stages) {
+  box.innerHTML = '';
+  const fills = [];
+  for (const st of stages) {
+    const seg = document.createElement('div');
+    seg.className = `seg ${st.type === 'rest' ? 'rest' : st.intensity || 'medium'}`;
+    seg.style.flex = `${Math.max(stageSeconds(st), 25)} 1 0px`;
+    const fill = document.createElement('div');
+    fill.className = 'fill';
+    seg.appendChild(fill);
+    box.appendChild(seg);
+    fills.push(fill);
+  }
+  return fills;
+}
+
+// the week rail: numbered nodes, prior weeks marked done, the accent line
+// filling across to the selected node
+function renderWeekRail(current, onPick) {
+  const box = $('weekChips');
+  box.querySelectorAll('button').forEach((b) => b.remove());
+  for (let i = 0; i < PLAN.length; i++) {
+    const w = i + 1;
+    const b = document.createElement('button');
+    b.innerHTML = `<span class="dot"></span>${w}`;
+    if (w < current) b.classList.add('done');
+    if (w === current) b.classList.add('sel');
+    b.addEventListener('click', () => { onPick(w); refreshSetup(); });
+    box.appendChild(b);
+  }
+  // anchor the fill to node centres once laid out
+  requestAnimationFrame(() => {
+    const btns = box.querySelectorAll('button');
+    const sel = btns[current - 1];
+    if (!sel) return;
+    const box0 = box.getBoundingClientRect();
+    const mid = (el) => el.getBoundingClientRect().left + el.offsetWidth / 2 - box0.left;
+    const fill = $('weekFill');
+    fill.style.left = `${mid(btns[0])}px`;
+    fill.style.width = `${Math.max(0, mid(sel) - mid(btns[0]))}px`;
+  });
+}
+
 function refreshSetup() {
-  buildChips('modeChips', [['just', 'just row'], ['distance', 'distance'], ['time', 'time']],
+  buildChips('modeChips',
+    [['just', 'just row'], ['distance', 'distance'], ['time', 'time'], ['plan', 'plan']],
     cfg.mode, (v) => {
       cfg.mode = v;
-      if (v !== 'just' && !TARGETS[v].some(([t]) => t === cfg.target)) cfg.target = TARGETS[v][1][0];
+      if ((v === 'distance' || v === 'time') && !TARGETS[v].some(([t]) => t === cfg.target)) {
+        cfg.target = TARGETS[v][1][0];
+      }
     });
-  const goal = cfg.mode !== 'just';
+  const goal = cfg.mode === 'distance' || cfg.mode === 'time';
+  const plan = cfg.mode === 'plan';
   $('targetRow').hidden = !goal;
   $('repeatRow').hidden = !goal;
   $('restRow').hidden = !goal || cfg.repeats < 2;
+  $('planPanel').hidden = !plan;
   if (goal) {
     buildChips('targetChips', TARGETS[cfg.mode], cfg.target, (v) => { cfg.target = v; });
     buildChips('repeatChips', [[1, '×1'], [2, '×2'], [4, '×4'], [6, '×6']], cfg.repeats, (v) => { cfg.repeats = v; });
     buildChips('restChips', [[30, '0:30'], [60, '1:00'], [120, '2:00']], cfg.rest, (v) => { cfg.rest = v; });
+  }
+  if (plan) {
+    renderWeekRail(cfg.week, (v) => { cfg.week = v; });
+    buildChips('sessionChips', [[1, 'session 1'], [2, 'session 2']], cfg.session, (v) => { cfg.session = v; });
+    const week = PLAN[cfg.week - 1], sess = week.sessions[cfg.session - 1];
+    renderStrip($('planStrip'), sess.stages);
+    $('planDesc').textContent = sess.desc;
+    $('planTotal').textContent = `≈ ${Math.round(sess.stages.reduce((a, s) => a + stageSeconds(s), 0) / 60)} min`;
+    $('planAim').textContent = week.aim;
   }
 }
 
@@ -166,18 +231,33 @@ function beginWorkout() {
   sounds.ensure();
   stroke.reset();
   course.reset();
-  workout = cfg.mode === 'just' ? null : new Workout({ ...cfg });
-  workout?.start(0);
-  course.setFinish(cfg.mode === 'distance' ? cfg.target : null);
+  let stages = null;
+  if (cfg.mode === 'plan') stages = PLAN[cfg.week - 1].sessions[cfg.session - 1].stages;
+  else if (cfg.mode !== 'just') stages = customStages(cfg);
+  workout = stages ? new Workout(stages) : null;
+  activeLabel = cfg.mode === 'plan' ? `week ${cfg.week} · session ${cfg.session}` : '';
+  localStorage.setItem('morningrow.cfg', JSON.stringify(cfg));
+
+  course.setFinish(stages && stages[0].by === 'distance' ? stages[0].amount : null);
+  elSession.hidden = !workout;
+  if (workout) {
+    sessFills = renderStrip($('sessStrip'), stages);
+    elSessName.textContent = activeLabel
+      || (stages.length > 1 ? `${cfg.repeats} × ${stageAmount(stages[0])}` : stageAmount(stages[0]));
+    elSessStage.textContent = 'ready';
+  }
+  lastTick = 0;
+  elRateAim.hidden = true;
   elOverlay.classList.remove('show');
   elHud.classList.add('started');
-  elGoalStat.hidden = cfg.mode === 'just';
+  elGoalStat.hidden = !workout;
   setHint(ftms.connected ? '<span>row on your machine</span>' : '<span>Hold</span><kbd>space</kbd><span>to row</span>');
   strokes = 0;
 }
 
 function showSummary() {
   const s = workout.summary();
+  $('doneTag').textContent = activeLabel ? `${activeLabel} complete` : 'workout complete';
   $('sumDist').textContent = `${s.dist.toFixed(0)} m`;
   $('sumTime').textContent = fmtTime(s.time, 1);
   $('sumSplit').textContent = s.split ? fmtTime(s.split, 1) : '–:––';
@@ -195,9 +275,92 @@ function resetToSetup() {
   showSetup();
 }
 
-function setHint(html) {
+function setHint(html, autodim = false) {
+  clearTimeout(hintT);
   elHint.innerHTML = html;
   elHint.classList.remove('gone', 'dim');
+  if (autodim) hintT = setTimeout(() => elHint.classList.add('dim'), 4000);
+}
+
+function rowHint(st) {
+  const parts = [st.by === 'strokes' ? `${st.amount} strokes` : 'row'];
+  if (st.intensity) parts.push(st.intensity, `${INTENSITY[st.intensity].aim} spm`);
+  return `<span>${parts.join(' · ')}</span>`;
+}
+
+function onWorkoutEvent(ev) {
+  if (ev === 'done') {
+    sounds.fanfare();
+    showSummary();
+    workout = null;
+    return;
+  }
+  const st = workout.stage;
+  if (ev === 'burst') {
+    sounds.cueBurst();
+    setHint(`<span>burst · ${st.burst.strokes} hard strokes</span>`);
+    return;
+  }
+  if (ev === 'burstEnd') {
+    sounds.cueRow(st.intensity);
+    setHint(`<span>steady · ${st.intensity}</span>`, true);
+    return;
+  }
+  // 'start' | 'stage': a new stage begins
+  lastTick = 0;
+  if (st.type === 'rest') {
+    sounds.cueRest();
+    course.setFinish(null);
+  } else {
+    sounds.cueRow(st.intensity);
+    course.setFinish(st.by === 'distance' ? workout.stageStart + st.amount : null);
+    setHint(rowHint(st), true);
+  }
+}
+
+function updateWorkoutHud() {
+  const st = workout.stage;
+  const active = workout.state === 'active';
+  const idx = Math.max(workout.i, 0);
+  const rem = workout.remaining(stroke.dist);
+  const frac = active ? 1 - rem / st.amount : 0;
+  for (let k = 0; k < sessFills.length; k++) {
+    sessFills[k].style.width = k < idx ? '100%' : k === idx ? `${frac * 100}%` : '0%';
+    sessFills[k].parentElement.classList.toggle('cur', k === idx && active);
+  }
+
+  // bottom-left goal: what to do right now, and how much of it is left
+  if (st.type === 'rest') {
+    elGoalLabel.textContent = 'Rest';
+    elGoalVal.textContent = fmtTime(rem);
+    elSessStage.textContent = st.light ? 'rest · or light row' : 'rest';
+    const c = Math.ceil(rem);
+    if (c <= 3 && c !== lastTick) { sounds.tick(); lastTick = c; }
+    setHint(c <= 3 ? `<span>row in ${c}…</span>` : `<span>rest · ${fmtTime(rem)}</span>`);
+  } else if (workout.burst) {
+    elGoalLabel.textContent = 'Burst';
+    elGoalVal.textContent = `${workout.burst.left} strokes`;
+    elSessStage.textContent = `burst · ${workout.burst.left} to go`;
+  } else {
+    elGoalLabel.textContent = `Row ${workout.rowIndex()} of ${workout.rowCount}`;
+    elGoalVal.textContent = st.by === 'time' ? fmtTime(rem)
+      : st.by === 'distance' ? `${rem.toFixed(0)} m`
+      : `${Math.ceil(rem)} strokes`;
+    elSessStage.textContent = !active ? 'ready'
+      : st.intensity ? `row · ${st.intensity}` : 'row';
+  }
+  elSessStage.classList.toggle('hot', !!workout.burst || (st.type === 'row' && st.intensity === 'high'));
+
+  // guide stroke rate for the current intensity, judged against the live rate
+  const k = active ? workout.intensity() : (st.type === 'row' ? st.intensity : null);
+  if (k) {
+    elRateAim.hidden = false;
+    elRateAim.textContent = `aim ${INTENSITY[k].aim}`;
+    const [lo, hi] = INTENSITY[k].rate;
+    elRateAim.classList.toggle('on', stroke.spm >= lo && stroke.spm <= hi);
+  } else {
+    elRateAim.hidden = true;
+  }
 }
 
 $('begin').addEventListener('click', beginWorkout);
@@ -252,6 +415,7 @@ function bladeWorld(tipLocal) {
 // dev handle for poking the sim from the console
 window.__sim = {
   camera, controls, stroke, input, scene, boat, rower, course, world, renderer,
+  get workout() { return workout; },
   pause(mode, p) { stroke.mode = mode; stroke.p = p; window.__paused = true; },
   play() { window.__paused = false; },
   step(ms = 16) { last -= ms; tick(); }, // manual frame, e.g. for hidden tabs
@@ -337,7 +501,8 @@ function tick() {
     world.fx.ring(_w, 0.18, 0.35 + stroke.v * 0.06, 1.3);
   }
 
-  if (pose.mode === 'drive' && prevMode === 'rec') {
+  const caught = pose.mode === 'drive' && prevMode === 'rec';
+  if (caught) {
     strokes++;
     if (strokes === 2) elHint.classList.add('dim');
   }
@@ -347,29 +512,11 @@ function tick() {
   world.update(dt, boatGroup.position);
   course.update(dt, stroke.dist, t);
 
-  // workout state machine
+  // workout state machine: chime + re-cue on every stage change
   if (workout) {
-    const ev = workout.update(dt, stroke.dist, pose.mode === 'drive' && !window.__paused);
-    if (ev === 'rest') { sounds.chime(); }
-    else if (ev === 'work') {
-      sounds.chime();
-      setHint('<span>row</span>');
-      elHint.classList.add('dim');
-      if (cfg.mode === 'distance') course.setFinish(workout.intStart + cfg.target);
-    }
-    else if (ev === 'done') { sounds.fanfare(); showSummary(); workout = null; }
-    if (workout) {
-      elGoalLabel.textContent = cfg.repeats > 1
-        ? `Goal ${Math.min(workout.interval + 1, cfg.repeats)} of ${cfg.repeats}`
-        : 'Goal';
-      if (workout.state === 'rest') {
-        elGoalVal.textContent = '–';
-        setHint(`<span>rest · ${fmtTime(workout.restT)}</span>`);
-      } else {
-        const rem = workout.remaining(stroke.dist);
-        elGoalVal.textContent = cfg.mode === 'time' ? fmtTime(rem) : `${rem.toFixed(0)} m`;
-      }
-    }
+    const ev = workout.update(dt, stroke.dist, pose.mode === 'drive' && !window.__paused, caught);
+    if (ev) onWorkoutEvent(ev);
+    if (workout) updateWorkoutHud();
   }
 
   // HUD
@@ -377,8 +524,6 @@ function tick() {
   elSplit.textContent = fmtSplit(smoothV);
   elRate.textContent = stroke.spm > 0 ? stroke.spm.toFixed(0) : '––';
   elDist.textContent = `${stroke.dist.toFixed(0)} m`;
-  const pct = clamp((pose.seat - G.seatCatch) / (G.seatFinish - G.seatCatch), 0, 1);
-  elBead.style.left = `${(1 - pct) * 100}%`;
 
   controls.update();
   renderer.render(scene, camera);

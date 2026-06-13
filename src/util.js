@@ -8,6 +8,14 @@ export const smooth = (a, b, x) => {
 };
 export const easeSin = (x) => (1 - Math.cos(Math.PI * clamp(x, 0, 1))) / 2;
 
+export function fmtTime(s, dp = 0) {
+  s = Math.max(0, s);
+  const m = Math.floor(s / 60);
+  const sec = s - m * 60;
+  const ss = dp ? sec.toFixed(dp) : `${Math.floor(sec)}`;
+  return `${m}:${sec < 10 ? '0' : ''}${ss}`;
+}
+
 // deterministic rng (mulberry32) so scenery tiles are reproducible
 export function rng(seed) {
   let s = seed >>> 0;

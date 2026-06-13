@@ -1,79 +1,100 @@
-// Goal/interval state machine. cfg: { mode: 'just'|'distance'|'time',
-// target (m or s), repeats, rest (s) }. The clock arms on the first drive.
+// Stage-list workout engine. A session is an ordered list of stages:
+//   { type: 'row'|'rest', by: 'time'|'distance'|'strokes', amount,
+//     intensity?, light?, burst? }
+// burst: { first, every, strokes, intensity } schedules short hard efforts
+// inside a longer row stage ("a 10-stroke burst every other minute").
+// The clock arms on the first drive; from then stages advance on their own.
 export class Workout {
-  constructor(cfg) {
-    this.cfg = cfg;
-    this.state = 'waiting'; // waiting -> work <-> rest -> done
-    this.interval = 0;      // completed intervals
-    this.workT = 0;         // time in the current work interval
-    this.restT = 0;         // rest remaining
-    this.workTotal = 0;     // time spent working across intervals
-    this.totalDist = 0;     // metres rowed during work intervals
-    this.intStart = 0;      // dist at the start of the current interval
+  constructor(stages) {
+    this.stages = stages;
+    this.state = 'waiting'; // waiting -> active -> done
+    this.i = -1;            // current stage index (-1 until armed)
+    this.elapsed = 0;       // seconds in the current stage
+    this.strokes = 0;       // catches in the current stage
+    this.stageStart = 0;    // dist at the start of the current stage
+    this.burst = null;      // { left } while a burst is on
+    this.burstAt = Infinity;
+    this.workTotal = 0;     // time spent in row stages
+    this.totalDist = 0;     // metres credited from completed row stages
   }
 
-  start(dist) {
-    this.intStart = dist;
+  get stage() { return this.stages[Math.max(this.i, 0)]; }
+  get rowCount() { return this.stages.reduce((n, s) => n + (s.type === 'row'), 0); }
+  rowIndex() {
+    let n = 0;
+    for (let k = 0; k <= Math.max(this.i, 0); k++) n += this.stages[k].type === 'row';
+    return n;
   }
 
-  // returns an event string when the state changes: 'start'|'rest'|'work'|'done'
-  update(dt, dist, driving) {
-    if (this.state === 'done' || this.cfg.mode === 'just') return null;
+  enter(i, dist) {
+    this.i = i;
+    this.elapsed = 0;
+    this.strokes = 0;
+    this.stageStart = dist;
+    this.burst = null;
+    this.burstAt = this.stage.burst ? this.stage.burst.first : Infinity;
+  }
+
+  // events: 'start' | 'stage' | 'burst' | 'burstEnd' | 'done' | null
+  update(dt, dist, driving, caught) {
+    if (this.state === 'done') return null;
     if (this.state === 'waiting') {
       if (!driving) return null;
-      this.state = 'work';
-      this.intStart = dist;
+      this.state = 'active';
+      this.enter(0, dist);
+      if (caught) this.strokes = 1; // the arming catch counts
       return 'start';
     }
-    let ev = null;
-    if (this.state === 'work') {
-      this.workT += dt;
+    const st = this.stage;
+    this.elapsed += dt;
+    if (caught) this.strokes++;
+    if (st.type === 'row') {
       this.workTotal += dt;
-      this.d = dist - this.intStart;
-      const hit = this.cfg.mode === 'time'
-        ? this.workT >= this.cfg.target
-        : this.d >= this.cfg.target;
-      if (hit) {
-        this.totalDist += this.d;
-        this.interval++;
-        if (this.interval >= this.cfg.repeats) {
-          this.state = 'done';
-          ev = 'done';
-        } else if (this.cfg.rest > 0) {
-          this.state = 'rest';
-          this.restT = this.cfg.rest;
-          ev = 'rest';
-        } else {
-          this.workT = 0;
-          this.intStart = dist;
-          ev = 'work';
+      if (st.burst) {
+        if (this.burst) {
+          if (caught && --this.burst.left <= 0) {
+            this.burst = null;
+            return 'burstEnd';
+          }
+        } else if (this.elapsed >= this.burstAt) {
+          this.burst = { left: st.burst.strokes };
+          this.burstAt += st.burst.every;
+          return 'burst';
         }
       }
-    } else if (this.state === 'rest') {
-      this.restT -= dt;
-      if (this.restT <= 0) {
-        this.state = 'work';
-        this.workT = 0;
-        this.intStart = dist;
-        ev = 'work';
-      }
     }
-    return ev;
+    if (this.progress(dist) >= st.amount) {
+      if (st.type === 'row') this.totalDist += dist - this.stageStart;
+      if (this.i + 1 >= this.stages.length) {
+        this.state = 'done';
+        return 'done';
+      }
+      this.enter(this.i + 1, dist);
+      return 'stage';
+    }
+    return null;
   }
 
-  // remaining work in the current interval, for the HUD
+  progress(dist) {
+    const st = this.stage;
+    return st.by === 'time' ? this.elapsed
+      : st.by === 'distance' ? dist - this.stageStart
+      : this.strokes;
+  }
+
   remaining(dist) {
-    if (this.cfg.mode === 'time') return Math.max(0, this.cfg.target - this.workT);
-    return Math.max(0, this.cfg.target - (dist - this.intStart));
+    return Math.max(0, this.stage.amount - this.progress(dist));
+  }
+
+  // the burst overrides the stage's base intensity while it runs
+  intensity() {
+    const st = this.stage;
+    if (this.state !== 'active' || st.type !== 'row') return null;
+    return this.burst ? st.burst.intensity : st.intensity;
   }
 
   summary() {
-    const t = this.workTotal;
-    const d = this.totalDist;
-    return {
-      dist: d,
-      time: t,
-      split: d > 1 ? (t / d) * 500 : 0,
-    };
+    const t = this.workTotal, d = this.totalDist;
+    return { dist: d, time: t, split: d > 1 ? (t / d) * 500 : 0 };
   }
 }
