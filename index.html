@@ -56,14 +56,21 @@
     }
     .stat .sub.on { opacity: 1; color: var(--ink); }
 
-    /* session strip: the shape of the workout, segment height = intensity */
+    /* session strip: the shape of the workout, segment height = intensity.
+       a frosted pill keeps the bar legible over any backdrop */
     .session {
-      position: absolute; top: 26px; left: 50%; transform: translateX(-50%);
-      width: min(600px, 88vw);
+      position: absolute; top: 18px; left: 50%; transform: translateX(-50%);
+      width: min(560px, 90vw);
+      padding: 11px 18px 13px;
+      background: var(--paper);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      border: 1px solid rgba(46,59,51,0.14);
+      border-radius: 16px;
+      box-shadow: 0 6px 22px rgba(28, 46, 38, 0.12);
       opacity: 0; transition: opacity 0.9s ease;
     }
     .shead {
-      display: flex; justify-content: space-between; gap: 14px; margin-bottom: 9px;
+      display: flex; justify-content: space-between; gap: 14px; margin-bottom: 10px;
       font-family: 'Sometype Mono', monospace;
       font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase;
       color: var(--ink-soft);
@@ -73,12 +80,12 @@
     .strip .seg {
       position: relative; height: 7px; min-width: 4px;
       border-radius: 4px; overflow: hidden;
-      background: rgba(46,59,51,0.13);
+      background: rgba(46,59,51,0.16);
     }
-    .strip .seg.low { height: 5px; background: rgba(125,162,94,0.30); }
-    .strip .seg.medium { height: 8px; background: rgba(46,59,51,0.20); }
-    .strip .seg.high { height: 12px; background: rgba(156,116,48,0.36); }
-    .strip .seg.rest { height: 2px; border-radius: 1px; background: rgba(46,59,51,0.16); }
+    .strip .seg.low { height: 5px; background: rgba(125,162,94,0.42); }
+    .strip .seg.medium { height: 8px; background: rgba(46,59,51,0.26); }
+    .strip .seg.high { height: 12px; background: rgba(156,116,48,0.48); }
+    .strip .seg.rest { height: 2px; border-radius: 1px; background: rgba(46,59,51,0.20); }
     .strip .seg .fill {
       position: absolute; inset: 0; width: 0%;
       background: var(--ink); opacity: 0.75;
