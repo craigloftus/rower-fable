@@ -198,7 +198,7 @@ function makeClouds(scene) {
   const cm = mat(0xfbfdff, { roughness: 1, emissive: 0x8d99a4, emissiveIntensity: 0.22 });
   const g = new THREE.Group();
   const clouds = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 20; i++) {
     const c = new THREE.Group();
     const n = 3 + ((r() * 3) | 0);
     const rad = 5 + r() * 5;

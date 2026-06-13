@@ -138,12 +138,12 @@ function buildChunk(ci) {
       mound.position.y = -0.8;
       g.add(mound);
     }
-    // trees: a couple of denser groves plus scattered singles
-    const grove = [s0 + r() * CHUNK, s0 + r() * CHUNK];
-    for (let i = 0; i < 8; i++) {
+    // trees: a few denser groves plus scattered singles
+    const grove = [s0 + r() * CHUNK, s0 + r() * CHUNK, s0 + r() * CHUNK];
+    for (let i = 0; i < 24; i++) {
       const tree = makeTree(r, 1.6 + r() * 2.4);
-      const sT = i < 5
-        ? grove[i % 2] + (r() - 0.5) * 22
+      const sT = i < 15
+        ? grove[i % grove.length] + (r() - 0.5) * 22
         : s0 + r() * CHUNK;
       place(tree, sT, side * (W + 3.5 + r() * 24), r() * Math.PI * 2);
       tree.position.y = 0.5 + r() * 1.5;
