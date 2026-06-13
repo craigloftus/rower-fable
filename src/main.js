@@ -227,7 +227,21 @@ function showSetup() {
   elHint.classList.add('gone');
 }
 
+// go immersive on begin: fullscreen, and lock to landscape where the
+// platform allows it (phones). Both reject on unsupported setups (desktop),
+// so failures are swallowed. Must run inside the begin click gesture.
+async function enterImmersive() {
+  try {
+    const root = document.documentElement;
+    if (!document.fullscreenElement && root.requestFullscreen) {
+      await root.requestFullscreen({ navigationUI: 'hide' });
+    }
+    await screen.orientation?.lock?.('landscape');
+  } catch { /* unsupported or denied — carry on windowed */ }
+}
+
 function beginWorkout() {
+  enterImmersive();
   sounds.ensure();
   stroke.reset();
   course.reset();
