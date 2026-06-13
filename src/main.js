@@ -248,6 +248,7 @@ function beginWorkout() {
   }
   lastTick = 0;
   elRateAim.hidden = true;
+  chasePending = true;
   elOverlay.classList.remove('show');
   elHud.classList.add('started');
   elGoalStat.hidden = !workout;
@@ -403,6 +404,22 @@ renderer.domElement.addEventListener('pointerdown', endIntro, { once: true });
 // --------------------------------------------------------------- loop ------
 let last = performance.now();
 let prevBlade = 0.2, prevMode = 'rec', dripT = 0;
+
+// chase view: once rowing starts, the camera settles in behind the boat,
+// above and angled down, looking along the hull in the direction of travel
+const CHASE = { back: 8.5, up: 3.6, dur: 4.5, ease: 1.1 };
+let chasePending = false, chaseT = 0;
+const _chase = new THREE.Vector3();
+let prevTh = f0.th;
+const _up = new THREE.Vector3(0, 1, 0);
+const _off = new THREE.Vector3();
+// a deliberate camera drag (or zoom) takes priority over the settle
+let downX = 0, downY = 0;
+renderer.domElement.addEventListener('pointerdown', (e) => { downX = e.clientX; downY = e.clientY; });
+renderer.domElement.addEventListener('pointermove', (e) => {
+  if (e.buttons && Math.hypot(e.clientX - downX, e.clientY - downY) > 10) chaseT = 0;
+});
+addEventListener('wheel', () => { chaseT = 0; });
 const _w = new THREE.Vector3();
 const _anchor = new THREE.Vector3();
 const _delta = new THREE.Vector3();
@@ -464,11 +481,28 @@ function tick() {
   shadow.position.set(_frame.x, 0.035, _frame.z);
   shadow.rotation.y = _frame.th;
 
-  // camera rig translates with the boat; orbit stays user-controlled
+  // camera rig is locked to the boat: translate with it and swing around
+  // it as the river bends, so the view holds its boat-relative angle
   _anchor.set(_frame.x, 0.55, _frame.z);
   _delta.subVectors(_anchor, controls.target);
   controls.target.copy(_anchor);
   camera.position.add(_delta);
+  if (_frame.th !== prevTh) {
+    _off.subVectors(camera.position, _anchor).applyAxisAngle(_up, _frame.th - prevTh);
+    camera.position.copy(_anchor).add(_off);
+    prevTh = _frame.th;
+  }
+
+  // ease toward the chase position behind the stern (travel dir is
+  // (cos th, 0, -sin th), matching the course centreline integration)
+  if (chaseT > 0) {
+    chaseT -= dt;
+    _chase.set(
+      _frame.x - Math.cos(_frame.th) * CHASE.back,
+      CHASE.up,
+      _frame.z + Math.sin(_frame.th) * CHASE.back);
+    camera.position.lerp(_chase, 1 - Math.exp(-dt * CHASE.ease));
+  }
 
   boat.setPose(pose);
   rower.update(pose, boat.handL, boat.handR, t);
@@ -505,6 +539,7 @@ function tick() {
   if (caught) {
     strokes++;
     if (strokes === 2) elHint.classList.add('dim');
+    if (chasePending) { chasePending = false; chaseT = CHASE.dur; }
   }
   prevBlade = pose.blade;
   prevMode = pose.mode;
