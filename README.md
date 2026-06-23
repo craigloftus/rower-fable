@@ -38,8 +38,9 @@ guide stroke rate for the target intensity.
 | Connect monitor | Drive strokes from a real rower over Bluetooth FTMS |
 
 With a Fitness Machine Service rower connected (PM5 and most smart rowers;
-Chrome/Edge only), real strokes drive the avatar, your stroke rate paces
-the animation, and your pace carries the boat.
+Chrome/Edge only), real FTMS stroke/power events drive the avatar, your
+stroke rate paces the animation, and your pace carries the boat. Starting a
+row also asks the browser to keep the screen awake where supported.
 
 ## How it works
 

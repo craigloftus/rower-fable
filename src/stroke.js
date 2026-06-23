@@ -40,7 +40,16 @@ export class Stroke {
   }
 
   reset() {
+    this.mode = 'rec'; this.p = G.restPoint;
     this.dist = 0; this.v = 0; this.spm = 0; this.lastCatch = null;
+  }
+
+  catchNow() {
+    if (this.mode === 'drive') return;
+    this.mode = 'drive';
+    this.p = 0;
+    if (this.lastCatch != null) this.spm = 60 / (this.time - this.lastCatch);
+    this.lastCatch = this.time;
   }
 
   update(dt, input) {

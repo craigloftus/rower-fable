@@ -219,6 +219,7 @@ function refreshSetup() {
 }
 
 function showSetup() {
+  releaseWakeLock();
   refreshSetup();
   elSetup.hidden = false;
   elDone.hidden = true;
@@ -227,10 +228,32 @@ function showSetup() {
   elHint.classList.add('gone');
 }
 
-// go immersive on begin: fullscreen, and lock to landscape where the
-// platform allows it (phones). Both reject on unsupported setups (desktop),
-// so failures are swallowed. Must run inside the begin click gesture.
+let wakeLock = null;
+let wakeLockWanted = false;
+
+async function requestWakeLock() {
+  if (!wakeLockWanted || wakeLock || document.visibilityState !== 'visible' || !navigator.wakeLock) return;
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+    wakeLock.addEventListener('release', () => { wakeLock = null; }, { once: true });
+  } catch { wakeLock = null; }
+}
+
+function releaseWakeLock() {
+  wakeLockWanted = false;
+  wakeLock?.release();
+  wakeLock = null;
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') requestWakeLock();
+});
+
+// go immersive on begin: fullscreen, keep the screen awake, and lock to
+// landscape where the platform allows it (phones). These reject on unsupported
+// setups (desktop), so failures are swallowed. Must run inside the begin click.
 async function enterImmersive() {
+  wakeLockWanted = true;
   try {
     const root = document.documentElement;
     if (!document.fullscreenElement && root.requestFullscreen) {
@@ -238,6 +261,7 @@ async function enterImmersive() {
     }
     await screen.orientation?.lock?.('landscape');
   } catch { /* unsupported or denied — carry on windowed */ }
+  requestWakeLock();
 }
 
 function beginWorkout() {
@@ -271,6 +295,7 @@ function beginWorkout() {
 }
 
 function showSummary() {
+  releaseWakeLock();
   const s = workout.summary();
   $('doneTag').textContent = activeLabel ? `${activeLabel} complete` : 'workout complete';
   $('sumDist').textContent = `${s.dist.toFixed(0)} m`;
@@ -385,7 +410,10 @@ $('change').addEventListener('click', showSetup);
 // ------------------------------------------------------------- bluetooth ---
 const ftms = new FTMS();
 const elBt = $('btConnect'), elBtStatus = $('btStatus');
-ftms.onStroke = () => { input.queued = true; };
+ftms.onDriveStart = () => {
+  input.queued = false;
+  stroke.catchNow();
+};
 ftms.onChange = () => {
   elBt.textContent = ftms.connected ? 'disconnect' : 'connect monitor';
   elBtStatus.textContent = ftms.connected ? `linked to ${ftms.device?.name || 'rower'}` : '';
@@ -445,7 +473,7 @@ function bladeWorld(tipLocal) {
 
 // dev handle for poking the sim from the console
 window.__sim = {
-  camera, controls, stroke, input, scene, boat, rower, course, world, renderer,
+  camera, controls, stroke, input, scene, boat, rower, course, world, renderer, ftms,
   get workout() { return workout; },
   pause(mode, p) { stroke.mode = mode; stroke.p = p; window.__paused = true; },
   play() { window.__paused = false; },

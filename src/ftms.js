@@ -1,6 +1,9 @@
 // FTMS (Bluetooth Fitness Machine Service) rower client via Web Bluetooth.
 // Subscribes to the Rower Data characteristic and surfaces stroke events,
 // stroke rate, pace and power. Works with PM5s and most smart rowers.
+const DRIVE_POWER_WATTS = 12;
+const DRIVE_COOLDOWN_MS = 900;
+
 export class FTMS {
   constructor() {
     this.device = null;
@@ -10,8 +13,9 @@ export class FTMS {
     this.watts = 0;
     this.deviceDist = 0;   // metres reported by the machine
     this.strokeCount = null;
+    this.lastDriveStart = 0;
     this.lastData = 0;     // performance.now() of last notification
-    this.onStroke = null;
+    this.onDriveStart = null;
     this.onChange = null;
   }
 
@@ -39,6 +43,7 @@ export class FTMS {
     await ch.startNotifications();
     this.connected = true;
     this.strokeCount = null;
+    this.lastDriveStart = 0;
     this.onChange?.();
   }
 
@@ -46,16 +51,22 @@ export class FTMS {
     this.device?.gatt?.disconnect();
   }
 
+  driveStart(now = performance.now()) {
+    if (now - this.lastDriveStart < DRIVE_COOLDOWN_MS) return;
+    this.lastDriveStart = now;
+    this.onDriveStart?.();
+  }
+
   // FTMS Rower Data (0x2AD1): uint16 flags, then fields per flag bits
   parse(dv) {
     let o = 0;
+    const now = performance.now();
     const flags = dv.getUint16(o, true); o += 2;
     if (!(flags & 0x0001)) { // "more data" clear: stroke rate + count present
       this.spm = dv.getUint8(o) / 2; o += 1;
       const sc = dv.getUint16(o, true); o += 2;
       if (this.strokeCount != null && sc > this.strokeCount) {
-        const n = Math.min(sc - this.strokeCount, 4);
-        for (let i = 0; i < n; i++) this.onStroke?.();
+        this.driveStart(now);
       }
       this.strokeCount = sc;
     }
@@ -70,8 +81,10 @@ export class FTMS {
     }
     if (flags & 0x0010) o += 2; // average pace
     if (flags & 0x0020) {       // instantaneous power
-      this.watts = dv.getInt16(o, true); o += 2;
+      const watts = dv.getInt16(o, true); o += 2;
+      if (watts >= DRIVE_POWER_WATTS && this.watts < DRIVE_POWER_WATTS) this.driveStart(now);
+      this.watts = watts;
     }
-    this.lastData = performance.now();
+    this.lastData = now;
   }
 }
