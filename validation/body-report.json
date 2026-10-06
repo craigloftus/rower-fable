@@ -1,0 +1,37 @@
+[
+  {
+    "id": "mira",
+    "poses": 161,
+    "armLegTriangleIntersections": 0,
+    "candidates": 0,
+    "firstCollisions": []
+  },
+  {
+    "id": "kai",
+    "poses": 161,
+    "armLegTriangleIntersections": 0,
+    "candidates": 0,
+    "firstCollisions": []
+  },
+  {
+    "id": "june",
+    "poses": 161,
+    "armLegTriangleIntersections": 0,
+    "candidates": 0,
+    "firstCollisions": []
+  },
+  {
+    "id": "sol",
+    "poses": 161,
+    "armLegTriangleIntersections": 0,
+    "candidates": 0,
+    "firstCollisions": []
+  },
+  {
+    "id": "ada",
+    "poses": 161,
+    "armLegTriangleIntersections": 0,
+    "candidates": 0,
+    "firstCollisions": []
+  }
+]

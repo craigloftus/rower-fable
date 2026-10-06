@@ -186,10 +186,52 @@
       border-radius: 999px; padding: 8px 14px; cursor: pointer;
     }
     .ghost:disabled { opacity: 0.45; cursor: default; }
-    #btStatus {
+    #btStatus, #recStatus {
       font-family: 'Sometype Mono', monospace;
       font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase;
       color: var(--ink-soft); min-height: 10px;
+    }
+    /* TEMP: raw Bluetooth capture row */
+    .dbg { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    #recToggle.on {
+      color: #a3322a; border-color: rgba(163, 50, 42, 0.5);
+      background: rgba(163, 50, 42, 0.08);
+    }
+    #recToggle.on::before {
+      content: ''; display: inline-block; vertical-align: middle;
+      width: 6px; height: 6px; margin-right: 7px; border-radius: 50%;
+      background: #a3322a; animation: recpulse 1.4s ease-in-out infinite;
+    }
+    @keyframes recpulse { 50% { opacity: 0.25; } }
+    #overlay.dropping .card { box-shadow: 0 0 0 2px var(--accent), 0 18px 60px rgba(28, 46, 38, 0.18); }
+    .characters { margin: 18px 0 20px; }
+    .characters .lbl { font: 9px 'Sometype Mono', monospace; letter-spacing: .26em; text-transform: uppercase; color: var(--ink-soft); }
+    #characterChoices { display: flex; gap: 12px; margin-top: 10px; }
+    #characterChoices button {
+      flex: 1; min-width: 0; padding: 0; border: 0; background: none;
+      color: var(--ink-soft); cursor: pointer; font: 10px 'Sometype Mono', monospace;
+    }
+    .character-avatar {
+      display: block; width: 56px; height: 56px; margin: 0 auto 7px;
+      position: relative; overflow: hidden;
+      border-radius: 50%; outline: 2px solid transparent; outline-offset: 3px;
+      transition: transform 160ms ease, outline-color 160ms ease;
+    }
+    .character-avatar img { display: block; width: 100%; height: auto; }
+    .character-avatar .character-concept { position: absolute; width: 300%; max-width: none; left: -100%; top: 0; }
+    #characterChoices button:hover .character-avatar { transform: translateY(-3px); }
+    #characterChoices button[aria-pressed="true"] { color: var(--ink); }
+    #characterChoices button[aria-pressed="true"] .character-avatar { outline-color: var(--accent); }
+    #characterChoices button:focus-visible { outline: 2px solid var(--ink); outline-offset: 5px; border-radius: 4px; }
+    #characterStatus { min-height: 12px; margin-top: 10px; color: var(--ink-soft); font: 9px 'Sometype Mono', monospace; }
+    .primary:disabled { opacity: .45; cursor: wait; }
+    @media (max-width: 400px) {
+      #characterChoices { gap: 7px; }
+      .character-avatar { width: 44px; height: 44px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .character-avatar { transition: none; }
+      #characterChoices button:hover .character-avatar { transform: none; }
     }
     .primary {
       font-family: 'Marcellus', serif;
@@ -301,6 +343,21 @@
       font-variant-numeric: tabular-nums;
     }
 
+    #wakeStatus {
+      position: fixed; bottom: max(10px, env(safe-area-inset-bottom)); right: 14px;
+      z-index: 3; max-width: min(340px, calc(100vw - 28px));
+      color: var(--ink-soft); font: 10px/1.5 'Sometype Mono', monospace;
+    }
+    #wakeStatus[data-state="error"], #wakeStatus[data-state="insecure"],
+    #wakeStatus[data-state="unsupported"] {
+      padding: 8px 12px; border: 1px solid var(--accent); border-radius: 8px;
+      color: var(--ink); background: #f4f3e6;
+    }
+    #wakeRetry {
+      margin-left: 8px; border: 0; background: none; color: var(--ink);
+      font: inherit; text-decoration: underline; cursor: pointer; padding: 6px;
+    }
+
     /* atmosphere: vignette + grain */
     .vignette {
       position: fixed; inset: 0; pointer-events: none; z-index: 1;
@@ -365,11 +422,22 @@
     <div id="hint" class="gone"><span>Hold</span><kbd>space</kbd><span>to row</span></div>
   </div>
 
+  <div id="wakeStatus" hidden>
+    <span id="wakeMessage" role="status" aria-live="polite"></span>
+    <button id="wakeRetry" type="button" hidden>Retry screen lock</button>
+  </div>
+
   <div id="overlay">
     <div class="card" id="setupCard">
       <h1>Morning Row</h1>
       <div class="rule"></div>
       <p class="tag">a low-poly sculling game</p>
+
+      <div class="characters">
+        <span class="lbl" id="characterLabel">your rower</span>
+        <div id="characterChoices" role="group" aria-labelledby="characterLabel"></div>
+        <div id="characterStatus" role="status" aria-live="polite"></div>
+      </div>
 
       <div class="frow">
         <span class="lbl">goal</span>
@@ -405,6 +473,16 @@
             <span class="l-high"><i></i>high 26+</span>
           </div>
           <p class="plan-aim" id="planAim"></p>
+        </div>
+      </div>
+
+      <!-- TEMP: raw Bluetooth capture, for tuning the stroke model against a
+           real machine. Remove this row (and src/recorder.js) when done. -->
+      <div class="frow" id="debugRow">
+        <span class="lbl">debug</span>
+        <div class="dbg">
+          <button class="ghost" id="recToggle" disabled>record ble</button>
+          <span id="recStatus"></span>
         </div>
       </div>
 

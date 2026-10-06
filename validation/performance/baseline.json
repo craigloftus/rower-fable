@@ -1,0 +1,3646 @@
+{
+  "metadata": {
+    "created": "2026-10-06T11:14:10.592Z",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+    "devicePixelRatio": 2,
+    "gpuTimerSupported": true,
+    "notes": "CPU is JS + render submission, not GPU duration. Desktop results do not establish phone thermals."
+  },
+  "character": "june",
+  "characterVisible": true,
+  "viewport": [
+    2036,
+    1314
+  ],
+  "distance": 320,
+  "wakeLock": {
+    "state": "active",
+    "wanted": true,
+    "held": true,
+    "secure": true,
+    "supported": true,
+    "attempts": 1,
+    "releases": 0,
+    "error": null,
+    "events": [
+      {
+        "at": 1791285254588,
+        "state": "idle",
+        "error": null
+      },
+      {
+        "at": 1791285263991,
+        "state": "requesting",
+        "error": null
+      },
+      {
+        "at": 1791285264200,
+        "state": "active",
+        "error": null
+      }
+    ]
+  },
+  "capture": {
+    "state": "complete",
+    "warmupSeconds": 10,
+    "durationSeconds": 60
+  },
+  "samples": [
+    {
+      "seconds": 25.99,
+      "fps": 30,
+      "frameP95": 33.8,
+      "over25ms": 30,
+      "frames": 30,
+      "cpuMean": 4.23,
+      "cpuP95": 4.7,
+      "gpuMean": 3.54,
+      "gpuP95": 3.57,
+      "calls": 1075,
+      "triangles": 124703,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.05,
+        "animation": 0.02,
+        "world": 0.02,
+        "hud": 0.1,
+        "render": 4.05
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 28,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 27.02,
+      "fps": 30,
+      "frameP95": 33.8,
+      "over25ms": 31,
+      "frames": 31,
+      "cpuMean": 3.55,
+      "cpuP95": 4.1,
+      "gpuMean": 3.45,
+      "gpuP95": 3.48,
+      "calls": 1086,
+      "triangles": 124883,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.04,
+        "animation": 0.03,
+        "world": 0.02,
+        "hud": 0.1,
+        "render": 3.37
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 32,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 28.02,
+      "fps": 30,
+      "frameP95": 34.2,
+      "over25ms": 30,
+      "frames": 30,
+      "cpuMean": 3.69,
+      "cpuP95": 4.3,
+      "gpuMean": 3.47,
+      "gpuP95": 3.51,
+      "calls": 1086,
+      "triangles": 124711,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.04,
+        "world": 0.01,
+        "hud": 0.08,
+        "render": 3.52
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 36,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 29.02,
+      "fps": 30,
+      "frameP95": 34.3,
+      "over25ms": 30,
+      "frames": 30,
+      "cpuMean": 3.71,
+      "cpuP95": 4.1,
+      "gpuMean": 3.46,
+      "gpuP95": 3.47,
+      "calls": 1062,
+      "triangles": 124451,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.04,
+        "world": 0.02,
+        "hud": 0.09,
+        "render": 3.54
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 39,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 30.02,
+      "fps": 30,
+      "frameP95": 34.2,
+      "over25ms": 30,
+      "frames": 30,
+      "cpuMean": 3.68,
+      "cpuP95": 4.3,
+      "gpuMean": 2.99,
+      "gpuP95": 3.52,
+      "calls": 1062,
+      "triangles": 124451,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.03,
+        "animation": 0.03,
+        "world": 0.02,
+        "hud": 0.11,
+        "render": 3.49
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 43,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 31.05,
+      "fps": 30,
+      "frameP95": 34,
+      "over25ms": 31,
+      "frames": 31,
+      "cpuMean": 3.39,
+      "cpuP95": 4,
+      "gpuMean": 3.52,
+      "gpuP95": 3.54,
+      "calls": 1054,
+      "triangles": 124247,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.04,
+        "animation": 0.03,
+        "world": 0.02,
+        "hud": 0.09,
+        "render": 3.22
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 47,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 32.05,
+      "fps": 30,
+      "frameP95": 34.2,
+      "over25ms": 30,
+      "frames": 30,
+      "cpuMean": 3.62,
+      "cpuP95": 4,
+      "gpuMean": 3.5,
+      "gpuP95": 3.52,
+      "calls": 1065,
+      "triangles": 124211,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.03,
+        "animation": 0.04,
+        "world": 0.02,
+        "hud": 0.09,
+        "render": 3.45
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 50,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 33.05,
+      "fps": 30,
+      "frameP95": 34.1,
+      "over25ms": 30,
+      "frames": 30,
+      "cpuMean": 3.3,
+      "cpuP95": 3.6,
+      "gpuMean": 3.5,
+      "gpuP95": 3.57,
+      "calls": 1071,
+      "triangles": 124247,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.04,
+        "animation": 0.04,
+        "world": 0.02,
+        "hud": 0.07,
+        "render": 3.12
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 54,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 34.09,
+      "fps": 30,
+      "frameP95": 34.3,
+      "over25ms": 31,
+      "frames": 31,
+      "cpuMean": 3.79,
+      "cpuP95": 4.6,
+      "gpuMean": 3.48,
+      "gpuP95": 3.5,
+      "calls": 1046,
+      "triangles": 123967,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.04,
+        "animation": 0.04,
+        "world": 0.02,
+        "hud": 0.1,
+        "render": 3.59
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 58,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 35.12,
+      "fps": 30.01,
+      "frameP95": 33.8,
+      "over25ms": 31,
+      "frames": 31,
+      "cpuMean": 3.68,
+      "cpuP95": 4.1,
+      "gpuMean": 3.51,
+      "gpuP95": 3.53,
+      "calls": 1040,
+      "triangles": 123835,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.04,
+        "world": 0.01,
+        "hud": 0.1,
+        "render": 3.51
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 62,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 36.15,
+      "fps": 29.99,
+      "frameP95": 34,
+      "over25ms": 31,
+      "frames": 31,
+      "cpuMean": 3.6,
+      "cpuP95": 4,
+      "gpuMean": 3.49,
+      "gpuP95": 3.51,
+      "calls": 1038,
+      "triangles": 123755,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.04,
+        "world": 0.02,
+        "hud": 0.08,
+        "render": 3.42
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 66,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 37.19,
+      "fps": 30,
+      "frameP95": 34.3,
+      "over25ms": 31,
+      "frames": 31,
+      "cpuMean": 3.71,
+      "cpuP95": 4.5,
+      "gpuMean": 3.5,
+      "gpuP95": 3.5,
+      "calls": 1047,
+      "triangles": 123791,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.05,
+        "world": 0.02,
+        "hud": 0.09,
+        "render": 3.53
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 69,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 38.22,
+      "fps": 30.01,
+      "frameP95": 34.1,
+      "over25ms": 31,
+      "frames": 31,
+      "cpuMean": 3.92,
+      "cpuP95": 4.4,
+      "gpuMean": 3.51,
+      "gpuP95": 3.57,
+      "calls": 1046,
+      "triangles": 122711,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.03,
+        "world": 0.02,
+        "hud": 0.1,
+        "render": 3.74
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 74,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 39.22,
+      "fps": 29.99,
+      "frameP95": 33.8,
+      "over25ms": 30,
+      "frames": 30,
+      "cpuMean": 3.62,
+      "cpuP95": 4,
+      "gpuMean": 3.54,
+      "gpuP95": 3.59,
+      "calls": 1021,
+      "triangles": 122403,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.01,
+        "animation": 0.03,
+        "world": 0.01,
+        "hud": 0.11,
+        "render": 3.46
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 77,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 40.22,
+      "fps": 30,
+      "frameP95": 34,
+      "over25ms": 30,
+      "frames": 30,
+      "cpuMean": 3.57,
+      "cpuP95": 4.2,
+      "gpuMean": 3.51,
+      "gpuP95": 3.52,
+      "calls": 1010,
+      "triangles": 122135,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.03,
+        "world": 0.03,
+        "hud": 0.09,
+        "render": 3.41
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 81,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 41.25,
+      "fps": 30.02,
+      "frameP95": 34.3,
+      "over25ms": 31,
+      "frames": 31,
+      "cpuMean": 3.77,
+      "cpuP95": 4.3,
+      "gpuMean": 3.51,
+      "gpuP95": 3.52,
+      "calls": 1003,
+      "triangles": 121899,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.04,
+        "world": 0.01,
+        "hud": 0.11,
+        "render": 3.6
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 85,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 42.25,
+      "fps": 29.98,
+      "frameP95": 34.1,
+      "over25ms": 30,
+      "frames": 30,
+      "cpuMean": 4.01,
+      "cpuP95": 4.6,
+      "gpuMean": 3.51,
+      "gpuP95": 3.52,
+      "calls": 1011,
+      "triangles": 121983,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.01,
+        "animation": 0.04,
+        "world": 0.01,
+        "hud": 0.1,
+        "render": 3.86
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 88,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 43.25,
+      "fps": 30,
+      "frameP95": 33.9,
+      "over25ms": 30,
+      "frames": 30,
+      "cpuMean": 3.59,
+      "cpuP95": 4.4,
+      "gpuMean": 3.5,
+      "gpuP95": 3.54,
+      "calls": 1006,
+      "triangles": 121667,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.03,
+        "world": 0.01,
+        "hud": 0.09,
+        "render": 3.43
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 92,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 44.25,
+      "fps": 30,
+      "frameP95": 34.2,
+      "over25ms": 30,
+      "frames": 30,
+      "cpuMean": 3.56,
+      "cpuP95": 3.9,
+      "gpuMean": 3.48,
+      "gpuP95": 3.49,
+      "calls": 979,
+      "triangles": 121431,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.03,
+        "world": 0.01,
+        "hud": 0.08,
+        "render": 3.41
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 96,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 45.25,
+      "fps": 30,
+      "frameP95": 34.3,
+      "over25ms": 30,
+      "frames": 30,
+      "cpuMean": 3.56,
+      "cpuP95": 4.1,
+      "gpuMean": 3.5,
+      "gpuP95": 3.56,
+      "calls": 962,
+      "triangles": 121075,
+      "geometries": 1247,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.01,
+        "animation": 0.04,
+        "world": 0.03,
+        "hud": 0.08,
+        "render": 3.39
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 99,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 46.29,
+      "fps": 30,
+      "frameP95": 34.2,
+      "over25ms": 31,
+      "frames": 31,
+      "cpuMean": 3.4,
+      "cpuP95": 3.9,
+      "gpuMean": 3.46,
+      "gpuP95": 3.49,
+      "calls": 948,
+      "triangles": 120703,
+      "geometries": 1204,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.03,
+        "world": 0.06,
+        "hud": 0.09,
+        "render": 3.19
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 103,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 47.29,
+      "fps": 30,
+      "frameP95": 34.2,
+      "over25ms": 29,
+      "frames": 30,
+      "cpuMean": 3.07,
+      "cpuP95": 3.6,
+      "gpuMean": 3.46,
+      "gpuP95": 3.47,
+      "calls": 953,
+      "triangles": 120771,
+      "geometries": 1204,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.01,
+        "animation": 0.03,
+        "world": 0.02,
+        "hud": 0.09,
+        "render": 2.91
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 107,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 48.32,
+      "fps": 30.02,
+      "frameP95": 36.9,
+      "over25ms": 30,
+      "frames": 31,
+      "cpuMean": 3.06,
+      "cpuP95": 3.6,
+      "gpuMean": 3.44,
+      "gpuP95": 3.49,
+      "calls": 954,
+      "triangles": 120631,
+      "geometries": 1204,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.05,
+        "world": 0.02,
+        "hud": 0.09,
+        "render": 2.89
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 111,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 49.35,
+      "fps": 29.98,
+      "frameP95": 34.4,
+      "over25ms": 30,
+      "frames": 31,
+      "cpuMean": 3.05,
+      "cpuP95": 3.6,
+      "gpuMean": 3.44,
+      "gpuP95": 3.48,
+      "calls": 920,
+      "triangles": 120095,
+      "geometries": 1204,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.01,
+        "animation": 0.03,
+        "world": 0,
+        "hud": 0.11,
+        "render": 2.9
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 114,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 50.39,
+      "fps": 30,
+      "frameP95": 34.4,
+      "over25ms": 30,
+      "frames": 31,
+      "cpuMean": 3.3,
+      "cpuP95": 3.7,
+      "gpuMean": 3.38,
+      "gpuP95": 3.41,
+      "calls": 915,
+      "triangles": 119983,
+      "geometries": 1204,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.06,
+        "world": 0.02,
+        "hud": 0.09,
+        "render": 3.12
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 119,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 51.39,
+      "fps": 30,
+      "frameP95": 34.3,
+      "over25ms": 29,
+      "frames": 30,
+      "cpuMean": 3.66,
+      "cpuP95": 4.2,
+      "gpuMean": 3.46,
+      "gpuP95": 3.48,
+      "calls": 1117,
+      "triangles": 126003,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.03,
+        "world": 0.33,
+        "hud": 0.09,
+        "render": 3.2
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 122,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 52.42,
+      "fps": 30,
+      "frameP95": 34.3,
+      "over25ms": 30,
+      "frames": 31,
+      "cpuMean": 3.43,
+      "cpuP95": 4.1,
+      "gpuMean": 3.56,
+      "gpuP95": 3.75,
+      "calls": 1123,
+      "triangles": 125899,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.03,
+        "world": 0.02,
+        "hud": 0.09,
+        "render": 3.27
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 126,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 53.45,
+      "fps": 30,
+      "frameP95": 34.3,
+      "over25ms": 30,
+      "frames": 31,
+      "cpuMean": 3.66,
+      "cpuP95": 4.2,
+      "gpuMean": 3.45,
+      "gpuP95": 3.46,
+      "calls": 1127,
+      "triangles": 125795,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.05,
+        "world": 0.02,
+        "hud": 0.08,
+        "render": 3.49
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 130,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 54.45,
+      "fps": 30,
+      "frameP95": 34.1,
+      "over25ms": 29,
+      "frames": 30,
+      "cpuMean": 3.79,
+      "cpuP95": 4.4,
+      "gpuMean": 3.47,
+      "gpuP95": 3.49,
+      "calls": 1101,
+      "triangles": 125515,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.01,
+        "animation": 0.04,
+        "world": 0.02,
+        "hud": 0.08,
+        "render": 3.63
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 133,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 55.49,
+      "fps": 30,
+      "frameP95": 34.1,
+      "over25ms": 30,
+      "frames": 31,
+      "cpuMean": 3.58,
+      "cpuP95": 4.1,
+      "gpuMean": 3.49,
+      "gpuP95": 3.49,
+      "calls": 1098,
+      "triangles": 125423,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.04,
+        "world": 0.02,
+        "hud": 0.08,
+        "render": 3.42
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 137,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 56.52,
+      "fps": 30,
+      "frameP95": 34.3,
+      "over25ms": 30,
+      "frames": 31,
+      "cpuMean": 3.38,
+      "cpuP95": 4,
+      "gpuMean": 3.49,
+      "gpuP95": 3.52,
+      "calls": 1100,
+      "triangles": 125387,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.03,
+        "animation": 0.03,
+        "world": 0.03,
+        "hud": 0.08,
+        "render": 3.22
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 141,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 57.52,
+      "fps": 30,
+      "frameP95": 34.4,
+      "over25ms": 29,
+      "frames": 30,
+      "cpuMean": 3.41,
+      "cpuP95": 4.1,
+      "gpuMean": 4.47,
+      "gpuP95": 6.35,
+      "calls": 1104,
+      "triangles": 125367,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.04,
+        "world": 0.01,
+        "hud": 0.07,
+        "render": 3.25
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 144,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 58.55,
+      "fps": 30.02,
+      "frameP95": 34.3,
+      "over25ms": 30,
+      "frames": 31,
+      "cpuMean": 3.88,
+      "cpuP95": 4.7,
+      "gpuMean": 3.09,
+      "gpuP95": 3.51,
+      "calls": 1105,
+      "triangles": 125247,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.04,
+        "animation": 0.04,
+        "world": 0.01,
+        "hud": 0.08,
+        "render": 3.7
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 149,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 59.59,
+      "fps": 29.98,
+      "frameP95": 34.2,
+      "over25ms": 30,
+      "frames": 31,
+      "cpuMean": 3.62,
+      "cpuP95": 4.1,
+      "gpuMean": 3.59,
+      "gpuP95": 3.82,
+      "calls": 1093,
+      "triangles": 125035,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.04,
+        "world": 0.01,
+        "hud": 0.09,
+        "render": 3.45
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 152,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 60.59,
+      "fps": 30,
+      "frameP95": 34.3,
+      "over25ms": 28,
+      "frames": 30,
+      "cpuMean": 3.33,
+      "cpuP95": 3.8,
+      "gpuMean": 3.51,
+      "gpuP95": 3.56,
+      "calls": 1076,
+      "triangles": 124815,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.03,
+        "world": 0,
+        "hud": 0.09,
+        "render": 3.18
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 156,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 61.59,
+      "fps": 30,
+      "frameP95": 34.4,
+      "over25ms": 28,
+      "frames": 30,
+      "cpuMean": 3.52,
+      "cpuP95": 4.1,
+      "gpuMean": 3.48,
+      "gpuP95": 3.49,
+      "calls": 1079,
+      "triangles": 124847,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.03,
+        "world": 0.01,
+        "hud": 0.09,
+        "render": 3.37
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 160,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 62.62,
+      "fps": 30,
+      "frameP95": 34.2,
+      "over25ms": 29,
+      "frames": 31,
+      "cpuMean": 3.64,
+      "cpuP95": 4.7,
+      "gpuMean": 4.53,
+      "gpuP95": 6.55,
+      "calls": 1085,
+      "triangles": 124799,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.01,
+        "animation": 0.04,
+        "world": 0.01,
+        "hud": 0.09,
+        "render": 3.49
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 163,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 63.62,
+      "fps": 30,
+      "frameP95": 34.3,
+      "over25ms": 28,
+      "frames": 30,
+      "cpuMean": 3.45,
+      "cpuP95": 4.1,
+      "gpuMean": 3.46,
+      "gpuP95": 3.46,
+      "calls": 1084,
+      "triangles": 124619,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.01,
+        "animation": 0.04,
+        "world": 0,
+        "hud": 0.09,
+        "render": 3.31
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 167,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 64.62,
+      "fps": 30,
+      "frameP95": 34.3,
+      "over25ms": 28,
+      "frames": 30,
+      "cpuMean": 3.34,
+      "cpuP95": 4.2,
+      "gpuMean": 3.53,
+      "gpuP95": 3.56,
+      "calls": 1056,
+      "triangles": 124239,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.03,
+        "animation": 0.03,
+        "world": 0.02,
+        "hud": 0.08,
+        "render": 3.18
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 170,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 65.62,
+      "fps": 30,
+      "frameP95": 34.3,
+      "over25ms": 28,
+      "frames": 30,
+      "cpuMean": 3.47,
+      "cpuP95": 4.5,
+      "gpuMean": 3.72,
+      "gpuP95": 4.14,
+      "calls": 1046,
+      "triangles": 123967,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.03,
+        "world": 0.01,
+        "hud": 0.09,
+        "render": 3.31
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 174,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 66.65,
+      "fps": 30,
+      "frameP95": 34.2,
+      "over25ms": 29,
+      "frames": 31,
+      "cpuMean": 3.45,
+      "cpuP95": 4,
+      "gpuMean": 3.55,
+      "gpuP95": 3.64,
+      "calls": 1043,
+      "triangles": 123763,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.04,
+        "world": 0.01,
+        "hud": 0.1,
+        "render": 3.28
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 178,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 67.65,
+      "fps": 30,
+      "frameP95": 34.1,
+      "over25ms": 28,
+      "frames": 30,
+      "cpuMean": 3.27,
+      "cpuP95": 3.7,
+      "gpuMean": 3.5,
+      "gpuP95": 3.52,
+      "calls": 1048,
+      "triangles": 123855,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.02,
+        "world": 0.02,
+        "hud": 0.08,
+        "render": 3.13
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 181,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 68.69,
+      "fps": 30.01,
+      "frameP95": 34.3,
+      "over25ms": 29,
+      "frames": 31,
+      "cpuMean": 3.16,
+      "cpuP95": 3.6,
+      "gpuMean": 3.49,
+      "gpuP95": 3.52,
+      "calls": 1039,
+      "triangles": 123519,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.04,
+        "world": 0.01,
+        "hud": 0.09,
+        "render": 3
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 185,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 69.72,
+      "fps": 29.02,
+      "frameP95": 34.3,
+      "over25ms": 29,
+      "frames": 30,
+      "cpuMean": 3.42,
+      "cpuP95": 4.1,
+      "gpuMean": 3.39,
+      "gpuP95": 3.41,
+      "calls": 1013,
+      "triangles": 123215,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.03,
+        "world": 0.02,
+        "hud": 0.07,
+        "render": 3.28
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 189,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 70.75,
+      "fps": 29.05,
+      "frameP95": 33.4,
+      "over25ms": 29,
+      "frames": 30,
+      "cpuMean": 3.47,
+      "cpuP95": 3.9,
+      "gpuMean": 3.58,
+      "gpuP95": 3.81,
+      "calls": 1007,
+      "triangles": 122003,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.05,
+        "world": 0.02,
+        "hud": 0.06,
+        "render": 3.32
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 192,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 71.75,
+      "fps": 30,
+      "frameP95": 34,
+      "over25ms": 28,
+      "frames": 30,
+      "cpuMean": 3.17,
+      "cpuP95": 3.7,
+      "gpuMean": 3.57,
+      "gpuP95": 3.79,
+      "calls": 1016,
+      "triangles": 121971,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.02,
+        "world": 0.02,
+        "hud": 0.08,
+        "render": 3.02
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 196,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 72.79,
+      "fps": 29.02,
+      "frameP95": 34.4,
+      "over25ms": 28,
+      "frames": 30,
+      "cpuMean": 3.3,
+      "cpuP95": 3.9,
+      "gpuMean": 3.41,
+      "gpuP95": 3.46,
+      "calls": 1004,
+      "triangles": 121795,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.01,
+        "animation": 0.04,
+        "world": 0.02,
+        "hud": 0.1,
+        "render": 3.12
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 199,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 73.79,
+      "fps": 29,
+      "frameP95": 34.3,
+      "over25ms": 27,
+      "frames": 29,
+      "cpuMean": 3.57,
+      "cpuP95": 4.3,
+      "gpuMean": 3.4,
+      "gpuP95": 3.48,
+      "calls": 980,
+      "triangles": 121299,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.03,
+        "world": 0.02,
+        "hud": 0.09,
+        "render": 3.4
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 203,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 74.79,
+      "fps": 29,
+      "frameP95": 33.8,
+      "over25ms": 27,
+      "frames": 29,
+      "cpuMean": 3.32,
+      "cpuP95": 3.9,
+      "gpuMean": 3.52,
+      "gpuP95": 3.74,
+      "calls": 980,
+      "triangles": 121231,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.04,
+        "world": 0.02,
+        "hud": 0.07,
+        "render": 3.17
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 207,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 75.79,
+      "fps": 29,
+      "frameP95": 34.2,
+      "over25ms": 27,
+      "frames": 29,
+      "cpuMean": 3.27,
+      "cpuP95": 3.8,
+      "gpuMean": 3.41,
+      "gpuP95": 3.45,
+      "calls": 982,
+      "triangles": 121079,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.03,
+        "world": 0.02,
+        "hud": 0.08,
+        "render": 3.11
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 210,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 76.79,
+      "fps": 29,
+      "frameP95": 34.3,
+      "over25ms": 27,
+      "frames": 29,
+      "cpuMean": 3.06,
+      "cpuP95": 3.5,
+      "gpuMean": 3.47,
+      "gpuP95": 3.51,
+      "calls": 961,
+      "triangles": 120483,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.05,
+        "world": 0.02,
+        "hud": 0.07,
+        "render": 2.9
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 214,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 77.79,
+      "fps": 29,
+      "frameP95": 34.2,
+      "over25ms": 27,
+      "frames": 29,
+      "cpuMean": 3.29,
+      "cpuP95": 4.1,
+      "gpuMean": 3.4,
+      "gpuP95": 3.41,
+      "calls": 921,
+      "triangles": 119843,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.04,
+        "world": 0.01,
+        "hud": 0.08,
+        "render": 3.13
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 217,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 78.79,
+      "fps": 29,
+      "frameP95": 34.2,
+      "over25ms": 27,
+      "frames": 29,
+      "cpuMean": 3.13,
+      "cpuP95": 3.9,
+      "gpuMean": 3.92,
+      "gpuP95": 4.79,
+      "calls": 914,
+      "triangles": 119695,
+      "geometries": 1401,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.01,
+        "animation": 0.02,
+        "world": 0,
+        "hud": 0.12,
+        "render": 2.97
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 220,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 79.79,
+      "fps": 29,
+      "frameP95": 34,
+      "over25ms": 27,
+      "frames": 29,
+      "cpuMean": 3.05,
+      "cpuP95": 3.6,
+      "gpuMean": 4.62,
+      "gpuP95": 7.07,
+      "calls": 899,
+      "triangles": 119255,
+      "geometries": 1287,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.01,
+        "animation": 0.03,
+        "world": 0.05,
+        "hud": 0.06,
+        "render": 2.9
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 224,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 80.82,
+      "fps": 28.07,
+      "frameP95": 34,
+      "over25ms": 28,
+      "frames": 29,
+      "cpuMean": 3.04,
+      "cpuP95": 3.4,
+      "gpuMean": 2.88,
+      "gpuP95": 3.47,
+      "calls": 874,
+      "triangles": 118923,
+      "geometries": 1287,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.01,
+        "animation": 0.03,
+        "world": 0.03,
+        "hud": 0.07,
+        "render": 2.89
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 227,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 81.82,
+      "fps": 28,
+      "frameP95": 34.4,
+      "over25ms": 27,
+      "frames": 28,
+      "cpuMean": 2.96,
+      "cpuP95": 3.9,
+      "gpuMean": 2.78,
+      "gpuP95": 3.48,
+      "calls": 854,
+      "triangles": 118479,
+      "geometries": 1287,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.02,
+        "animation": 0.04,
+        "world": 0.01,
+        "hud": 0.07,
+        "render": 2.81
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 231,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 82.82,
+      "fps": 28,
+      "frameP95": 34.1,
+      "over25ms": 26,
+      "frames": 28,
+      "cpuMean": 2.76,
+      "cpuP95": 3.2,
+      "gpuMean": 3.38,
+      "gpuP95": 3.42,
+      "calls": 856,
+      "triangles": 118227,
+      "geometries": 1287,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.01,
+        "animation": 0.03,
+        "world": 0.01,
+        "hud": 0.09,
+        "render": 2.62
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 234,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "seconds": 83.82,
+      "fps": 28,
+      "frameP95": 34.1,
+      "over25ms": 26,
+      "frames": 28,
+      "cpuMean": 2.82,
+      "cpuP95": 3.1,
+      "gpuMean": 3.19,
+      "gpuP95": 3.32,
+      "calls": 851,
+      "triangles": 118131,
+      "geometries": 1287,
+      "textures": 1,
+      "programs": 9,
+      "drawingBuffer": [
+        5120,
+        2880
+      ],
+      "dpr": 2,
+      "stages": {
+        "simulation": 0.01,
+        "animation": 0.04,
+        "world": 0.01,
+        "hud": 0.08,
+        "render": 2.69
+      },
+      "character": "june",
+      "characterVisible": true,
+      "viewport": [
+        2560,
+        1440
+      ],
+      "distance": 237,
+      "wakeLock": {
+        "state": "active",
+        "wanted": true,
+        "held": true,
+        "secure": true,
+        "supported": true,
+        "attempts": 1,
+        "releases": 0,
+        "error": null,
+        "events": [
+          {
+            "at": 1791285254588,
+            "state": "idle",
+            "error": null
+          },
+          {
+            "at": 1791285263991,
+            "state": "requesting",
+            "error": null
+          },
+          {
+            "at": 1791285264200,
+            "state": "active",
+            "error": null
+          }
+        ]
+      }
+    }
+  ]
+}

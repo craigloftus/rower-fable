@@ -1,20 +1,31 @@
 import * as THREE from 'three';
+import { createFramePacer } from './render-budget.js';
+import { createPerformanceMonitor } from './performance-monitor.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { World, FOG_COLOR } from './world.js';
 import { Course, frame as courseFrame } from './course.js';
+import { createCourseBuilder } from './course-builder.js';
 import { Boat } from './boat.js';
 import { Rower } from './rower.js';
+import { CHARACTERS } from './characters.js';
 import { Stroke, G } from './stroke.js';
+import { fitRowingPose } from './rowing-fit.js';
 import { Workout } from './workout.js';
+import { createScreenWakeLock } from './wake-lock.js';
 import { PLAN, INTENSITY, customStages, stageSeconds, stageAmount } from './plan.js';
 import { FTMS } from './ftms.js';
 import { Sounds } from './audio.js';
+import { loadPrefs, savePrefs, TARGETS, REPEATS, RESTS } from './prefs.js';
+import { BleRecorder } from './recorder.js';
+import { Replay, readRecording, rowerFrames, catches } from './replay.js';
 import { clamp, lerp, fmtTime } from './util.js';
 
 // ------------------------------------------------------------ renderer -----
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(innerWidth, innerHeight);
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+let resolutionOverride = null;
+const resizeResolution = () => renderer.setPixelRatio(resolutionOverride ?? devicePixelRatio);
+resizeResolution();
 renderer.toneMapping = THREE.NoToneMapping;
 document.getElementById('app').appendChild(renderer.domElement);
 
@@ -52,7 +63,7 @@ const world = new World(scene);
 const course = new Course(scene, (pos) => {
   sounds.pop();
   world.fx.ring(pos, 0.5, 1.1, 1.4);
-});
+}, createCourseBuilder());
 
 const boatGroup = new THREE.Group();
 boatGroup.rotation.order = 'YXZ';
@@ -76,6 +87,7 @@ const input = { held: false, queued: false };
 // -------------------------------------------------------------- input ------
 addEventListener('keydown', (e) => {
   if (e.code === 'Space') {
+    if (elOverlay.classList.contains('show') && e.target.closest('button, input, select, textarea')) return;
     e.preventDefault();
     sounds.ensure();
     if (!e.repeat) { input.held = true; input.queued = true; }
@@ -110,22 +122,64 @@ function fmtSplit(v) {
   return fmtTime(500 / v, 1);
 }
 // ------------------------------------------------------- goals + overlay ---
-const cfg = { mode: 'distance', target: 1000, repeats: 1, rest: 60, week: 1, session: 1 };
-try {
-  const saved = JSON.parse(localStorage.getItem('morningrow.cfg'));
-  if (saved && ['just', 'distance', 'time', 'plan'].includes(saved.mode)) Object.assign(cfg, saved);
-} catch { /* fresh start */ }
-cfg.week = clamp(cfg.week | 0, 1, PLAN.length);
-cfg.session = clamp(cfg.session | 0, 1, 2);
-const TARGETS = {
-  distance: [[500, '500 m'], [1000, '1000 m'], [2000, '2000 m'], [5000, '5000 m']],
-  time: [[120, '2:00'], [300, '5:00'], [600, '10:00'], [1200, '20:00']],
-};
+// the setup card reopens where it was left: goal mode, that mode's target,
+// repeats/rest, and the plan week + session
+const cfg = loadPrefs(PLAN.length);
+let characterRequest = 0;
+async function selectCharacter(id) {
+  const request = ++characterRequest;
+  $('characterStatus').textContent = 'Loading rower…';
+  $('begin').disabled = true;
+  try {
+    const selected = await rower.select(id);
+    if (!selected) return;
+    cfg.character = id;
+    savePrefs(cfg);
+    document.querySelectorAll('#characterChoices button').forEach((b) => {
+      b.setAttribute('aria-pressed', String(b.dataset.character === id));
+    });
+    $('characterStatus').textContent = `${CHARACTERS.find((c) => c.id === id).name} is ready`;
+  } catch (error) {
+    if (request !== characterRequest) return;
+    $('characterStatus').textContent = 'Couldn’t load rower. Choose an avatar to retry.';
+    console.error(error);
+  } finally {
+    if (request === characterRequest) $('begin').disabled = !rower.ready;
+  }
+}
+for (const character of CHARACTERS) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.dataset.character = character.id;
+  button.setAttribute('aria-label', `Choose ${character.name}`);
+  button.setAttribute('aria-pressed', 'false');
+  const avatar = document.createElement('span');
+  avatar.className = 'character-avatar';
+  const portrait = document.createElement('img');
+  portrait.src = character.portrait;
+  portrait.className = 'character-concept';
+  portrait.alt = '';
+  avatar.append(portrait);
+  const label = document.createElement('span');
+  label.textContent = character.name;
+  button.append(avatar, label);
+  button.addEventListener('click', () => selectCharacter(character.id));
+  $('characterChoices').append(button);
+}
+selectCharacter(cfg.character);
+const target = () => cfg.targets[cfg.mode];
 let workout = null;
 let sessFills = [];   // strip fill elements, one per stage
 let lastTick = 0;     // last rest-countdown second chirped
 let hintT = 0;        // auto-dim timer for stage hints
 let activeLabel = ''; // 'week 3 · session 1' while a plan session runs
+
+// every pick writes the card's state straight back to storage, so closing the
+// tab mid-fiddle still reopens on the same choice
+function commitSetup() {
+  savePrefs(cfg);
+  refreshSetup();
+}
 
 function buildChips(rowId, list, current, onPick) {
   const box = $(rowId);
@@ -136,7 +190,7 @@ function buildChips(rowId, list, current, onPick) {
     if (v === current) b.classList.add('sel');
     b.addEventListener('click', () => {
       onPick(v);
-      refreshSetup();
+      commitSetup();
     });
     box.appendChild(b);
   }
@@ -171,7 +225,7 @@ function renderWeekRail(current, onPick) {
     b.innerHTML = `<span class="dot"></span>${w}`;
     if (w < current) b.classList.add('done');
     if (w === current) b.classList.add('sel');
-    b.addEventListener('click', () => { onPick(w); refreshSetup(); });
+    b.addEventListener('click', () => { onPick(w); commitSetup(); });
     box.appendChild(b);
   }
   // anchor the fill to node centres once laid out
@@ -190,12 +244,7 @@ function renderWeekRail(current, onPick) {
 function refreshSetup() {
   buildChips('modeChips',
     [['just', 'just row'], ['distance', 'distance'], ['time', 'time'], ['plan', 'plan']],
-    cfg.mode, (v) => {
-      cfg.mode = v;
-      if ((v === 'distance' || v === 'time') && !TARGETS[v].some(([t]) => t === cfg.target)) {
-        cfg.target = TARGETS[v][1][0];
-      }
-    });
+    cfg.mode, (v) => { cfg.mode = v; });
   const goal = cfg.mode === 'distance' || cfg.mode === 'time';
   const plan = cfg.mode === 'plan';
   $('targetRow').hidden = !goal;
@@ -203,9 +252,9 @@ function refreshSetup() {
   $('restRow').hidden = !goal || cfg.repeats < 2;
   $('planPanel').hidden = !plan;
   if (goal) {
-    buildChips('targetChips', TARGETS[cfg.mode], cfg.target, (v) => { cfg.target = v; });
-    buildChips('repeatChips', [[1, '×1'], [2, '×2'], [4, '×4'], [6, '×6']], cfg.repeats, (v) => { cfg.repeats = v; });
-    buildChips('restChips', [[30, '0:30'], [60, '1:00'], [120, '2:00']], cfg.rest, (v) => { cfg.rest = v; });
+    buildChips('targetChips', TARGETS[cfg.mode], target(), (v) => { cfg.targets[cfg.mode] = v; });
+    buildChips('repeatChips', REPEATS.map((n) => [n, `×${n}`]), cfg.repeats, (v) => { cfg.repeats = v; });
+    buildChips('restChips', RESTS.map((s) => [s, fmtTime(s)]), cfg.rest, (v) => { cfg.rest = v; });
   }
   if (plan) {
     renderWeekRail(cfg.week, (v) => { cfg.week = v; });
@@ -219,7 +268,7 @@ function refreshSetup() {
 }
 
 function showSetup() {
-  releaseWakeLock();
+  screenWakeLock.stop();
   refreshSetup();
   elSetup.hidden = false;
   elDone.hidden = true;
@@ -228,32 +277,27 @@ function showSetup() {
   elHint.classList.add('gone');
 }
 
-let wakeLock = null;
-let wakeLockWanted = false;
-
-async function requestWakeLock() {
-  if (!wakeLockWanted || wakeLock || document.visibilityState !== 'visible' || !navigator.wakeLock) return;
-  try {
-    wakeLock = await navigator.wakeLock.request('screen');
-    wakeLock.addEventListener('release', () => { wakeLock = null; }, { once: true });
-  } catch { wakeLock = null; }
-}
-
-function releaseWakeLock() {
-  wakeLockWanted = false;
-  wakeLock?.release();
-  wakeLock = null;
-}
-
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') requestWakeLock();
+const screenWakeLock = createScreenWakeLock({
+  onChange(status) {
+    const box = $('wakeStatus');
+    const label = $('wakeMessage');
+    const retry = $('wakeRetry');
+    box.hidden = !status.wanted;
+    box.dataset.state = status.state;
+    retry.hidden = status.state !== 'error';
+    label.textContent = status.state === 'active' ? 'Screen awake'
+      : status.state === 'requesting' ? 'Keeping screen awake…'
+      : status.state === 'insecure' || status.state === 'unsupported' ? status.error
+      : status.state === 'suspended' ? 'Screen lock paused while away'
+      : 'Screen may sleep. Check power-saving settings and browser permissions.';
+    box.title = status.error || '';
+  },
 });
+$('wakeRetry').addEventListener('click', () => screenWakeLock.retry());
 
-// go immersive on begin: fullscreen, keep the screen awake, and lock to
-// landscape where the platform allows it (phones). These reject on unsupported
-// setups (desktop), so failures are swallowed. Must run inside the begin click.
+// Fullscreen and orientation are optional; screen wake lock is requested
+// separately, directly from Begin, so these promises cannot delay it.
 async function enterImmersive() {
-  wakeLockWanted = true;
   try {
     const root = document.documentElement;
     if (!document.fullscreenElement && root.requestFullscreen) {
@@ -261,20 +305,20 @@ async function enterImmersive() {
     }
     await screen.orientation?.lock?.('landscape');
   } catch { /* unsupported or denied — carry on windowed */ }
-  requestWakeLock();
 }
 
 function beginWorkout() {
+  screenWakeLock.start();
   enterImmersive();
   sounds.ensure();
   stroke.reset();
   course.reset();
   let stages = null;
   if (cfg.mode === 'plan') stages = PLAN[cfg.week - 1].sessions[cfg.session - 1].stages;
-  else if (cfg.mode !== 'just') stages = customStages(cfg);
+  else if (cfg.mode !== 'just') stages = customStages({ ...cfg, target: target() });
   workout = stages ? new Workout(stages) : null;
   activeLabel = cfg.mode === 'plan' ? `week ${cfg.week} · session ${cfg.session}` : '';
-  localStorage.setItem('morningrow.cfg', JSON.stringify(cfg));
+  savePrefs(cfg);
 
   course.setFinish(stages && stages[0].by === 'distance' ? stages[0].amount : null);
   elSession.hidden = !workout;
@@ -295,7 +339,7 @@ function beginWorkout() {
 }
 
 function showSummary() {
-  releaseWakeLock();
+  screenWakeLock.stop();
   const s = workout.summary();
   $('doneTag').textContent = activeLabel ? `${activeLabel} complete` : 'workout complete';
   $('sumDist').textContent = `${s.dist.toFixed(0)} m`;
@@ -417,6 +461,8 @@ ftms.onDriveStart = () => {
 ftms.onChange = () => {
   elBt.textContent = ftms.connected ? 'disconnect' : 'connect monitor';
   elBtStatus.textContent = ftms.connected ? `linked to ${ftms.device?.name || 'rower'}` : '';
+  if (recorder.active && !ftms.connected) stopRecording('device dropped — save it');
+  refreshRec();
 };
 if (!ftms.supported) {
   elBt.disabled = true;
@@ -431,6 +477,91 @@ elBt.addEventListener('click', async () => {
     elBtStatus.textContent = err.name === 'NotFoundError' ? '' : 'connection failed';
   }
 });
+
+// --------------------------------------------- TEMP: raw ble capture -------
+// Records the machine's notification stream verbatim and saves it to disk;
+// dropping a saved file back on the card replays it through the same code
+// path a live device drives, so the stroke model can be worked on away from
+// the boathouse. Remove alongside #debugRow when the model settles.
+const recorder = new BleRecorder();
+const replay = new Replay(ftms);
+const elRec = $('recToggle'), elRecStatus = $('recStatus');
+let recNote = '';     // transient status line; falls back to the hint below
+let recPending = false; // captured samples not yet written to disk
+let recTick = 0;
+
+function refreshRec() {
+  const rec = recorder.active;
+  elRec.disabled = !rec && !recPending && (!ftms.connected || replay.playing);
+  elRec.textContent = rec ? `stop · ${fmtTime(recorder.seconds)} · ${recorder.count}`
+    : recPending ? 'save recording' : 'record ble';
+  elRec.classList.toggle('on', rec);
+  elRecStatus.textContent = recNote
+    || (replay.playing ? 'replaying — press begin'
+      : ftms.connected ? 'or drop a recording here to replay'
+      : 'connect a monitor, or drop a recording here');
+}
+
+async function startRecording() {
+  recNote = '';
+  recorder.start(ftms.device);
+  ftms.onRaw = (uuid, name, dv) => recorder.push(uuid, name, dv);
+  recPending = true;
+  recTick = setInterval(refreshRec, 500);
+  refreshRec();
+  const names = await ftms.watchAll();
+  recNote = `${names.length} stream${names.length === 1 ? '' : 's'}: ${names.join(' · ')}`;
+  refreshRec();
+}
+
+function stopRecording(note) {
+  clearInterval(recTick);
+  recorder.stop();
+  ftms.onRaw = null;
+  ftms.unwatchAll();  // cleanup; not awaited so a save keeps its user gesture
+  recNote = note || '';
+  refreshRec();
+}
+
+elRec.addEventListener('click', async () => {
+  if (recorder.active) stopRecording();
+  else if (!recPending) return startRecording();
+  if (!recorder.count) {
+    recPending = false;
+    recNote = 'nothing captured — is the machine awake?';
+    return refreshRec();
+  }
+  const name = await recorder.save();
+  recPending = !name;
+  recNote = name ? `saved ${name} · ${recorder.count} packets` : 'save cancelled';
+  refreshRec();
+});
+
+// drop a saved recording anywhere on the setup card to play it back
+const dropZone = elOverlay;
+dropZone.addEventListener('dragover', (e) => {
+  if (elSetup.hidden) return;
+  e.preventDefault();
+  dropZone.classList.add('dropping');
+});
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dropping'));
+dropZone.addEventListener('drop', async (e) => {
+  if (elSetup.hidden) return;
+  e.preventDefault();
+  dropZone.classList.remove('dropping');
+  const file = e.dataTransfer.files[0];
+  if (!file) return;
+  try {
+    const rec = await readRecording(file);
+    replay.play(rec);
+    recNote = `replaying ${file.name} · ${Math.round(rec.durationMs / 1000)}s`;
+  } catch (err) {
+    recNote = `not a recording: ${err.message}`;
+  }
+  refreshRec();
+});
+replay.onEnd = () => { recNote = 'replay finished'; refreshRec(); };
+refreshRec();
 
 // ------------------------------------------------------------ fly-in -------
 const camFrom = camera.position.clone();
@@ -474,14 +605,37 @@ function bladeWorld(tipLocal) {
 // dev handle for poking the sim from the console
 window.__sim = {
   camera, controls, stroke, input, scene, boat, rower, course, world, renderer, ftms,
+  // TEMP: stroke-model work — __sim.replay.play(rec, { speed: 4 }), and
+  // __sim.frames(rec) / __sim.catches(rec) for the decoded time series
+  recorder, replay, frames: rowerFrames, catches, wakeLock: screenWakeLock,
   get workout() { return workout; },
   pause(mode, p) { stroke.mode = mode; stroke.p = p; window.__paused = true; },
   play() { window.__paused = false; },
-  step(ms = 16) { last -= ms; tick(); }, // manual frame, e.g. for hidden tabs
+  step(ms = 16) { last -= ms; renderFrame(performance.now()); }, // manual frame, e.g. for hidden tabs
 };
 
-function tick() {
-  const now = performance.now();
+const perf = createPerformanceMonitor(renderer, () => ({
+  character: rower.character, characterReady: rower.ready, characterVisible: rower.group.visible,
+  targetFps: elOverlay.classList.contains('show') && introDone ? 30 : 120, visibility: document.visibilityState, viewport: [innerWidth, innerHeight], distance: Math.round(stroke.dist),
+  wakeLock: screenWakeLock.status,
+}));
+if (perf) {
+  perf.onCaptureStart = () => { if (!rower.ready || ftms.connected) return false; beginWorkout(); input.held = true; };
+  perf.onCaptureEnd = () => { input.held = false; };
+  perf.onCharacter = visible => { rower.group.visible = visible; };
+  perf.onResolution = value => { resolutionOverride = value === 'auto' ? null : Number(value); resizeResolution(); };
+}
+
+const shouldRender = createFramePacer();
+let nextHud = 0;
+function tick(now) {
+  perf?.animationFrame(now);
+  if (document.hidden || !shouldRender(now, elOverlay.classList.contains('show') && introDone ? 30 : 120)) return;
+  renderFrame(now);
+}
+
+function renderFrame(now) {
+  perf?.begin(now);
   const dt = Math.min((now - last) / 1000, 0.05);
   last = now;
   const t = now / 1000;
@@ -505,7 +659,7 @@ function tick() {
   }
 
   // dev: window.__sim.pause('drive', 0.5) freezes the cycle for inspection
-  const pose = window.__paused ? stroke.pose() : stroke.update(dt, input);
+  const pose = fitRowingPose(window.__paused ? stroke.pose() : stroke.update(dt, input), rower.character);
 
   // follow the river: position + heading from the course centreline
   courseFrame(stroke.dist, _frame);
@@ -546,8 +700,10 @@ function tick() {
     camera.position.lerp(_chase, 1 - Math.exp(-dt * CHASE.ease));
   }
 
+  perf?.mark('simulation');
   boat.setPose(pose);
-  rower.update(pose, boat.handL, boat.handR, t);
+  rower.update(pose);
+  perf?.mark('animation');
 
   // blade water events: entry / exit splashes, release puddles
   if (prevBlade > -0.02 && pose.blade <= -0.02) {
@@ -589,27 +745,41 @@ function tick() {
   world.update(dt, boatGroup.position);
   course.update(dt, stroke.dist, t);
 
+  perf?.mark('world');
+
   // workout state machine: chime + re-cue on every stage change
   if (workout) {
     const ev = workout.update(dt, stroke.dist, pose.mode === 'drive' && !window.__paused, caught);
     if (ev) onWorkoutEvent(ev);
-    if (workout) updateWorkoutHud();
+    if (workout && now >= nextHud) updateWorkoutHud();
   }
 
   // HUD
   smoothV = lerp(smoothV, stroke.v, 1 - Math.exp(-dt * 1.6));
-  elSplit.textContent = fmtSplit(smoothV);
-  elRate.textContent = stroke.spm > 0 ? stroke.spm.toFixed(0) : '––';
-  elDist.textContent = `${stroke.dist.toFixed(0)} m`;
+  if (now >= nextHud) {
+    nextHud = now + 100;
+    elSplit.textContent = fmtSplit(smoothV);
+    elRate.textContent = stroke.spm > 0 ? stroke.spm.toFixed(0) : '––';
+    elDist.textContent = `${stroke.dist.toFixed(0)} m`;
+  }
 
   controls.update();
+  perf?.mark('hud');
+  perf?.beforeRender();
   renderer.render(scene, camera);
+  perf?.mark('render');
+  perf?.end(now);
 }
 
 renderer.setAnimationLoop(tick);
+document.addEventListener('visibilitychange', () => {
+  last = performance.now();
+  renderer.setAnimationLoop(document.hidden ? null : tick);
+});
 
 addEventListener('resize', () => {
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
+  resizeResolution();
   renderer.setSize(innerWidth, innerHeight);
 });

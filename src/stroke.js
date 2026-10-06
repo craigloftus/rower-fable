@@ -6,12 +6,12 @@ import { lerp, smooth, easeSin, clamp } from './util.js';
 export const G = {
   seatCatch: -0.12,   // seat x at the catch (compressed)
   seatFinish: 0.36,   // seat x at the finish (legs down)
-  leanCatch: 0.50,    // torso pitch, + = forward (toward stern)
+  leanCatch: 0.32,    // torso pitch, + = forward (toward stern)
   leanFinish: -0.36,  // layback
-  oarCatch: 0.95,     // oar sweep angle, + = blade toward bow
+  oarCatch: 1.15,     // oar sweep angle, + = blade toward bow
   oarFinish: -0.55,
   oarRest: -0.12,     // hands-away angle, handles in front of the body at rest
-  pinX: 0.05, pinY: 0.325, pinZ: 0.80,  // oarlock pin
+  pinX: 0.05, pinY: 0.50, pinZ: 0.80,  // oarlock pin
   inboard: 0.86, outboard: 2.03,        // scull dimensions either side of pin
   bladeDrive: -0.075, // blade height in the water during the drive
   bladeRec: 0.16,     // blade skims just clear of the water on the recovery
@@ -19,6 +19,7 @@ export const G = {
   recDur: 1.65,
   restPoint: 0.24,    // recovery fraction where the rower pauses, "easy oars"
   hipY: 0.40,
+  seat: { length: 0.28, width: 0.30, top: 0.3175, thickness: 0.035 },
   ankle: { x: -0.47, y: 0.215, z: 0.115 },
   thigh: 0.44, shin: 0.43,
   upperArm: 0.30, foreArm: 0.32,
@@ -96,7 +97,7 @@ export class Stroke {
     if (this.mode === 'drive') {
       const d = this.p;
       // legs finish early so the hands sweep back over knees already down
-      seat = lerp(g.seatCatch, g.seatFinish, smooth(0.0, 0.62, d));
+      seat = lerp(g.seatCatch, g.seatFinish, smooth(0.0, 0.58, d));
       lean = lerp(g.leanCatch, g.leanFinish, smooth(0.20, 0.97, d));
       oar = lerp(g.oarCatch, g.oarFinish, easeSin(d));
       blade = lerp(-0.02, g.bladeDrive, smooth(0, 0.12, d));
@@ -106,7 +107,7 @@ export class Stroke {
       const r = this.p;
       // hands away first, then body over, then slide -- the seat (and the
       // knees with it) only moves once the handles have cleared the legs
-      seat = lerp(g.seatFinish, g.seatCatch, smooth(0.50, 0.97, r));
+      seat = lerp(g.seatFinish, g.seatCatch, smooth(0.43, 0.97, r));
       lean = lerp(g.leanFinish, g.leanCatch, smooth(0.05, 0.45, r));
       const away = smooth(0.02, 0.22, r);
       oar = lerp(lerp(g.oarFinish, g.oarRest, away), g.oarCatch,

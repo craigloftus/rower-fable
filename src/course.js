@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { batchScenery } from './static-batch.js';
 import { mat, rng } from './util.js';
 import { jitterGeo, makeTree, cmat, GREENS, DARKGREENS } from './scenery.js';
 
@@ -99,7 +100,7 @@ const _e4 = new THREE.Euler();
 const _s4 = new THREE.Vector3();
 const _p4 = new THREE.Vector3();
 
-function buildChunk(ci) {
+export function buildChunk(ci) {
   const r = rng(4242 + ci * 131);
   const g = new THREE.Group();
   const s0 = ci * CHUNK, s1 = s0 + CHUNK;
@@ -177,6 +178,7 @@ function buildChunk(ci) {
     }
   }
 
+  batchScenery(g, 60);
   const reeds = new THREE.InstancedMesh(reedGeo, reedMat, reedXf.length);
   for (let i = 0; i < reedXf.length; i++) reeds.setMatrixAt(i, reedXf[i]);
   g.add(reeds);
@@ -331,22 +333,31 @@ class Markers {
 
 // --------------------------------------------------------------- course ----
 export class Course {
-  constructor(scene, onMarker) {
+  constructor(scene, onMarker, requestChunk) {
     this.group = new THREE.Group();
     scene.add(this.group);
     this.chunks = new Map();
+    this.pending = new Set();
+    this.requestChunk = requestChunk;
+    this.range = [0, 0];
     this.markers = new Markers(this.group, onMarker);
   }
 
   update(dt, dist, time) {
     const sw = dist + START;
     const lo = Math.max(0, Math.floor((sw - VIEW_BEHIND) / CHUNK));
-    const hi = Math.floor((sw + VIEW_AHEAD) / CHUNK);
+    // Prepare one full chunk beyond visibility, before the boat needs it.
+    const hi = Math.floor((sw + VIEW_AHEAD) / CHUNK) + 1;
+    this.range = [lo, hi];
     for (let i = lo; i <= hi; i++) {
-      if (!this.chunks.has(i)) {
-        const c = buildChunk(i);
-        this.chunks.set(i, c);
-        this.group.add(c);
+      if (!this.chunks.has(i) && !this.pending.has(i)) {
+        this.pending.add(i);
+        this.requestChunk(i).then(c => {
+          if (i < this.range[0] || i > this.range[1]) { this.pending.delete(i); disposeGroup(c); return; }
+          this.chunks.set(i, c);
+          this.group.add(c);
+          this.pending.delete(i);
+        }).catch(error => console.error('River scenery failed to load', error));
       }
     }
     for (const [i, c] of this.chunks) {

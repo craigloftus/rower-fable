@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { batchScenery } from './static-batch.js';
 import { mat, rng, clamp, lerp } from './util.js';
 import { jitterGeo } from './scenery.js';
 
@@ -161,6 +162,7 @@ function makeMountains(scene) {
       massif.add(shoulder);
     }
     massif.position.set(Math.cos(a) * dist, 0, Math.sin(a) * dist);
+    batchScenery(massif);
     g.add(massif);
   }
   // nearer green hills
@@ -224,6 +226,7 @@ function makeClouds(scene) {
         c.add(top);
       }
     }
+    batchScenery(c);
     const a = r() * Math.PI * 2;
     const d = 120 + r() * 160;
     c.position.set(Math.cos(a) * d, 50 + r() * 60, Math.sin(a) * d);

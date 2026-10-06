@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Morning Row · character review</title>
+<style>
+body{margin:0;background:#e9e6dc;color:#293d35;font:14px system-ui}header{padding:16px 24px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}h1{font:20px Georgia;margin:0}button,select{font:inherit;padding:8px 12px;border:1px solid #9ca69e;border-radius:5px;background:#f7f5ed;color:inherit;cursor:pointer}main{display:grid;grid-template-columns:1fr 1fr;height:calc(100vh - 150px)}section{position:relative;min-width:0;min-height:0;overflow:hidden}h2{position:absolute;z-index:1;pointer-events:none;top:8px;left:24px;font-size:14px;font-weight:500}canvas{position:absolute;inset:0;display:block;width:100%;height:100%}footer{padding:12px 24px;display:flex;align-items:center;gap:16px}input{flex:1}output{font-variant-numeric:tabular-nums;min-width:120px}#status{font-size:12px;margin-left:24px}
+body{height:100dvh;display:flex;flex-direction:column}header,footer,#status{flex-shrink:0}main{flex:1;min-height:0;height:auto}#status{padding-bottom:10px}body.single main{grid-template-columns:1fr}body.single #before{display:none}
+</style></head><body>
+<header><h1>Character review</h1><select aria-label="Character" id="character"></select><button id="play">Play cycle</button><button id="side">Side</button><button id="front">Front</button><button id="grip">Grip close-up</button><button id="rear">Rear</button><button id="face">Face</button><button id="feet">Feet</button><button id="knees">Knees</button><button id="seat">Seat</button></header>
+<main><section id="before"><h2>Original · runtime retargeting</h2></section><section id="after"><h2>Blender · baked rowing rig</h2></section></main>
+<footer><label for="phase">Stroke phase</label><input id="phase" type="range" min="0" max="2" step="0.002" value="0"><output id="phaseLabel">Catch</output></footer>
+<div id="status" role="status">Loading rigs…</div>
+<script type="module" src="/validation/review.js"></script></body></html>

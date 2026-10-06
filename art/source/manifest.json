@@ -1,0 +1,67 @@
+[
+  {
+    "file": "makehuman-base.obj",
+    "source": "https://raw.githubusercontent.com/makehumancommunity/makehuman/master/makehuman/data/3dobjs/base.obj",
+    "sha256": "8e761e6624b8f54536409135d1636da63b32486a90d4897f84e121d144f6fb4c"
+  },
+  {
+    "file": "default_weights.mhw",
+    "source": "https://raw.githubusercontent.com/makehumancommunity/makehuman/master/makehuman/data/rigs/default_weights.mhw",
+    "sha256": "0f3641d651ae3d00ad6b4ccee43142edb109d3bd909d27d9e4139ef1beed8625"
+  },
+  {
+    "file": "female-young.target",
+    "source": "https://raw.githubusercontent.com/makehumancommunity/makehuman/master/makehuman/data/targets/macrodetails/caucasian-female-young.target",
+    "sha256": "118379f6e8ba9266247fdb8788a20e1df40a239f97ced0b9905bcbcc74f6e820"
+  },
+  {
+    "file": "female-athletic.target",
+    "source": "https://raw.githubusercontent.com/makehumancommunity/makehuman/master/makehuman/data/targets/macrodetails/universal-female-young-averagemuscle-averageweight.target",
+    "sha256": "4ba5396ddabda448ece15650a566fbebfbb10239256ccb201e8f883429e12249"
+  },
+  {
+    "file": "male-young.target",
+    "source": "https://raw.githubusercontent.com/makehumancommunity/makehuman/master/makehuman/data/targets/macrodetails/caucasian-male-young.target",
+    "sha256": "70e228ba7164737dae664454394536fc5935fa48d333c1a97d77e2dc6eacc5f5"
+  },
+  {
+    "file": "male-athletic.target",
+    "source": "https://raw.githubusercontent.com/makehumancommunity/makehuman/master/makehuman/data/targets/macrodetails/universal-male-young-averagemuscle-averageweight.target",
+    "sha256": "4ba5396ddabda448ece15650a566fbebfbb10239256ccb201e8f883429e12249"
+  },
+  {
+    "file": "eye-left-larger.target",
+    "source": "https://raw.githubusercontent.com/makehumancommunity/makehuman/master/makehuman/data/targets/eyes/l-eye-scale-incr.target",
+    "sha256": "f35550dc3170ca1c0aacae0b598ca139e4f1f913f2ccea146ec6ea5b4e050dbb"
+  },
+  {
+    "file": "eye-right-larger.target",
+    "source": "https://raw.githubusercontent.com/makehumancommunity/makehuman/master/makehuman/data/targets/eyes/r-eye-scale-incr.target",
+    "sha256": "e1f4cb48575b60a46589635b99a8b87587ba82d7524a8ac1445ace0ba002e918"
+  },
+  {
+    "file": "mouth-smile.target",
+    "source": "https://raw.githubusercontent.com/makehumancommunity/makehuman/master/makehuman/data/targets/mouth/mouth-angles-up.target",
+    "sha256": "8ddc2f53f4264742f4e10ddafd128e059e09c6a4268a2722e9495bad0f274898"
+  },
+  {
+    "file": "nose-shorter.target",
+    "source": "https://raw.githubusercontent.com/makehumancommunity/makehuman/master/makehuman/data/targets/nose/nose-scale-depth-decr.target",
+    "sha256": "b46c35046c9c451b7ffe77acc0573bd945d7c6acaefe43d8c21912d4ce1a6e4c"
+  },
+  {
+    "file": "chin-softer.target",
+    "source": "https://raw.githubusercontent.com/makehumancommunity/makehuman/master/makehuman/data/targets/chin/chin-width-decr.target",
+    "sha256": "ac081bd1652c203fc8973f20988a868a423a49f1fe6449cb974727fd46c26af1"
+  },
+  {
+    "file": "mouth-upperlip-volume-incr.target",
+    "source": "https://raw.githubusercontent.com/makehumancommunity/makehuman/master/makehuman/data/targets/mouth/mouth-upperlip-volume-incr.target",
+    "sha256": "b124cbd9b9be318264f61a143da603b42e0357ed92b4b6afd1b31a83daaf8568"
+  },
+  {
+    "file": "mouth-lowerlip-volume-incr.target",
+    "source": "https://raw.githubusercontent.com/makehumancommunity/makehuman/master/makehuman/data/targets/mouth/mouth-lowerlip-volume-incr.target",
+    "sha256": "dbdaf045b00c67bf8672d53bc8cf94eb3e3dea316de6fe18a278f7080564c65d"
+  }
+]
