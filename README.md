@@ -53,14 +53,15 @@ repeats and rest, and the plan week and session
   back swing, then arms on the drive; hands away before the slide on the
   recovery). Hull speed integrates a thrust profile against linear +
   quadratic drag, landing at a realistic ~2:05 /500 m split at rate 24.
-- **The rower** ([src/rower.js](src/rower.js)) — five custom Blender characters,
+- **The rower** ([src/rower.js](src/rower.js)) — four custom Blender characters,
   each with a rowing-specific deform rig and one baked `RowingCycle` clip.
   The stroke phase samples the clip directly (drive = seconds 0–1,
   recovery = 1–2), so Bluetooth timing and pauses cannot drift from the oars.
   June retains the approved sculpt's simplified grip hands. The rig bake and boat share
   [src/oar-pose.js](src/oar-pose.js), including physical crossover height.
-- **Character selection** — choose Mira, Kai, June, Sol or Ada on the opening
-  card. Portraits are rendered from the actual Blender meshes. The loaded
+- **Character selection** — choose Kai, June, Sol or Ada on the opening
+  card. Portraits use the original generated illustrations. June is the default;
+  saved Mira selections migrate to June. The loaded
   choice is saved as `character` in `morningrow.cfg`; existing workout
   preferences are preserved.
 - **Oars** ([src/boat.js](src/boat.js)) — sweep, blade depth, and feathering

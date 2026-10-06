@@ -21,21 +21,22 @@ viewer. They are not a runtime fallback.
 
 ## The replacement
 
-Five custom faceted meshes use fixed rowing proportions and a single
+Four custom faceted meshes use fixed rowing proportions and a single
 `RowingCycle` clip. The shared cast has 15 deform bones plus a root. June's fresh
-rig has 30 deform bones and two grip markers. Mira is a new interpretation of the
-original rower; Kai, June, Sol and Ada use the generated concept images in this
-directory. Hair geometry, face details, skin and kit distinguish the cast.
+rig has 30 deform bones and two grip markers. Kai, June, Sol and Ada use the
+generated concept images in this directory. Mira was retired from the app in
+October 2026; her editable source remains as an archive. Hair geometry, face details, skin and kit distinguish the cast.
 
 The reference images were produced with the built-in image generation tool.
 Exact prompts are in `prompts.json`; each requested concept is saved alongside
 its `.blend` source. Portraits in `public/characters/` are rendered from the
-meshes rather than using the more detailed concept art as a misleading preview.
+meshes for validation. The opening selector uses the original concept art,
+as requested, independently of these rendered validation portraits.
 
 The shared body now uses MakeHuman's CC0 anatomical topology and skin weights,
 reshaped into fixed rowing proportions in an A-pose. Shoulder, hip, elbow and
 knee loops blend across joints; there are no overlapping skin-coloured thigh
-caps. Mira, Kai, Sol and Ada share topology, shoes and a rig, with separate body profiles.
+caps. Kai, Sol and Ada share topology, shoes and a rig, with separate body profiles.
 Cleanly cut vest/short boundaries, contoured soles and curved velcro straps
 replace the primitive clothing and shoes. The stretcher fits the new soles.
 
@@ -152,7 +153,7 @@ The vest has a wider scoop neckline, a tensioned chest surface and thin bound
 edges carrying the body's blended skin weights. Triangular planes in the skin
 and clothing move the finish closer to the faceted illustration. The stroke,
 grips, knee axes and sitting pads keep the existing animation design. These
-changes have not been applied to the other four characters.
+changes have not been applied to the other three active characters.
 
 That MakeHuman-based June sculpt is retained as a previous version in the
 development viewer. The active June build now runs without the Blender GUI:
