@@ -1,0 +1,15 @@
+{
+  "body": {
+    "passed": true,
+    "method": "Byte-identical approved June source",
+    "exportedProtectedVertices": 11910,
+    "exportedProtectedTriangles": 25477,
+    "exportedPositionDelta": 0,
+    "exportedWeightDelta": 0
+  },
+  "clip": {
+    "passed": true,
+    "tracks": 96,
+    "method": "Exact Float32 equality of every approved June track time and value"
+  }
+}

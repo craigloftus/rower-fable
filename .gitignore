@@ -35,3 +35,10 @@ validation/v2/
 art/characters/archive/
 art/characters/reference/june-planes.blend
 art/characters/reference/june-trellis-rig.blend
+
+# Temporary delivery comparison viewer and compressed scratch exports.
+validation/characters/delivery/
+# Duplicate snapshots of the historical candidate sculpt masters.
+art/characters/kai-sculpt.blend
+art/characters/sol-sculpt.blend
+art/characters/ada-sculpt.blend

@@ -1,0 +1,25 @@
+{
+  "sources": [
+    {
+      "path": "art/characters/ada-concept.png",
+      "bytes": 1586859,
+      "sha256": "8bd9d3a3a93f5ddb7989fe7e9bb1622c3d320cd14e0514ae3fd1bce1a017ecc1"
+    },
+    {
+      "path": "validation/characters/ada/original-head-crop.png",
+      "bytes": 80902,
+      "sha256": "546811410f42d6d3ef19fc60c4f7248469dded0a796e735f01d1f739c9fb0fe7"
+    },
+    {
+      "path": "validation/characters/ada/reconstructed.glb",
+      "bytes": 9953672,
+      "sha256": "8db7a28fc18517ca14972ebb336c93766354e39fca8c9af0021b19837b754bb5"
+    },
+    {
+      "path": "validation/characters/ada/head-reconstructed.glb",
+      "bytes": 9154816,
+      "sha256": "415a2b4092ef7343181878693bf7a5fd62fc91d23b4c35fcfae8b0c0331a456c"
+    }
+  ],
+  "reconstruction": "Local TRELLIS.2 MLX from original full body and unchanged [383,16,604,303] head crop. Raw inference excluded from curated package."
+}

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
 import {AnimationMixer,LoopOnce,Vector3,Quaternion,Texture,Group} from 'three';
 import {prepareCharacterSkinning,updateCharacterSkinning} from '../src/volume-skinning.js';
 import {Stroke,G} from '../src/stroke.js';
@@ -26,13 +27,13 @@ function clippedArea(vertices, planes) {
   return Math.abs(polygon.reduce((sum,a,i)=>{const b=polygon[(i+1)%polygon.length];return sum+a.x*b.z-a.z*b.x;},0))/2;
 }
 
-export async function validateNativeJune(asset=`${root}/june.glb`) {
+export async function validateNativeJune(asset=`${root}/june.glb`, reportRoot=root) {
 const bytes=readFileSync(asset),layout=JSON.parse(readFileSync(`${root}/layout.json`));
 for(const k of ['L','R'])for(const joint of ['thigh','shin']) {
   const hinge=new Vector3(0,0,1).applyQuaternion(new Quaternion(...layout.rest[joint+k].q));
   assert(hinge.z>.98,'Rest knee axes must point laterally, not follow a nearly straight-leg cross product');
 }
-const gltf=await new GLTFLoader().register(()=>({name:'GeometryValidation',loadTexture:()=>Promise.resolve(new Texture())}))
+const gltf=await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).register(()=>({name:'GeometryValidation',loadTexture:()=>Promise.resolve(new Texture())}))
   .parseAsync(bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength),'');
 prepareCharacterSkinning(gltf.scene);
 const bones={},meshes=[];
@@ -132,8 +133,8 @@ for(const {mesh,index,point} of placementWitness) {
   const actual=mesh.getVertexPosition(index,new Vector3()).applyMatrix4(mesh.matrixWorld);
   report.maxRigidPlacementError=Math.max(report.maxRigidPlacementError,actual.distanceTo(point.applyMatrix4(boat.matrixWorld)));
 }
-writeFileSync(`${root}/measurements.json`,JSON.stringify(report,null,2)+'\n');
-writeFileSync(`${root}/parity-witness.json`,JSON.stringify(witness));
+writeFileSync(`${reportRoot}/measurements.json`,JSON.stringify(report,null,2)+'\n');
+writeFileSync(`${reportRoot}/parity-witness.json`,JSON.stringify(witness));
 console.log(JSON.stringify(report,null,2));
 assert(report.maxGripError<.002,'Grip anchors drift');
 assert(report.maxBoneLengthError<.00001,'Limb length changes');
@@ -147,7 +148,7 @@ assert(report.minSoleClearance>0&&report.maxSoleClearance<.001,'Soles miss stret
 assert(report.maxSoleDrift<.0001,'Feet move');
 assert(report.maxKneeTwist<.01,'Knee axes disagree');
 assert(report.maxRigidPlacementError<.0001,'Moving the boat changes the skin deformation');
-writeFileSync(`${root}/report.json`,JSON.stringify(report,null,2)+'\n');
+writeFileSync(`${reportRoot}/report.json`,JSON.stringify(report,null,2)+'\n');
 return report;
 }
-if(import.meta.url===pathToFileURL(process.argv[1]).href)await validateNativeJune(process.argv[2]);
+if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)await validateNativeJune(process.argv[2]);

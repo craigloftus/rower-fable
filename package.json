@@ -8,12 +8,13 @@
     "build": "vite build",
     "preview": "vite preview",
     "characters:sample": "node scripts/sample-stroke.mjs",
-    "characters:build": "npm run characters:sample && uv run scripts/blender-mcp.py scripts/build-characters.py && npm run june:build && npm run june:install",
+    "characters:build": "node scripts/build-native-cast.mjs",
     "june:build": "node scripts/build-final-june.mjs",
     "june:install": "node scripts/install-final-june.mjs",
-    "characters:validate": "node scripts/validate-characters.mjs && node --test scripts/prefs.test.mjs scripts/rowing-fit.test.mjs",
-    "characters:validate-mesh": "blender --background --python-exit-code 1 --python scripts/validate-body.py",
-    "test": "node --test scripts/*.test.mjs"
+    "characters:validate": "node scripts/validate-characters.mjs && node --test scripts/prefs.test.mjs scripts/rowing-fit.test.mjs scripts/shared-cast.test.mjs",
+    "characters:validate-mesh": "node scripts/validate-cast-surfaces.mjs",
+    "test": "node --test scripts/*.test.mjs",
+    "characters:install": "node scripts/install-shared-cast.mjs"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +23,9 @@
     "three": "^0.184.0"
   },
   "devDependencies": {
+    "@gltf-transform/core": "^4.5.1",
+    "@gltf-transform/extensions": "^4.5.1",
+    "meshoptimizer": "^1.3.0",
     "playwright": "^1.62.1",
     "vite": "^8.0.16"
   }

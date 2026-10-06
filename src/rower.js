@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { DEFAULT_CHARACTER } from './characters.js';
 import { prepareCharacterSkinning } from './volume-skinning.js';
 
@@ -8,7 +9,7 @@ export class Rower {
   constructor(parent) {
     this.group = new THREE.Group();
     parent.add(this.group);
-    this.loader = new GLTFLoader();
+    this.loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
     this.request = 0;
     this.ready = false;
     this.character = null;
@@ -16,7 +17,7 @@ export class Rower {
 
   async select(id = DEFAULT_CHARACTER) {
     const request = ++this.request;
-    const gltf = await this.loader.loadAsync(`${import.meta.env.BASE_URL}characters/${id}.glb`);
+    const gltf = await this.loader.loadAsync(`${import.meta.env.BASE_URL}characters/${id}.glb?v=${import.meta.env.CHARACTER_REVISION}`);
     if (request !== this.request) {
       this.disposeModel(gltf.scene);
       return false;

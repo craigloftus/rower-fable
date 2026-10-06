@@ -1,0 +1,11 @@
+{
+  "input": "art/characters/shared-cast/june.glb",
+  "output": "validation/characters/installed/june/june.glb",
+  "sourceSha256": "3f7566a8c12b490ca98a9ef99132d424662224f2cabb37c873dccab234645cf6",
+  "sha256": "74f5d840917b91df867cbe1085636b0baef605fca8f97add9baccb2b34c5b2c4",
+  "sourceBytes": 9170496,
+  "bytes": 3268496,
+  "savedPercent": 64.35856904577462,
+  "lossless": true,
+  "trianglesRemoved": 0
+}

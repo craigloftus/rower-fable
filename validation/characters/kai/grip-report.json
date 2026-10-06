@@ -1,0 +1,40 @@
+{
+  "poses": 21,
+  "handleRadius": 0.02,
+  "hands": {
+    "L": {
+      "triangles": 1063,
+      "minimumSurfaceClearance": 0.00030803482573263374,
+      "contactTrianglesWithin3mm": 62,
+      "minimumPalmUp": 0.8294909742930487,
+      "maximumThumbEdgeStretch": 1.3514975249036532,
+      "regionSurfaceClearance": {
+        "palm": 0.00030803482573263374,
+        "fingers": 0.00040793073004856406,
+        "thumb": 0.0003943001455910984
+      },
+      "maximumRegionSurfaceClearance": {
+        "palm": 0.00030824795701603,
+        "fingers": 0.00040806548863589476,
+        "thumb": 0.0003944950469836721
+      }
+    },
+    "R": {
+      "triangles": 1018,
+      "minimumSurfaceClearance": 0.0002568581835910508,
+      "contactTrianglesWithin3mm": 47,
+      "minimumPalmUp": 0.8246503868375045,
+      "maximumThumbEdgeStretch": 1.3547177388740381,
+      "regionSurfaceClearance": {
+        "palm": 0.0002928577857905859,
+        "fingers": 0.00040751704703786626,
+        "thumb": 0.0002568581835910508
+      },
+      "maximumRegionSurfaceClearance": {
+        "palm": 0.0002930919741904632,
+        "fingers": 0.000407629441744696,
+        "thumb": 0.0002572904791497098
+      }
+    }
+  }
+}

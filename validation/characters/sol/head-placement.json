@@ -1,0 +1,14 @@
+{
+  "scale": 0.22168079078315614,
+  "translation": [
+    -0.008613449664754738,
+    0.3888215963044657,
+    -0.0008025614812406292
+  ],
+  "bodyCut": 0.318,
+  "headCut": 0.328,
+  "bodySectionVertices": 82,
+  "headSectionVertices": 55,
+  "triangles": 31732,
+  "watertight": true
+}

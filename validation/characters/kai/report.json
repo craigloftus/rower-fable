@@ -1,0 +1,20 @@
+{
+  "sha256": "c449b3c75b5e8c69c40e93b5742cdfc45c5c9e248b85b37a98361fdfbf43e5cf",
+  "bytes": 7738832,
+  "bones": 32,
+  "triangles": 46288,
+  "samples": 1201,
+  "sourceScale": 1.8,
+  "maxGripError": 0.0007080957998969479,
+  "maxBoneLengthError": 2.589140633002529e-7,
+  "maxAngularStep": 0.005141304581082191,
+  "maxSeamGap": 8.64039617730193e-7,
+  "minSeatClearance": 0.0003997174368631784,
+  "maxSeatGap": 0.0004122137445039531,
+  "minSeatContactArea": 0.00046785559328406433,
+  "minSoleClearance": 0.00038825086190756933,
+  "maxSoleClearance": 0.00040045795311547186,
+  "maxSoleDrift": 0.000012333070179429973,
+  "maxKneeTwist": 2.9802322387695312e-8,
+  "maxRigidPlacementError": 8.795570567117211e-8
+}

@@ -1,0 +1,11 @@
+{
+  "input": "art/characters/shared-cast/kai.glb",
+  "output": "validation/characters/installed/kai/kai.glb",
+  "sourceSha256": "c4b13ff3e562d8e85f5170c3265bf586a472600874a36045cca775a3e235c31b",
+  "sha256": "d1e376fbb3bebf9a8c9e039998fb54e896d29f5036404ce55ffd9192ad1f69d9",
+  "sourceBytes": 4835056,
+  "bytes": 2365096,
+  "savedPercent": 51.08441350007114,
+  "lossless": true,
+  "trianglesRemoved": 0
+}

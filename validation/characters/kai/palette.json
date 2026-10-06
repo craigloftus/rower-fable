@@ -1,0 +1,97 @@
+{
+  "palette": {
+    "Skin": [
+      171,
+      115,
+      69
+    ],
+    "Black curls": [
+      39,
+      35,
+      28
+    ],
+    "Olive singlet": [
+      99,
+      109,
+      64
+    ],
+    "Cream stripe": [
+      236,
+      225,
+      190
+    ],
+    "Charcoal shorts": [
+      54,
+      55,
+      51
+    ],
+    "Ivory shoes": [
+      221,
+      215,
+      194
+    ],
+    "Shoe soles": [
+      48,
+      49,
+      44
+    ],
+    "Shoe straps": [
+      236,
+      227,
+      205
+    ],
+    "Brows": [
+      52,
+      43,
+      32
+    ],
+    "Eye ivory": [
+      232,
+      220,
+      191
+    ],
+    "Iris": [
+      97,
+      66,
+      32
+    ],
+    "Pupil": [
+      13,
+      17,
+      13
+    ],
+    "Upper lid": [
+      85,
+      52,
+      29
+    ],
+    "Mouth": [
+      113,
+      72,
+      44
+    ],
+    "Lips": [
+      160,
+      101,
+      62
+    ]
+  },
+  "triangles": {
+    "Skin": 27831,
+    "Black curls": 2216,
+    "Olive singlet": 3865,
+    "Cream stripe": 267,
+    "Charcoal shorts": 4891,
+    "Ivory shoes": 3941,
+    "Shoe soles": 1388,
+    "Shoe straps": 841,
+    "Brows": 176,
+    "Eye ivory": 177,
+    "Iris": 356,
+    "Pupil": 144,
+    "Upper lid": 46,
+    "Mouth": 52,
+    "Lips": 97
+  },
+  "totalTriangles": 46288
+}

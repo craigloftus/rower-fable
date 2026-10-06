@@ -1,0 +1,38 @@
+[
+  {
+    "asset": "ada",
+    "dpr": 2.625,
+    "width": 2399,
+    "height": 1081,
+    "drawCalls": 57,
+    "triangles": 23692,
+    "medianFrameMs": 0.09999990463256836,
+    "p95FrameMs": 0.20000028610229492,
+    "frames": 300,
+    "measurement": "Synchronous call cost in a neutral boat scene; native DPR; headless desktop Chromium; not sustained GPU frame time"
+  },
+  {
+    "asset": "june",
+    "dpr": 2.625,
+    "width": 2399,
+    "height": 1081,
+    "drawCalls": 69,
+    "triangles": 48073,
+    "medianFrameMs": 0.2999997138977051,
+    "p95FrameMs": 0.40000009536743164,
+    "frames": 300,
+    "measurement": "Synchronous call cost in a neutral boat scene; native DPR; headless desktop Chromium; not sustained GPU frame time"
+  },
+  {
+    "asset": "candidate",
+    "dpr": 2.625,
+    "width": 2399,
+    "height": 1081,
+    "drawCalls": 63,
+    "triangles": 52818,
+    "medianFrameMs": 0.20000028610229492,
+    "p95FrameMs": 0.3000001907348633,
+    "frames": 300,
+    "measurement": "Synchronous call cost in a neutral boat scene; native DPR; headless desktop Chromium; not sustained GPU frame time"
+  }
+]

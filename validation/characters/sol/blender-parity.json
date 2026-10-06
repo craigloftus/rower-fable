@@ -1,0 +1,8 @@
+{
+  "sha256": "b7d09d6124052d6d6794bf6c2f496214ffa3afe4f27f93c5efbd0b7caf808f47",
+  "blendSha256": "401598f30b29a17bed7db19051364bf22cd499640757b1161877d9b4b02c731b",
+  "witnessVertices": 3520,
+  "poses": 5,
+  "maximumRestMatchError": 0,
+  "maximumPositionError": 7.457650265233886e-05
+}

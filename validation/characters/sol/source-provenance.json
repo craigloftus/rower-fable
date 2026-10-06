@@ -1,0 +1,39 @@
+{
+  "sources": [
+    {
+      "path": "art/characters/sol-concept.png",
+      "bytes": 1612588,
+      "sha256": "4b664f1df3048de75cec9540f487a5f126c9303975237258dda2100397c49b2e"
+    },
+    {
+      "path": "validation/characters/sol/original-head-crop.png",
+      "bytes": 89460,
+      "sha256": "d4c0b3bb72b3ed345f8542e0375920790d0885e3d019c3660f04c986ed4fe558"
+    },
+    {
+      "path": "validation/characters/sol/reconstructed.glb",
+      "bytes": 9441040,
+      "sha256": "c5df465a34c6179b34578245197108b0b9e88462b19137d28c9169bab12ad430"
+    },
+    {
+      "path": "validation/characters/sol/head-reconstructed.glb",
+      "bytes": 10795236,
+      "sha256": "1620c76d12649eba7a7c8ec2b1fe5e9442ccd426b323188c13c913c4ebe8f662"
+    }
+  ],
+  "headCrop": [
+    365,
+    6,
+    595,
+    322
+  ],
+  "localInference": {
+    "engine": "TRELLIS.2 MLX",
+    "resolution": 1024,
+    "steps": 12,
+    "targetFaces": 100000,
+    "textureSize": 2048
+  },
+  "fullBodySeconds": 322,
+  "headSeconds": 2452
+}

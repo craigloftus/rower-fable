@@ -1,0 +1,5 @@
+{
+  "source": "head-faceted-surface.ply",
+  "method": "Local Taubin cleanup, bilateral cheek and forehead planes; retained source features",
+  "maximumSourceDisplacement": 0.06130941542371311
+}

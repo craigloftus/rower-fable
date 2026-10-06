@@ -1,10 +1,16 @@
 import { chromium } from 'playwright';
 import { mkdir, writeFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 
 const url = process.env.PROFILE_URL || 'http://127.0.0.1:5176/rower-fable/?perf=1';
 const label = process.env.PROFILE_LABEL || 'headless-native';
 const output = 'validation/performance';
+const character = process.env.PROFILE_CHARACTER || 'june';
+assert(['kai', 'june', 'sol', 'ada'].includes(character));
+const candidate = process.env.PROFILE_ASSET && await readFile(process.env.PROFILE_ASSET);
+const poseModule = process.env.PROFILE_POSE_MODULE;
 await mkdir(output, { recursive: true });
 const browser = await chromium.launch({
   headless: true, channel: 'chromium',
@@ -13,6 +19,17 @@ try {
   const viewport = { width: 914, height: 412 };
   const context = await browser.newContext({ viewport, screen: viewport, deviceScaleFactor: 2.625 });
   const page = await context.newPage();
+  let modelResponse;
+  page.on('response',response=>{
+    if(new URL(response.url()).pathname.endsWith(`/characters/${character}.glb`)) modelResponse=response;
+  });
+  if (candidate) await page.route(`**/characters/${character}.glb*`, route =>
+    route.fulfill({ contentType: 'model/gltf-binary', body: candidate }));
+  if (poseModule) await page.route('**/src/rowing-fit.js', route => route.fulfill({
+    contentType: 'application/javascript',
+    body: `import { ${character}Pose } from ${JSON.stringify(poseModule)};
+      export function fitRowingPose(pose, id) { return id === ${JSON.stringify(character)} ? ${character}Pose(pose) : pose; }`,
+  }));
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => {
@@ -20,8 +37,8 @@ try {
   });
   await page.goto(url);
   await page.getByText('Performance · local measurements', { exact: true }).click();
-  await page.getByRole('button', { name: 'Choose June', exact: true }).click();
-  await page.waitForFunction(() => document.querySelector('#characterStatus').textContent === 'June is ready');
+  await page.locator(`[data-character="${character}"]`).click();
+  await page.waitForFunction(id => window.__sim.rower.ready && window.__sim.rower.character === id, character);
   await page.getByRole('button', { name: /^just row$/i }).click();
   await page.getByText('Performance · local measurements', { exact: true }).click();
   await page.getByRole('button', { name: 'Run 60s rowing sample', exact: true }).click();
@@ -30,7 +47,9 @@ try {
   await page.getByText('Report data', { exact: true }).click();
   await page.waitForFunction(() => document.querySelector('#perf-report').textContent.startsWith('{'));
   const report = JSON.parse(await page.locator('#perf-report').textContent());
+  const deliveredSha256=createHash('sha256').update(await modelResponse.body()).digest('hex');
   report.testEnvironment = { headless: true, viewport, deviceScaleFactor: 2.625,
+    character, deliveredSha256, candidateSha256: candidate && createHash('sha256').update(candidate).digest('hex'), poseModule,
     note: 'Phone-sized viewport on the desktop GPU. Not a Pixel 8 hardware/thermal test.' };
   await writeFile(`${output}/${label}.json`, JSON.stringify(report, null, 2));
   await page.getByText('Report data', { exact: true }).click();

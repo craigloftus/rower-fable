@@ -1,0 +1,11 @@
+{
+  "input": "art/characters/shared-cast/sol.glb",
+  "output": "validation/characters/installed/sol/sol.glb",
+  "sourceSha256": "9ed9567d5cdf2fc5c5947b8251060cd2822d3a997c891cc6a746b06da7dbbafb",
+  "sha256": "c45fc5b409178e09d19d19a4e37aef525a9d73b0b37c8e059d8002dbc6a5da3a",
+  "sourceBytes": 5127868,
+  "bytes": 2476924,
+  "savedPercent": 51.69680654806247,
+  "lossless": true,
+  "trianglesRemoved": 0
+}

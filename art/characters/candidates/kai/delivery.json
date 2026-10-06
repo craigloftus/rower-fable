@@ -1,0 +1,641 @@
+{
+  "status": "Refinement complete; final runtime integration review pending; not installed",
+  "boatFit": {
+    "catchAngle": 1.0,
+    "seatFinish": 0.36,
+    "pinY": 0.45,
+    "inboard": 0.8,
+    "gripRadius": 0.02
+  },
+  "finalGLB": {
+    "path": "art/characters/candidates/kai/kai.glb",
+    "bytes": 7738832,
+    "sha256": "c449b3c75b5e8c69c40e93b5742cdfc45c5c9e248b85b37a98361fdfbf43e5cf"
+  },
+  "triangles": 46288,
+  "limitations": [
+    "Interpretation of a single original illustration, not a pixel-identical likeness",
+    "Retained joined fingers have angular tips; bent shorts retain a normal hip fold",
+    "Headless desktop call timings do not establish Pixel 8 thermal performance"
+  ],
+  "assets": [
+    {
+      "path": "art/characters/candidates/kai/sculpt.blend",
+      "bytes": 1674672,
+      "sha256": "0a6e16244dd6acf009c287665507c4f6f4ded398e53095258be829e6c3b4d707"
+    },
+    {
+      "path": "art/characters/candidates/kai/head-authored.blend",
+      "bytes": 170568,
+      "sha256": "79852d9c8046cf2bc82a75c098f9d765a6a7962d3e98d222c9f8478d908c5523"
+    },
+    {
+      "path": "art/characters/candidates/kai/standing.glb",
+      "bytes": 4968652,
+      "sha256": "31b2190d1f3b1fb52d9f1c5c783d3caaef4ef1a2f25ae4ca96b9a51b99d61817"
+    },
+    {
+      "path": "art/characters/candidates/kai/kai.blend",
+      "bytes": 3222978,
+      "sha256": "20bbfc5cdac185601e1276801a2cf5bbf750fa8fb333f72f835661ff6974df38"
+    },
+    {
+      "path": "art/characters/candidates/kai/kai.glb",
+      "bytes": 7738832,
+      "sha256": "c449b3c75b5e8c69c40e93b5742cdfc45c5c9e248b85b37a98361fdfbf43e5cf"
+    },
+    {
+      "path": "art/characters/candidates/kai/anatomy.json",
+      "bytes": 3472,
+      "sha256": "78a9a9403198f6b86b7e93d3bdda29bd8324239a1fb50a8c03a85b9b7d1c2e1f"
+    },
+    {
+      "path": "art/characters/candidates/kai/README.md",
+      "bytes": 6493,
+      "sha256": "876878ee4178e681ca86b96d93039d9585bb0e9d92e0ec2063fc4698f35e584e"
+    }
+  ],
+  "curatedInputs": [
+    {
+      "path": "validation/characters/kai/faceted-surface.ply",
+      "bytes": 570247,
+      "sha256": "8bb006fb9d6a3807d2baa94d5fcf116297efde70c923459f7deaefd5ca82ca7b"
+    },
+    {
+      "path": "validation/characters/kai/head-faceted-surface.ply",
+      "bytes": 285246,
+      "sha256": "0904f861fde316f75324d88e77c8b4b7f5cb53ff450d1b373a0442ca30196d57"
+    },
+    {
+      "path": "validation/characters/kai/head-refined-surface.ply",
+      "bytes": 61045,
+      "sha256": "57343bffba5b604f49137541f1b473f5619b85a8dbf2bc3bb0f6649ea89447b4"
+    },
+    {
+      "path": "validation/characters/kai/head-colour-layout.npz",
+      "bytes": 185288,
+      "sha256": "03bd8b1fa2bb556fa5b9c9e8d6f94a3ea56f1e1149aa0528031875c25277043c"
+    },
+    {
+      "path": "validation/characters/kai/source-provenance.json",
+      "bytes": 684,
+      "sha256": "f838050b39df138fb1606c25fc374ee08631ae1a72ba54b64a5a725eb555f7ea"
+    }
+  ],
+  "provenance": [
+    {
+      "path": "art/characters/kai-concept.png",
+      "bytes": 1570690,
+      "sha256": "b074e8fa4e771bf1027c2d9f78d9715a154404e78f706e2cb35fa362a184c6bc"
+    },
+    {
+      "path": "validation/characters/kai/original-head-crop.png",
+      "bytes": 78141,
+      "sha256": "640e915c87722aa3d2bec8f71ade29ededb8b675b695665e9b432c905bfeda5b"
+    },
+    {
+      "path": "validation/characters/kai/reconstructed.glb",
+      "bytes": 12720244,
+      "sha256": "9e22a87d5d5ee2b9c8bfcfbfb0c6447a8ebc05f5118e8d22a452fea11af87aa5"
+    },
+    {
+      "path": "validation/characters/kai/head-reconstructed.glb",
+      "bytes": 11547488,
+      "sha256": "2196fc7dcba1dcc47d34a21f7755dc3409b30dc2755de145735deee00829ce93"
+    }
+  ],
+  "authoring": [
+    {
+      "path": "scripts/kai-assemble.py",
+      "bytes": 3228,
+      "sha256": "017e78c4c3e4a09de52205003111ecbb931ae18e5531ee16aa789b3dc16c9a54"
+    },
+    {
+      "path": "scripts/kai-bind-native.py",
+      "bytes": 8770,
+      "sha256": "81b519a60d0b358c8c18fde2ca77d0c95375568fff1d1b900aa9543b4f094184"
+    },
+    {
+      "path": "scripts/kai-browser-review.mjs",
+      "bytes": 1050,
+      "sha256": "8b1804d5a0f1e531a4811323fecd9d4dd06d503d4ec89af000fbb666b153adcb"
+    },
+    {
+      "path": "scripts/kai-build-native.mjs",
+      "bytes": 607,
+      "sha256": "04571086621733695359ebee685de8e51d93fb90491408bdc4b61871d20bb4da"
+    },
+    {
+      "path": "scripts/kai-check-parity.py",
+      "bytes": 1829,
+      "sha256": "0fcd3d474f202f3b7518c3820e14853cb75aee8c78b78e289125ce3a2b6ea67e"
+    },
+    {
+      "path": "scripts/kai-close-surface.py",
+      "bytes": 5802,
+      "sha256": "3fed8339ddf2cfabdc3244eaf118f616f3a48edda499c08edc0b2ba8a99b050f"
+    },
+    {
+      "path": "scripts/kai-colour-surface.py",
+      "bytes": 10887,
+      "sha256": "eeb02eb15ed24373a8bc97cfd0938be9f522f7dbc17083e9b64cf5159955114e"
+    },
+    {
+      "path": "scripts/kai-facet-surface.py",
+      "bytes": 1486,
+      "sha256": "b3e4902ccf961a7d7595daae6a088c32f1332b0f08729a526e8db6c8f127e6fc"
+    },
+    {
+      "path": "scripts/kai-fit-grip.mjs",
+      "bytes": 2263,
+      "sha256": "64c756076b20c3b51ce62b44ead1bdc78051e9683902d72310a3bd7ec7e39c69"
+    },
+    {
+      "path": "scripts/kai-fit-grip.py",
+      "bytes": 4944,
+      "sha256": "1813df6aa548c7fdc8389d0bd3a29a4db017e481aeb9960f260dd0e6b99f663a"
+    },
+    {
+      "path": "scripts/kai-fit-seating.mjs",
+      "bytes": 3155,
+      "sha256": "4926c4d0d2beb747cedbba33b6c5d482ea49ebe2fd725a16a57b3bff0505ad40"
+    },
+    {
+      "path": "scripts/kai-fit.mjs",
+      "bytes": 2055,
+      "sha256": "82ed3400fcfd19d2491c46499ce25cb0b2c351bc2f9bb0ed4b4db521f9256783"
+    },
+    {
+      "path": "scripts/kai-inspect-source.py",
+      "bytes": 1716,
+      "sha256": "22d367dd44cc7a3755b224763f799b34aa525a35c880f59e59f41e14d84d5387"
+    },
+    {
+      "path": "scripts/kai-reduce-head.py",
+      "bytes": 977,
+      "sha256": "28aced9f1af72b9207e727e879de974bfb2b5eada4d26197c2e5465f57b262d5"
+    },
+    {
+      "path": "scripts/kai-refine-head.py",
+      "bytes": 1705,
+      "sha256": "e796b09bf0ad5356b51dce9115de05ee0c7b63892f0dcc127439b895d0da9d57"
+    },
+    {
+      "path": "scripts/kai-render-rig.py",
+      "bytes": 2789,
+      "sha256": "d017aec4b8aec184c22aca3a1169ca64629725fde8ff9ad980f5739540f706e4"
+    },
+    {
+      "path": "scripts/kai-review.py",
+      "bytes": 3626,
+      "sha256": "61de7019abb19567d6356d6ec8ca6f4331dadb74d526d1000c97449e06ed51f8"
+    },
+    {
+      "path": "scripts/kai-sample-head-colour.py",
+      "bytes": 1154,
+      "sha256": "51cb210d380106a75ba4f18769c24147eceb56f13c48afbbe20ec9006491d2af"
+    },
+    {
+      "path": "scripts/kai-sample-native.mjs",
+      "bytes": 8749,
+      "sha256": "2ba5d3dd4705d6d85dc145d82f384a6ec75f08e7751c809660c1b16e7362809c"
+    },
+    {
+      "path": "scripts/kai-save-sculpt.py",
+      "bytes": 874,
+      "sha256": "f11dcb89056ade973a7f2f5cc52fe677311b924df4f188ff109eb106bcba4441"
+    },
+    {
+      "path": "scripts/kai-validate-body.py",
+      "bytes": 4786,
+      "sha256": "de66ab9611decd34e7972d40bff7c884b2663dd333618950e318aeb9c616f232"
+    },
+    {
+      "path": "scripts/kai-validate-grip.mjs",
+      "bytes": 6714,
+      "sha256": "f82efc739f191f11875e5129cef80f99692b65ec206d3e6b95711fb31aacb6e5"
+    },
+    {
+      "path": "scripts/kai-validate-native.mjs",
+      "bytes": 10555,
+      "sha256": "b55b752bccfb4c6013f49902b4f9e3d83d8bd1846dcd544976fa558baa69dc9a"
+    },
+    {
+      "path": "scripts/kai-write-delivery.py",
+      "bytes": 2478,
+      "sha256": "5bb4d42c6a790c18885ec3116654934e33b41419204831d0e9131c03e5d43a55"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "validation/characters/kai/report.json",
+      "bytes": 705,
+      "sha256": "b0280ba9c90e54c1a0940ef161c1334987d780251b20069f52fd11336b294d12"
+    },
+    {
+      "path": "validation/characters/kai/measurements.json",
+      "bytes": 705,
+      "sha256": "b0280ba9c90e54c1a0940ef161c1334987d780251b20069f52fd11336b294d12"
+    },
+    {
+      "path": "validation/characters/kai/blender-parity.json",
+      "bytes": 287,
+      "sha256": "a005fc268e60ab03232b663b47a3bcc4921b0e4d853f602ca80fa3e5d4708576"
+    },
+    {
+      "path": "validation/characters/kai/body-report.json",
+      "bytes": 204,
+      "sha256": "52af9223a5c9c58a6f4e3eaef015a091643406037ff0e1b45694573e960c3f78"
+    },
+    {
+      "path": "validation/characters/kai/grip-report.json",
+      "bytes": 1193,
+      "sha256": "a7b4869453f9c324cb34bd249dc55dc7787df9fde3fe57fb5b7e9ce073f8f2c5"
+    },
+    {
+      "path": "validation/characters/kai/binding.json",
+      "bytes": 238,
+      "sha256": "b0e24506dcb95326fc06c0468cb44a5fc8e5363a6c5eaeba9977caa32885f0bd"
+    },
+    {
+      "path": "validation/characters/kai/performance.json",
+      "bytes": 1021,
+      "sha256": "3866877af4a2b6853b8b1cb22307e836a4839ed550ffffcf500c31be12d9f9a8"
+    },
+    {
+      "path": "validation/characters/kai/palette.json",
+      "bytes": 1233,
+      "sha256": "e22eee9806e1d05f0ea6a64cf8f9b628ed602e851ae089f248673df770b82ea5"
+    },
+    {
+      "path": "validation/characters/kai/head-placement.json",
+      "bytes": 279,
+      "sha256": "8f8b0443ff984c39f86969a128f8c2c6ef08d14a2709daab7f46f784397fbd9b"
+    },
+    {
+      "path": "validation/characters/kai/head-authoring.json",
+      "bytes": 194,
+      "sha256": "46269ca0237aa1a53acea097c9381ec6bd76c385656b3059bdeb0b8923f93736"
+    },
+    {
+      "path": "validation/characters/kai/seat-fit.json",
+      "bytes": 47040,
+      "sha256": "e57714a394184f73ddff6793688cfa58b7e7573870f78f943fc67c408c40d7e5"
+    },
+    {
+      "path": "validation/characters/kai/index.html",
+      "bytes": 4178,
+      "sha256": "a187929ccd9e5f389527b508d094660ac4357870f95c3aa0d04b44b6eb788f90"
+    },
+    {
+      "path": "validation/characters/kai/before-rest/clay-front.png",
+      "bytes": 547507,
+      "sha256": "19a15d24340add3d87f08229a4257a698d19168af8a68f3c892343e492827ee3"
+    },
+    {
+      "path": "validation/characters/kai/before-rest/clay-profile.png",
+      "bytes": 519198,
+      "sha256": "b6cb50a4653a35b89e5beffdafa424141525b85461749000bd09ca26a98cee9b"
+    },
+    {
+      "path": "validation/characters/kai/before-rest/clay-rear.png",
+      "bytes": 549233,
+      "sha256": "84c506c04ac823f929898a8f6c53afe612fba8a08324dbbaf0a9ac819604ea6b"
+    },
+    {
+      "path": "validation/characters/kai/before-rest/clay-three-quarter.png",
+      "bytes": 542654,
+      "sha256": "dcc77b9e7919ab27590bee15484f42ca360d9d345945c68b33ec0d2628a36e34"
+    },
+    {
+      "path": "validation/characters/kai/before-rest/colour-front.png",
+      "bytes": 559283,
+      "sha256": "084fab64496c11e1dc6f3ff32733230b6830eafb29d9e090977c69ec64126d5d"
+    },
+    {
+      "path": "validation/characters/kai/before-rest/colour-profile.png",
+      "bytes": 528162,
+      "sha256": "35d664e6124eeee92bb5b3d31e8beae614a4f693cfed88aa46cd06926b441fb0"
+    },
+    {
+      "path": "validation/characters/kai/before-rest/colour-rear.png",
+      "bytes": 561433,
+      "sha256": "9334ffa2a6c63f1e646b893b597897afb7da53721aa739585469bca8a7af3144"
+    },
+    {
+      "path": "validation/characters/kai/before-rest/colour-three-quarter.png",
+      "bytes": 556099,
+      "sha256": "28068176f77041ed338e680f593b1834618bdd6140ddc4433581108c8c7d58ce"
+    },
+    {
+      "path": "validation/characters/kai/after/clay-front.png",
+      "bytes": 564405,
+      "sha256": "0303459586ed189fc173587efb7e44b723c9b4f0cd0f7715163a3e155b2eda48"
+    },
+    {
+      "path": "validation/characters/kai/after/clay-profile.png",
+      "bytes": 526213,
+      "sha256": "e9d3d6373269bf2e565824f92696625b00cfb1402ffe675603748f8b2d6a07b7"
+    },
+    {
+      "path": "validation/characters/kai/after/clay-rear.png",
+      "bytes": 561595,
+      "sha256": "ead5b1669eaa2cb6e930c0fdeab9069cb975e6dc17863d1b5cb729ced8bcf533"
+    },
+    {
+      "path": "validation/characters/kai/after/clay-reference-angle.png",
+      "bytes": 561198,
+      "sha256": "27fff8970c4b4c442894d5ee21fdc90cd1fe7e58b6aebd2c8ef0f830f0991bc9"
+    },
+    {
+      "path": "validation/characters/kai/after/clay-three-quarter.png",
+      "bytes": 566408,
+      "sha256": "7e63102ecf517a86a8104bf9ee5fc8c4b3e3e4694d878064886019cc05b5909b"
+    },
+    {
+      "path": "validation/characters/kai/after/colour-front.png",
+      "bytes": 575324,
+      "sha256": "be7d5b8a8a18e35104dde4e5b017d4fd3c9b29d53e6b0a63cc0a95188c455099"
+    },
+    {
+      "path": "validation/characters/kai/after/colour-profile.png",
+      "bytes": 534911,
+      "sha256": "dbc2188e4a650e09f4ac8ae819e7f90a3112ae095786d5b458101643d528159b"
+    },
+    {
+      "path": "validation/characters/kai/after/colour-rear.png",
+      "bytes": 569981,
+      "sha256": "8b91591a0babe6d660fb0c44e1f77f9990b5db621f1f49c8a8e491a8dd57be89"
+    },
+    {
+      "path": "validation/characters/kai/after/colour-reference-angle.png",
+      "bytes": 572043,
+      "sha256": "9f897a3479346e47c3587642dc253a3cb593dc816d311673e2e8fd287eec9818"
+    },
+    {
+      "path": "validation/characters/kai/after/colour-three-quarter.png",
+      "bytes": 575108,
+      "sha256": "8790b059c6910ab6deab975ca90b0502e3d480da8d21525be3fbf3054828f72f"
+    },
+    {
+      "path": "validation/characters/kai/after-head/clay-front.png",
+      "bytes": 634419,
+      "sha256": "5694d5e8e41fedc7456728b2d997089982e4509a100fa0ac6b2ede9588ffccee"
+    },
+    {
+      "path": "validation/characters/kai/after-head/clay-profile.png",
+      "bytes": 631039,
+      "sha256": "22067547c7ec17ee721e092fb2569bea3819dbbaf0fd0e94ab21274490efeb09"
+    },
+    {
+      "path": "validation/characters/kai/after-head/clay-rear.png",
+      "bytes": 596528,
+      "sha256": "c28a6d869ce6ba2b736a333cb68b020415e7b5850c3ffd329832ca7be39c560f"
+    },
+    {
+      "path": "validation/characters/kai/after-head/clay-reference-angle.png",
+      "bytes": 592703,
+      "sha256": "604613c6012a735b66408947ffa0109c0da7a5d518431517b6315871561d4a5c"
+    },
+    {
+      "path": "validation/characters/kai/after-head/clay-three-quarter.png",
+      "bytes": 605498,
+      "sha256": "21b55b80f85d766e89fdd9c3f17de2caf399cba86433fb1fd7134dc91b654012"
+    },
+    {
+      "path": "validation/characters/kai/after-head/colour-front.png",
+      "bytes": 639358,
+      "sha256": "9a9acea96b87a2d608931d129b8038b4087a9e9b596888c0b0984ea46226ad56"
+    },
+    {
+      "path": "validation/characters/kai/after-head/colour-profile.png",
+      "bytes": 630063,
+      "sha256": "45047fbcb8a23f45a72206c9556d2f836d1a8c8a7b39c808efdbfe81ea4f4d56"
+    },
+    {
+      "path": "validation/characters/kai/after-head/colour-rear.png",
+      "bytes": 596532,
+      "sha256": "429625c882ee55b210f3624d17e7edfaddc7afde953fa54e6910dab8b5a238ea"
+    },
+    {
+      "path": "validation/characters/kai/after-head/colour-reference-angle.png",
+      "bytes": 598772,
+      "sha256": "eeb9269dd9170ec356d836507af11011ee3ac26b7d09a1727ca01171785869ad"
+    },
+    {
+      "path": "validation/characters/kai/after-head/colour-three-quarter.png",
+      "bytes": 605987,
+      "sha256": "8eb342fdb2517bbe2bcd6b4ae53e9853b9a98506be211ddad63bfdf097817018"
+    },
+    {
+      "path": "validation/characters/kai/final-review/0.00-feet.png",
+      "bytes": 396517,
+      "sha256": "d9b36f8dce9eb7b891df11d0f92b2f69a738bd0ac51d8d0103f663fa71739b43"
+    },
+    {
+      "path": "validation/characters/kai/final-review/0.00-front.png",
+      "bytes": 414563,
+      "sha256": "130d4257db116d6cdd199f449601968235690bbc20a7cd9fddd3509dbd183524"
+    },
+    {
+      "path": "validation/characters/kai/final-review/0.00-grip.png",
+      "bytes": 416700,
+      "sha256": "bcae286b42926b7b7e7873a9410fa714c644041882f4d07a6696d148f9bf750f"
+    },
+    {
+      "path": "validation/characters/kai/final-review/0.00-rear.png",
+      "bytes": 396150,
+      "sha256": "28100ce3fb036fa7ada22ff7b110ada8e6b7f9368a4b996bda2701963aaae713"
+    },
+    {
+      "path": "validation/characters/kai/final-review/0.00-side.png",
+      "bytes": 384608,
+      "sha256": "03a3d72a68fde6a7a72757eb28305bc2a0cb9b8e269c138177f287c86ec0ce9c"
+    },
+    {
+      "path": "validation/characters/kai/final-review/0.00-thumb.png",
+      "bytes": 377636,
+      "sha256": "0f29dae69fb01a1afc960eb81ccd860dd479a43e3818e7a5954356ce362d6d2c"
+    },
+    {
+      "path": "validation/characters/kai/final-review/0.00-waist.png",
+      "bytes": 371184,
+      "sha256": "474d7ab63e5b745f61220e8f52f50e5e2bf36dbf711b53f1550a3a122a891867"
+    },
+    {
+      "path": "validation/characters/kai/final-review/0.50-feet.png",
+      "bytes": 388720,
+      "sha256": "b660b53c62c8926a405a2e9f28ba452f58a9b735612421bd85bf64a4d5e50693"
+    },
+    {
+      "path": "validation/characters/kai/final-review/0.50-front.png",
+      "bytes": 406195,
+      "sha256": "455478ce3f703d6c722cdc27f0bdaf435bf2173ba7d495f2bdeec3f4a1edc6e6"
+    },
+    {
+      "path": "validation/characters/kai/final-review/0.50-grip.png",
+      "bytes": 427557,
+      "sha256": "e10464a819d7ef8cf4ce396acde8dc3b17491956cb660fdb9e9844dee7890a6b"
+    },
+    {
+      "path": "validation/characters/kai/final-review/0.50-rear.png",
+      "bytes": 388534,
+      "sha256": "6e05e30db441d77abd16ff44fc90ee9f33e6ae1b0dc758ab77814a597b65ca3c"
+    },
+    {
+      "path": "validation/characters/kai/final-review/0.50-side.png",
+      "bytes": 382842,
+      "sha256": "75edae40fd12bf19a1fb196a4d2973637235e077a71de09b11e4bff551694aaf"
+    },
+    {
+      "path": "validation/characters/kai/final-review/0.50-thumb.png",
+      "bytes": 382279,
+      "sha256": "320a4b9adc15a1e620934bb1cbc97203e34f979dff65b71bf6a1dd5fdd5476ac"
+    },
+    {
+      "path": "validation/characters/kai/final-review/0.50-waist.png",
+      "bytes": 374923,
+      "sha256": "26a1a5b54722400ced2fbc71385d0a4a392ec7152d03112f52e15fd1b6bd7590"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.00-feet.png",
+      "bytes": 386125,
+      "sha256": "805ae794fbd3bd6f8d7394b3af9b3e46286039c52fe3737b6574186f2f9ae7f3"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.00-front.png",
+      "bytes": 404776,
+      "sha256": "4b182d7f30d4a3e7c56ae1e22245313a53e2f0746d23b1808f77c7861db1e052"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.00-grip.png",
+      "bytes": 417119,
+      "sha256": "62f7b3a68680df8ae8c6b7d65ab08e3e6b416332726139f5885e760661bde790"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.00-rear.png",
+      "bytes": 385122,
+      "sha256": "9144ee4a4550ecf2c0a1ded1af1a4f3d3373f3ec9c4753e1b6d1125d650bc162"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.00-side.png",
+      "bytes": 385081,
+      "sha256": "3bc59b7c1e178475ec6f56611cc6cadd2dc25ac4b0b24bcb9f031739e283a1a5"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.00-thumb.png",
+      "bytes": 348952,
+      "sha256": "097a6a024b16beae2e2232299937c85c739f188f38396e4f8045be0bffeef00e"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.00-waist.png",
+      "bytes": 392735,
+      "sha256": "509050e1b0a1e19d92a686f1f2dd29d89fd58d64ec1ab0027907f89d6f4d0a44"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.40-feet.png",
+      "bytes": 389956,
+      "sha256": "1ac54e548fb5c4e9b2f108790bf919c70e7a8868b67841aca9cc7016c4e79f30"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.40-front.png",
+      "bytes": 408400,
+      "sha256": "24db3406b1cde4e98d9ef6e68b8bdf13a1bdac3b3810d519b673e70fa8087ded"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.40-grip.png",
+      "bytes": 422754,
+      "sha256": "a503d0ccada56725787587f84768487c26b36a452b5510278161d17419eed994"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.40-rear.png",
+      "bytes": 390564,
+      "sha256": "d05cd46ffffbf8dbfbde179b679120e169afc89192cabf45caf72f212e7998ea"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.40-side.png",
+      "bytes": 379875,
+      "sha256": "f53ce371efc5ecdf726cb9b124f5898a6172546ae141a777a02876d0be7b4451"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.40-thumb.png",
+      "bytes": 379882,
+      "sha256": "3ae730956d433711341d7f5c98eef7c373c8cdc3f8818b5ddb64f131a3d7fd4d"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.40-waist.png",
+      "bytes": 370743,
+      "sha256": "be4bb69d699590e2ee69d9b33fee231ccfecb9a4924965c671070f353e8ec9a2"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.70-feet.png",
+      "bytes": 397514,
+      "sha256": "ae0a61fbf1f5082d7abea0edf5f39854da5c2bbb192a42913ccd178d2ce78cb9"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.70-front.png",
+      "bytes": 414207,
+      "sha256": "9764095c33cb6d8bac74ddac3694bef012fd3c2da5dbb0e01abe71113aad8305"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.70-grip.png",
+      "bytes": 414462,
+      "sha256": "86fec5df10f41b0a10b15563f15eeee3a1e939bcc689e6bb0952c190776cf024"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.70-rear.png",
+      "bytes": 397175,
+      "sha256": "f40de29d40c806033e46bf73d21d886e6057f5b2d3437c8d84f7ca15e1954028"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.70-side.png",
+      "bytes": 383654,
+      "sha256": "ece6f07d4b37c9ed9d49b6a5641355f2778f1603977939ba55329a5a817890a3"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.70-thumb.png",
+      "bytes": 378969,
+      "sha256": "6f48595663d0f6905f5e30a60349637cb0fbe28ae8209051823085ebf7182a72"
+    },
+    {
+      "path": "validation/characters/kai/final-review/1.70-waist.png",
+      "bytes": 371117,
+      "sha256": "22c709c44eef4f2b91cddc02a14f96433fd294405a7558565a0d571923af4eef"
+    },
+    {
+      "path": "validation/characters/kai/browser-candidate-0.5.png",
+      "bytes": 261500,
+      "sha256": "70d3e16de8af2c00e10000b63fff030499844616f43a6c04d28f74f249f6a680"
+    },
+    {
+      "path": "validation/characters/kai/browser-candidate-0.png",
+      "bytes": 257490,
+      "sha256": "9908d4943e7628d3ecf8547bb76d1294e6f6051cd4e81ead65dd573c1fa8744e"
+    },
+    {
+      "path": "validation/characters/kai/browser-candidate-1.4.png",
+      "bytes": 251990,
+      "sha256": "11ffadde7f2028f747c5b86572e3bfb9146a729ea2963fb8a214ff80341c6002"
+    },
+    {
+      "path": "validation/characters/kai/browser-candidate-1.7.png",
+      "bytes": 251676,
+      "sha256": "d3905befc61be0682331bcb52749e9318c12c623fc8c0578169a7f2476b6c286"
+    },
+    {
+      "path": "validation/characters/kai/browser-candidate-1.png",
+      "bytes": 263991,
+      "sha256": "9831e1eef016eac075e1064a889d24df8a8c89e7a54b70a20574bb202b14b68c"
+    },
+    {
+      "path": "validation/characters/kai/browser-june-0.png",
+      "bytes": 241065,
+      "sha256": "659d0a02c8c4aaaf6505d77e60a6ebc7de06fe79711f335410a391d012eac4ad"
+    },
+    {
+      "path": "validation/characters/kai/browser-kai-0.png",
+      "bytes": 232801,
+      "sha256": "a4873a07924c591b83f7ea01bf859a070cff90f57728406d11b1ba0089e5cf43"
+    }
+  ]
+}

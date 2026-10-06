@@ -1,0 +1,9 @@
+{
+  "authoritativeInput": "head-colour-layout.npz",
+  "compactReplayByteIdentical": true,
+  "fullCloudVsCompactMaximumPositionDifference": 2.834014594554901e-05,
+  "interpretation": "Equal-distance texture samples shift material-cut vertices slightly; deterministic compact layout is the final authoring input",
+  "compactSamples": 35762,
+  "compactBytes": 474579,
+  "standingSha256": "8e3751ddfe3f928cec3c6782b3befad94f242a0b16869ab1131564f74dd6b2cb"
+}

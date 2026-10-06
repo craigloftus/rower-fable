@@ -18,18 +18,26 @@ function recoverySweep(p) {
     : travel((p-.30)/.70,.35,1,1.8*.70,0);
 }
 
-// The boat and baked character must use the same handle path. June's sculpt
-// has its own proportions, so its finish stops before the hands reach her chest.
+export const JUNE_ROWING_FIT = {
+  catchAngle: 1.00, seatFinish: G.seatFinish, pinY: .45, inboard: .80, gripRadius: .020,
+};
+
+// Every character shares June's approved body and baked stroke.
 export function fitRowingPose(pose, character) {
-  if (character !== 'june') return pose;
-  const catchAngle = 1.00, finishAngle = -.10;
+  if (character === null) return pose; // The initial asset is still loading.
+  return fitNativeRowingPose(pose, JUNE_ROWING_FIT);
+}
+
+export function fitNativeRowingPose(pose, fit) {
+  const { catchAngle, seatFinish, pinY, inboard, gripRadius } = fit;
+  const finishAngle = -.10;
   const p = pose.p;
   const oar = pose.mode === 'drive'
     ? lerp(catchAngle, finishAngle, easeSin(p))
     : lerp(finishAngle, catchAngle, recoverySweep(p));
   const seat = pose.mode === 'drive'
-    ? lerp(.025, G.seatFinish, smooth(0, .86, p))
-    : lerp(G.seatFinish, .025, soft(.10, 1, p));
+    ? lerp(.025, seatFinish, smooth(0, .86, p))
+    : lerp(seatFinish, .025, soft(.10, 1, p));
   const lean = pose.mode === 'drive' ? pose.lean*.75 : lerp(-.27, .24, soft(0, .52, p));
   const blade = pose.mode === 'drive' ? pose.blade
     : lerp(lerp(G.bladeDrive, .045, soft(0, .42, p)), -.02, soft(.90, 1, p));
@@ -41,5 +49,5 @@ export function fitRowingPose(pose, character) {
   const roundedAngle=pose.mode==='rec' && angle<.10
     ? .10*t*t*t*(6+t*(-8+3*t)) : angle;
   const crossover=Math.max(0,1-roundedAngle/.5)**2;
-  return { ...pose, seat, oar, lean, blade, feather, crossover, pinY: .45, inboard: .80, gripRadius: .020 };
+  return { ...pose, seat, oar, lean, blade, feather, crossover, pinY, inboard, gripRadius };
 }

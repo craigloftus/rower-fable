@@ -71,3 +71,69 @@ must respect these shared physical dimensions.
 Review recovery at `validation.html?baseline=native` and the boat alone at
 `validation.html?baseline=boat`. The full character pipeline and its retained
 experiments are documented in [characters/reference/README.md](characters/reference/README.md).
+
+## Applying the pipeline to the rest of the cast
+
+A separate reconstruction of the original head crop preserves identity better
+than enlarging the low-resolution head from a whole-body inference. Keep the
+original cheek, nose, jaw and hair volumes, then simplify selected face regions
+into deliberate planes. Uniform smoothing leaves a soft face; global decimation
+leaves arbitrary dents. Compare against the source from the same direction.
+
+Eyes need an actual shallow convex surface, with upper-lid occlusion and a
+separate dark pupil. A bright exposed globe can look startled even if its centre
+and width match the drawing. Review the profile as carefully as the front.
+Keep lips shallow and retain their surrounding facial surface. Remove isolated
+skin-colour islands from hair boundaries before treating them as geometry faults.
+
+A reconstruction seam must be welded and locally faired before rigging. A short
+neck can still look wrong if a thin shelf or ring interrupts its profile. Likewise,
+back-vest buckles may already exist in the standing surface: inspect the bind
+shape before changing weights. A hip fold that appears only at the catch needs
+local weight inspection, without reducing the original hip or thigh volume.
+
+Each character has measured boat-fit parameters. Keep the baked handle curve,
+slider travel and runtime boat dimensions identical. Reuse the smooth curve
+implementation; vary only the anatomical fit. Validate the complete retained
+hand surface, including fingertips and thumb webs, between animation keys.
+
+Flat normals duplicate glTF vertices and make delivery files larger than the
+triangle count suggests. Lossless Meshopt buffer compression reduces download
+size without quantizing geometry, changing colours, or resampling animation.
+`scripts/compress-character.mjs` checks decoded attribute bytes, material data,
+bone transforms and triangle winding. The runtime uses Three.js's bundled
+decoder. This reduces transfer size, not vertex count or GPU memory.
+
+Validate the compressed installed file as well as the editable export. Profile
+that exact file in the full river scene at native pixel density, using headless
+Chromium. Record its hash with the timings; repeat after a new final export.
+Desktop 120 fps is useful regression evidence, not a measurement of a Pixel 8's
+sustained speed or temperature.
+
+## Shared body decision
+
+After refining separate bodies, the user chose a simpler production architecture:
+one approved June body and rig, character-specific heads, skin tones and singlet
+colours, plus two fixed chest variants. Keep the useful head work, but stop
+re-solving shoulders, hips, hands and rowing motion for each character. The
+chest choice belongs in source configuration, not the character-selection UI.
+
+Reuse the exact approved weights and clip. New heads attach through a small
+welded neck bridge, aligned by facial landmarks rather than hairstyle height.
+The flatter chest is a bounded static sculpt with a rounded ribcage; it must not
+alter the waist, shoulders or limbs or morph during animation. Check shared-body
+vertices and weights against June outside the explicit changed regions. This
+reduces future animation regressions and keeps the cast visually consistent.
+
+When attaching a head, traverse the actual cut-edge loop. Sorting boundary
+vertices by angle can reorder small concavities and produce serrated seams even
+when every vertex appears to lie on the same ring. Check boundary closure and
+inspect the neck from the side under real lighting. Carry the donor's corner
+normals through the join; normals measured from the body origin are wrong for a
+translated neck.
+
+For a static chest variant, preserve the source facet normals under the local
+deformation. Recomputing a normal for every small triangle exposes the internal
+triangulation of larger sculpted planes as starburst shading. Keep a rounded
+ribcage and a gradual transition into the abdomen. Body/clip identity tests do
+not catch these shading problems; neutral profile and close-up renders do.

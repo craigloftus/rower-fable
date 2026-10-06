@@ -3,12 +3,12 @@ import assert from 'node:assert/strict';
 import { Group, Vector3 } from 'three';
 import { Boat } from '../src/boat.js';
 import { Stroke, G } from '../src/stroke.js';
-import { fitRowingPose } from '../src/rowing-fit.js';
+import { fitRowingPose, fitNativeRowingPose, JUNE_ROWING_FIT } from '../src/rowing-fit.js';
 import { oarPose } from '../src/oar-pose.js';
 
 test('fitted boat meshes agree with hand targets, including character changes', () => {
   const boat=new Boat(new Group()),stroke=new Stroke();
-  for(const character of ['kai','june','kai'])for(const time of [0,.4,1,1.1,1.4,1.7,2]) {
+  for(const character of ['kai','june','sol','ada','kai'])for(const time of [0,.4,1,1.1,1.4,1.7,2]) {
     stroke.mode=time<=1?'drive':'rec';stroke.p=time<=1?time:time-1;
     const pose=fitRowingPose(stroke.pose(),character);
     boat.setPose(pose);boat.group.updateMatrixWorld(true);
@@ -20,8 +20,8 @@ test('fitted boat meshes agree with hand targets, including character changes', 
       assert(end.distanceTo(target)<1e-10);
       const centre=oar.grip.localToWorld(new Vector3(0,0,-G.inboard+.15));
       const edge=oar.grip.localToWorld(new Vector3(.028,0,-G.inboard+.15));
-      assert(Math.abs(edge.distanceTo(centre)-(character==='june'?.020:.028))<1e-10);
-      assert.equal(oar.group.position.y,character==='june'?.45:G.pinY);
+      assert(Math.abs(edge.distanceTo(centre)-(JUNE_ROWING_FIT.gripRadius))<1e-10);
+      assert.equal(oar.group.position.y,JUNE_ROWING_FIT.pinY);
       oar.shaft.geometry.computeBoundingBox();
       const shaftEnd=oar.shaft.localToWorld(new Vector3(0,0,oar.shaft.geometry.boundingBox.min.z));
       const socket=oar.grip.localToWorld(new Vector3(0,0,-G.inboard+.27));
@@ -75,4 +75,32 @@ test('boat contact surfaces retain the rig dimensions', () => {
   assert(Math.abs(board.geometry.boundingBox.max.x-.0125)<1e-7);
   assert.equal(board.position.x,-.551);
   assert.equal(board.rotation.z,Math.atan2(.10,.14));
+});
+
+test('a measured native profile places the actual handles and seat on its targets', () => {
+  const fit={catchAngle:.90,seatFinish:.30,pinY:.48,inboard:.75,gripRadius:.020};
+  const boat=new Boat(new Group()),stroke=new Stroke();
+  for(let i=0;i<=240;i++) {
+    const t=i/120;stroke.mode=t<=1?'drive':'rec';stroke.p=t<=1?t:t-1;
+    const pose=fitNativeRowingPose(stroke.pose(),fit);
+    boat.setPose(pose);boat.group.updateMatrixWorld(true);
+    assert.equal(boat.seat.position.x,pose.seat);
+    for(const oar of [boat.oarL,boat.oarR]) {
+      const target=oarPose(pose,oar.side).grip;
+      const contact=oar.grip.localToWorld(new Vector3(0,0,-G.inboard+.10));
+      assert(contact.distanceTo(target)<1e-10,'The fitted wood handle must reach the baked grip target');
+      assert.equal(oar.group.position.y,fit.pinY);
+    }
+  }
+});
+
+test('all characters share the approved June boat fit throughout the cycle', () => {
+  const stroke=new Stroke();
+  for(const id of ['kai','sol','ada']) {
+    for(let frame=0;frame<=1200;frame++) {
+      const time=frame/600;
+      stroke.mode=time<=1?'drive':'rec';stroke.p=time<=1?time:time-1;
+      assert.deepEqual(fitRowingPose(stroke.pose(),id),fitRowingPose(stroke.pose(),'june'),`${id} at ${time}`);
+    }
+  }
 });

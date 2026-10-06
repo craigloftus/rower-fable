@@ -1,0 +1,294 @@
+{
+  "sourceBlend": "validation/reconstruction/fresh-rig/june.blend",
+  "sourceBlendSha256": "4fb4c46dc3e6c058a0753eabd921f93427565300ac022e8abc9567c834c527e4",
+  "sourceGLB": "validation/reconstruction/fresh-rig/june.glb",
+  "sourceGLBSha256": "3f7566a8c12b490ca98a9ef99132d424662224f2cabb37c873dccab234645cf6",
+  "boatFit": {
+    "catchAngle": 1,
+    "seatFinish": 0.36,
+    "pinY": 0.45,
+    "inboard": 0.8,
+    "gripRadius": 0.02
+  },
+  "characters": [
+    {
+      "id": "june",
+      "chestVariant": "approved",
+      "skinColour": "approved June albedo",
+      "topColour": [
+        177,
+        89,
+        56
+      ],
+      "file": "june.glb",
+      "editableBlend": "june.blend",
+      "sha256": "3f7566a8c12b490ca98a9ef99132d424662224f2cabb37c873dccab234645cf6",
+      "triangles": 45777,
+      "bodyIdentityCheck": {
+        "passed": true,
+        "method": "Byte-identical approved June source",
+        "exportedProtectedVertices": 11910,
+        "exportedProtectedTriangles": 25477,
+        "exportedPositionDelta": 0,
+        "exportedWeightDelta": 0
+      },
+      "clipIdentityCheck": {
+        "passed": true,
+        "tracks": 96,
+        "method": "Exact Float32 equality of every approved June track time and value"
+      }
+    },
+    {
+      "id": "kai",
+      "chestVariant": "flat",
+      "skinColour": [
+        171,
+        115,
+        69
+      ],
+      "topColour": [
+        99,
+        109,
+        64
+      ],
+      "headScale": 0.8,
+      "headCut": 0.334,
+      "file": "kai.glb",
+      "editableBlend": "kai.blend",
+      "sha256": "c4b13ff3e562d8e85f5170c3265bf586a472600874a36045cca775a3e235c31b",
+      "triangles": 34758,
+      "bodyIdentityCheck": {
+        "passed": true,
+        "protectedBodyCorners": 78739,
+        "maximumProtectedPositionDelta": 0,
+        "maximumBodyWeightDelta": 0,
+        "changedChestVertices": 1071,
+        "maximumChestDisplacement": 0.021571472522727918,
+        "neckCutSourceHeight": 0.302,
+        "eyeHeight": 1.0779263973236084,
+        "headUniformScale": 0.8,
+        "headTranslation": [
+          0.0317070335149765,
+          -0.006593604572117329,
+          0
+        ],
+        "verticalHeadShift": 0.10061705112457275,
+        "maximumPosteriorNeckFairing": 0.011525932222531772,
+        "neckBridgeTriangles": 796,
+        "neckTopologyCheck": {
+          "passed": true,
+          "edges": 1338,
+          "boundaryEdges": 0,
+          "nonManifoldEdges": 0
+        },
+        "exportedProtectedVertices": 10147,
+        "exportedProtectedTriangles": 21466,
+        "exportedPositionDelta": 0,
+        "exportedWeightDelta": 0
+      },
+      "clipIdentityCheck": {
+        "passed": true,
+        "tracks": 96,
+        "method": "Exact Float32 equality of every approved June track time and value"
+      },
+      "donor": {
+        "source": "art/characters/candidates/kai/standing.glb",
+        "sourceSha256": "31b2190d1f3b1fb52d9f1c5c783d3caaef4ef1a2f25ae4ca96b9a51b99d61817",
+        "headSha256": "c0da4f8ff59794245bdd6c8ff8b6ced14b30aa46ed6293bbb0a82a644a65822b",
+        "cutSourceHeight": 0.334,
+        "eyeBounds": [
+          [
+            -0.030268000438809395,
+            -0.06888683885335922,
+            0.4083489179611206
+          ],
+          [
+            0.035367999225854874,
+            -0.06555913388729095,
+            0.4151363670825958
+          ]
+        ],
+        "lipBounds": [
+          [
+            -0.023189639672636986,
+            -0.06858604401350021,
+            0.35890623927116394
+          ],
+          [
+            0.021263275295495987,
+            -0.05448497086763382,
+            0.3651217222213745
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sol",
+      "chestVariant": "approved",
+      "skinColour": [
+        193,
+        142,
+        86
+      ],
+      "topColour": [
+        221,
+        174,
+        51
+      ],
+      "headScale": 0.82,
+      "headCut": 0.328,
+      "file": "sol.glb",
+      "editableBlend": "sol.blend",
+      "sha256": "9ed9567d5cdf2fc5c5947b8251060cd2822d3a997c891cc6a746b06da7dbbafb",
+      "triangles": 36919,
+      "bodyIdentityCheck": {
+        "passed": true,
+        "protectedBodyCorners": 79856,
+        "maximumProtectedPositionDelta": 0,
+        "maximumBodyWeightDelta": 0,
+        "changedChestVertices": 0,
+        "maximumChestDisplacement": 0,
+        "neckCutSourceHeight": 0.302,
+        "eyeHeight": 1.0779263973236084,
+        "headUniformScale": 0.82,
+        "headTranslation": [
+          0.04686781391501427,
+          -0.010575749911367893,
+          0
+        ],
+        "verticalHeadShift": 0.1024332046508789,
+        "maximumPosteriorNeckFairing": 0.012833030606637057,
+        "neckBridgeTriangles": 831,
+        "neckTopologyCheck": {
+          "passed": true,
+          "edges": 1440,
+          "boundaryEdges": 0,
+          "nonManifoldEdges": 0
+        },
+        "exportedProtectedVertices": 11910,
+        "exportedProtectedTriangles": 25477,
+        "exportedPositionDelta": 0,
+        "exportedWeightDelta": 0
+      },
+      "clipIdentityCheck": {
+        "passed": true,
+        "tracks": 96,
+        "method": "Exact Float32 equality of every approved June track time and value"
+      },
+      "donor": {
+        "source": "art/characters/candidates/sol/standing.glb",
+        "sourceSha256": "8e3751ddfe3f928cec3c6782b3befad94f242a0b16869ab1131564f74dd6b2cb",
+        "headSha256": "5540343f9f04e8875dcf7376b83115ef5ecadd021572d2ce6d6b601a9f7dd7a6",
+        "cutSourceHeight": 0.328,
+        "eyeBounds": [
+          [
+            -0.03992364555597305,
+            -0.06287961453199387,
+            0.3960329294204712
+          ],
+          [
+            0.026686999946832657,
+            -0.05733996257185936,
+            0.40490642189979553
+          ]
+        ],
+        "lipBounds": [
+          [
+            -0.023244380950927734,
+            -0.06998951733112335,
+            0.3489280343055725
+          ],
+          [
+            0.010894459672272205,
+            -0.05670123174786568,
+            0.35403987765312195
+          ]
+        ]
+      }
+    },
+    {
+      "id": "ada",
+      "chestVariant": "approved",
+      "skinColour": [
+        136,
+        81,
+        47
+      ],
+      "topColour": [
+        109,
+        142,
+        171
+      ],
+      "headScale": 0.92,
+      "headCut": 0.328,
+      "file": "ada.glb",
+      "editableBlend": "ada.blend",
+      "sha256": "4bc5a1c1505f129dd0c0075192938e218873d39edf462ff04ebd2a3b0028b2c6",
+      "triangles": 40755,
+      "bodyIdentityCheck": {
+        "passed": true,
+        "protectedBodyCorners": 79856,
+        "maximumProtectedPositionDelta": 0,
+        "maximumBodyWeightDelta": 0,
+        "changedChestVertices": 0,
+        "maximumChestDisplacement": 0,
+        "neckCutSourceHeight": 0.302,
+        "eyeHeight": 1.0779263973236084,
+        "headUniformScale": 0.92,
+        "headTranslation": [
+          0.027616819366812706,
+          -0.0010094677563756704,
+          0
+        ],
+        "verticalHeadShift": 0.031146645545959473,
+        "maximumPosteriorNeckFairing": 0.007507606098555514,
+        "neckBridgeTriangles": 869,
+        "neckTopologyCheck": {
+          "passed": true,
+          "edges": 1538,
+          "boundaryEdges": 0,
+          "nonManifoldEdges": 0
+        },
+        "exportedProtectedVertices": 11910,
+        "exportedProtectedTriangles": 25477,
+        "exportedPositionDelta": 0,
+        "exportedWeightDelta": 0
+      },
+      "clipIdentityCheck": {
+        "passed": true,
+        "tracks": 96,
+        "method": "Exact Float32 equality of every approved June track time and value"
+      },
+      "donor": {
+        "source": "art/characters/candidates/ada/standing.glb",
+        "sourceSha256": "e58be50f62d2323bf27f2b690ba994558169e51b8c7bf071ef4f2cfcd578ea2e",
+        "headSha256": "bf6672f984936d2299655325a2e4d3fc7bc018cc15c133b5eb02c4481f982f92",
+        "cutSourceHeight": 0.328,
+        "eyeBounds": [
+          [
+            -0.03403644636273384,
+            -0.07052159309387207,
+            0.39634865522384644
+          ],
+          [
+            0.03454677015542984,
+            -0.06685078889131546,
+            0.4036269187927246
+          ]
+        ],
+        "lipBounds": [
+          [
+            -0.024613389745354652,
+            -0.07291808724403381,
+            0.3501496911048889
+          ],
+          [
+            0.02473815344274044,
+            -0.058933280408382416,
+            0.3628712594509125
+          ]
+        ]
+      }
+    }
+  ]
+}

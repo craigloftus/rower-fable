@@ -1,0 +1,11 @@
+[
+  {
+    "id": "sol",
+    "poses": 161,
+    "armLegTriangleIntersections": 0,
+    "armChestTriangleIntersections": 0,
+    "candidates": 0,
+    "firstCollisions": [],
+    "firstChestCollisions": []
+  }
+]

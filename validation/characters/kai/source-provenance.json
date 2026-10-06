@@ -1,0 +1,22 @@
+[
+  {
+    "path": "art/characters/kai-concept.png",
+    "bytes": 1570690,
+    "sha256": "b074e8fa4e771bf1027c2d9f78d9715a154404e78f706e2cb35fa362a184c6bc"
+  },
+  {
+    "path": "validation/characters/kai/original-head-crop.png",
+    "bytes": 78141,
+    "sha256": "640e915c87722aa3d2bec8f71ade29ededb8b675b695665e9b432c905bfeda5b"
+  },
+  {
+    "path": "validation/characters/kai/reconstructed.glb",
+    "bytes": 12720244,
+    "sha256": "9e22a87d5d5ee2b9c8bfcfbfb0c6447a8ebc05f5118e8d22a452fea11af87aa5"
+  },
+  {
+    "path": "validation/characters/kai/head-reconstructed.glb",
+    "bytes": 11547488,
+    "sha256": "2196fc7dcba1dcc47d34a21f7755dc3409b30dc2755de145735deee00829ce93"
+  }
+]

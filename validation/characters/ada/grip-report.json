@@ -1,0 +1,72 @@
+{
+  "poses": 21,
+  "handleRadius": 0.02,
+  "hands": {
+    "L": {
+      "triangles": 1221,
+      "minimumSurfaceClearance": -0.0001314318317792093,
+      "contactTrianglesWithin3mm": 77,
+      "minimumPalmUp": 0.7580935586587758,
+      "maximumThumbEdgeStretch": 1.3485413158697797,
+      "worstThumbEdge": {
+        "a": 54514,
+        "b": 54515,
+        "restLength": 0.008010078600908866,
+        "posedLength": 0.010801921936690006,
+        "restA": [
+          -0.05258797109127045,
+          0.3280588686466217,
+          0.35637030005455017
+        ],
+        "restB": [
+          -0.060235992074012756,
+          0.3282046616077423,
+          0.35874682664871216
+        ]
+      },
+      "regionSurfaceClearance": {
+        "palm": 0.00036966075184243635,
+        "fingers": -0.0001314318317792093,
+        "thumb": 0.0005388376820042243
+      },
+      "maximumRegionSurfaceClearance": {
+        "palm": 0.0003698485971773413,
+        "fingers": -0.0001313087393835788,
+        "thumb": 0.0005390967517812165
+      }
+    },
+    "R": {
+      "triangles": 1009,
+      "minimumSurfaceClearance": -0.0004679427075139943,
+      "contactTrianglesWithin3mm": 43,
+      "minimumPalmUp": 0.7817664241908567,
+      "maximumThumbEdgeStretch": 1.3598124384314627,
+      "worstThumbEdge": {
+        "a": 23846,
+        "b": 23844,
+        "restLength": 0.006253067132826344,
+        "posedLength": 0.008502998465564226,
+        "restA": [
+          -0.05083451420068741,
+          0.34828680753707886,
+          -0.3040309548377991
+        ],
+        "restB": [
+          -0.0515105240046978,
+          0.3423205018043518,
+          -0.30577653646469116
+        ]
+      },
+      "regionSurfaceClearance": {
+        "palm": -0.0004535450907546465,
+        "fingers": 0.0010375785045576465,
+        "thumb": -0.0004679427075139943
+      },
+      "maximumRegionSurfaceClearance": {
+        "palm": -0.0004532323978553403,
+        "fingers": 0.0010378245997038037,
+        "thumb": -0.00046762980567589124
+      }
+    }
+  }
+}

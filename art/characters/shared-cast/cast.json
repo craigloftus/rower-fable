@@ -1,0 +1,72 @@
+{
+  "sourceBlend": "validation/reconstruction/fresh-rig/june.blend",
+  "sourceGLB": "validation/reconstruction/fresh-rig/june.glb",
+  "neckCut": 0.302,
+  "boatFit": {
+    "catchAngle": 1.0,
+    "seatFinish": 0.36,
+    "pinY": 0.45,
+    "inboard": 0.8,
+    "gripRadius": 0.02
+  },
+  "characters": [
+    {
+      "id": "june",
+      "chestVariant": "approved",
+      "skinColour": "approved June albedo",
+      "topColour": [
+        177,
+        89,
+        56
+      ]
+    },
+    {
+      "id": "kai",
+      "chestVariant": "flat",
+      "skinColour": [
+        171,
+        115,
+        69
+      ],
+      "topColour": [
+        99,
+        109,
+        64
+      ],
+      "headScale": 0.8,
+      "headCut": 0.334
+    },
+    {
+      "id": "sol",
+      "chestVariant": "approved",
+      "skinColour": [
+        193,
+        142,
+        86
+      ],
+      "topColour": [
+        221,
+        174,
+        51
+      ],
+      "headScale": 0.82,
+      "headCut": 0.328
+    },
+    {
+      "id": "ada",
+      "chestVariant": "approved",
+      "skinColour": [
+        136,
+        81,
+        47
+      ],
+      "topColour": [
+        109,
+        142,
+        171
+      ],
+      "headScale": 0.92,
+      "headCut": 0.328
+    }
+  ]
+}

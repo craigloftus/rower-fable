@@ -1,0 +1,210 @@
+{
+  "hipL": {
+    "source": [
+      0.058,
+      -0.003,
+      0.002
+    ],
+    "inside": true
+  },
+  "kneeL": {
+    "source": [
+      0.091,
+      -0.205,
+      0.008
+    ],
+    "inside": true
+  },
+  "ankleL": {
+    "source": [
+      0.123,
+      -0.402,
+      -0.002
+    ],
+    "inside": true
+  },
+  "clavicleL": {
+    "source": [
+      0.028,
+      0.282,
+      -0.02
+    ],
+    "inside": true
+  },
+  "shoulderL": {
+    "source": [
+      0.101,
+      0.262,
+      -0.019
+    ],
+    "inside": true
+  },
+  "elbowL": {
+    "source": [
+      0.14,
+      0.115,
+      -0.019
+    ],
+    "inside": true
+  },
+  "wristL": {
+    "source": [
+      0.192,
+      -0.001,
+      0.016
+    ],
+    "inside": true
+  },
+  "knuckleL": {
+    "source": [
+      0.21,
+      -0.05,
+      0.02
+    ],
+    "inside": true
+  },
+  "fingerJointL": {
+    "source": [
+      0.211,
+      -0.077,
+      0.022
+    ],
+    "inside": true
+  },
+  "fingerTipL": {
+    "source": [
+      0.205,
+      -0.104,
+      0.027
+    ],
+    "inside": true
+  },
+  "thumbBaseL": {
+    "source": [
+      0.189,
+      -0.036,
+      0.039
+    ],
+    "inside": true
+  },
+  "thumbJointL": {
+    "source": [
+      0.192,
+      -0.058,
+      0.045
+    ],
+    "inside": true
+  },
+  "thumbTipL": {
+    "source": [
+      0.197,
+      -0.078,
+      0.042
+    ],
+    "inside": true
+  },
+  "hipR": {
+    "source": [
+      -0.058,
+      -0.003,
+      -0.001
+    ],
+    "inside": true
+  },
+  "kneeR": {
+    "source": [
+      -0.064,
+      -0.205,
+      0.001
+    ],
+    "inside": true
+  },
+  "ankleR": {
+    "source": [
+      -0.067,
+      -0.402,
+      -0.027
+    ],
+    "inside": true
+  },
+  "clavicleR": {
+    "source": [
+      -0.028,
+      0.282,
+      -0.02
+    ],
+    "inside": true
+  },
+  "shoulderR": {
+    "source": [
+      -0.103,
+      0.262,
+      -0.019
+    ],
+    "inside": true
+  },
+  "elbowR": {
+    "source": [
+      -0.141,
+      0.115,
+      -0.018
+    ],
+    "inside": true
+  },
+  "wristR": {
+    "source": [
+      -0.185,
+      -0.001,
+      0.004
+    ],
+    "inside": true
+  },
+  "knuckleR": {
+    "source": [
+      -0.2,
+      -0.052,
+      0.011
+    ],
+    "inside": true
+  },
+  "fingerJointR": {
+    "source": [
+      -0.203,
+      -0.077,
+      0.012
+    ],
+    "inside": true
+  },
+  "fingerTipR": {
+    "source": [
+      -0.192,
+      -0.105,
+      0.01
+    ],
+    "inside": true
+  },
+  "thumbBaseR": {
+    "source": [
+      -0.176,
+      -0.036,
+      0.029
+    ],
+    "inside": true
+  },
+  "thumbJointR": {
+    "source": [
+      -0.177,
+      -0.059,
+      0.03
+    ],
+    "inside": true
+  },
+  "thumbTipR": {
+    "source": [
+      -0.184,
+      -0.078,
+      0.029
+    ],
+    "inside": true
+  }
+}

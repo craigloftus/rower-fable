@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "source": "git staged snapshot without local caches",
+  "command": "npm run characters:build",
+  "rawExportHashes": {
+    "june": "3f7566a8c12b490ca98a9ef99132d424662224f2cabb37c873dccab234645cf6",
+    "kai": "c4b13ff3e562d8e85f5170c3265bf586a472600874a36045cca775a3e235c31b",
+    "sol": "9ed9567d5cdf2fc5c5947b8251060cd2822d3a997c891cc6a746b06da7dbbafb",
+    "ada": "4bc5a1c1505f129dd0c0075192938e218873d39edf462ff04ebd2a3b0028b2c6"
+  }
+}

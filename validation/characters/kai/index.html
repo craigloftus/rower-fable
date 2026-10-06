@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>Kai candidate review</title>
+<style>body{margin:0;background:#ded9ce;font:14px system-ui;color:#282c27}canvas{display:block}nav{position:absolute;top:12px;left:12px;display:flex;gap:8px;align-items:center;background:#f5f1e7dd;padding:10px;border-radius:8px}button,input{accent-color:#607147}button{padding:6px 10px}output{min-width:55px}</style>
+<nav><strong>Kai · candidate</strong><button id="play">Play</button><input id="phase" type="range" min="0" max="2" step=".005" value="0"><output id="time">0.00</output><button data-view="front">Front</button><button data-view="profile">Profile</button><button data-view="quarter">¾</button><button data-view="hands">Hands</button></nav>
+<script type="module">
+import * as T from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
+import {prepareCharacterSkinning,updateCharacterSkinning} from '../../../src/volume-skinning.js';
+import {Boat} from '../../../src/boat.js';
+import {Stroke} from '../../../src/stroke.js';
+import {fitRowingPose} from '../../../src/rowing-fit.js';
+import {kaiPose} from '../../../scripts/kai-fit.mjs';
+const renderer=new T.WebGLRenderer({antialias:true});renderer.setPixelRatio(devicePixelRatio);renderer.setSize(innerWidth,innerHeight);document.body.append(renderer.domElement);
+const scene=new T.Scene();scene.background=new T.Color('#ded9ce');scene.add(new T.HemisphereLight(0xffffff,0x77745e,2));
+const key=new T.DirectionalLight(0xffffff,2.2);key.position.set(-3,4,3);scene.add(key);
+const camera=new T.PerspectiveCamera(32,innerWidth/innerHeight,.01,100);
+const parent=new T.Group();scene.add(parent);const boat=new Boat(parent),stroke=new Stroke();
+const asset=new URLSearchParams(location.search).get('asset')||'candidate';
+const path=asset==='candidate'?'../../../art/characters/candidates/kai/kai.glb':`../../../public/characters/${asset==='june'?'june':'kai'}.glb`;
+const gltf=await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync(path);prepareCharacterSkinning(gltf.scene);parent.add(gltf.scene);
+const mixer=new T.AnimationMixer(gltf.scene),action=mixer.clipAction(gltf.animations[0]);action.setLoop(T.LoopOnce,1).play();action.clampWhenFinished=true;
+let phase=0,playing=false,view='quarter',last=performance.now();
+function setView(name){view=name;const positions={front:[-3,.98,0],profile:[.2,1.0,3],quarter:[-2.6,1.5,2.5],hands:[-.7,1.1,.6]};camera.position.fromArray(positions[name]);camera.lookAt(name==='hands'?new T.Vector3(-.35,.75,0):new T.Vector3(-.02,.77,0));}
+function pose(t){phase=t;stroke.mode=t<=1?'drive':'rec';stroke.p=t<=1?t:t-1;const p=asset==='candidate'?kaiPose(stroke.pose()):fitRowingPose(stroke.pose(),asset);boat.setPose(p);action.paused=false;mixer.setTime(t);updateCharacterSkinning(gltf.scene);document.querySelector('#phase').value=t;document.querySelector('#time').value=t.toFixed(2);}
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>setView(b.dataset.view));document.querySelector('#play').onclick=()=>{playing=!playing;document.querySelector('#play').textContent=playing?'Pause':'Play';};document.querySelector('#phase').oninput=e=>{playing=false;pose(+e.target.value);};
+setView('quarter');pose(0);
+function draw(now){if(playing)pose((phase+Math.min((now-last)/1000,.04)*.55)%2);last=now;renderer.render(scene,camera);requestAnimationFrame(draw);}requestAnimationFrame(draw);
+window.review={ready:true,renderer,scene,pose,setView,asset,async benchmark(){playing=false;const samples=[];const gl=renderer.getContext();for(let i=0;i<360;i++){const start=performance.now();pose((i%240)/120);renderer.render(scene,camera);gl.finish();if(i>=60)samples.push(performance.now()-start);}samples.sort((a,b)=>a-b);return {asset,dpr:devicePixelRatio,width:renderer.domElement.width,height:renderer.domElement.height,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,medianFrameMs:samples[150],p95FrameMs:samples[285],frames:300,measurement:'Synchronous neutral boat scene: pose + render + GPU finish; headless desktop Chromium'};}};
+</script></html>

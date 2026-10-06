@@ -4,6 +4,7 @@ Run with blender --background --python scripts/validate-body.py.
 import bpy
 import json
 import math
+import hashlib
 import sys
 from pathlib import Path
 from mathutils import Vector, Matrix
@@ -24,9 +25,11 @@ def intersects(a,b):
 
 report=[]
 final_june='--final-june' in sys.argv
-native_june='--native-june' in sys.argv
-for ident in (['june'] if final_june or native_june else ['mira','kai','june','sol','ada']):
-    asset=ROOT/'validation/reconstruction/fresh-rig/june.blend' if native_june else ROOT/'art/characters/reference/june-final-rig.blend' if final_june else ROOT/'art/characters'/(ident+'.blend')
+shared_cast='--shared-cast' in sys.argv
+native_june='--native-june' in sys.argv or shared_cast
+for ident in (['kai','june','sol','ada'] if shared_cast else ['june'] if final_june or native_june else ['mira','kai','june','sol','ada']):
+    asset=ROOT/f'art/characters/shared-cast/{ident}.blend' if shared_cast else ROOT/'validation/reconstruction/fresh-rig/june.blend' if native_june else ROOT/'art/characters/reference/june-final-rig.blend' if final_june else ROOT/'art/characters'/(ident+'.blend')
+    asset_sha256=hashlib.sha256(asset.read_bytes()).hexdigest()
     bpy.ops.wm.open_mainfile(filepath=str(asset))
     obj=bpy.data.objects[ident]
     volume_skin=obj.get('skinning')=='dualQuaternion'
@@ -76,10 +79,10 @@ for ident in (['june'] if final_june or native_june else ['mira','kai','june','s
                 if intersects([points[i] for i in arms[ai]],[points[i] for i in chest[ci]]):
                     chest_collisions.append({'frame':frame,'arm':ai,'chest':ci})
         evaluated.to_mesh_clear()
-    report.append({'id':ident,'poses':161,'armLegTriangleIntersections':len(collisions),'armChestTriangleIntersections':len(chest_collisions),
+    report.append({'id':ident,'assetSha256':asset_sha256,'poses':161,'armLegTriangleIntersections':len(collisions),'armChestTriangleIntersections':len(chest_collisions),
         'candidates':candidates,'firstCollisions':collisions[:5],'firstChestCollisions':chest_collisions[:5]})
     print('BODY_CHECK',report[-1],flush=True)
-report_path=ROOT/('validation/reconstruction/fresh-rig/body-report.json' if native_june else 'validation/reconstruction/june-final/body-report.json' if final_june else 'validation/body-report.json')
+report_path=ROOT/('validation/characters/shared-cast/body-report.json' if shared_cast else 'validation/reconstruction/fresh-rig/body-report.json' if native_june else 'validation/reconstruction/june-final/body-report.json' if final_june else 'validation/body-report.json')
 report_path.write_text(json.dumps(report,indent=2)+'\n')
 assert all(r['armLegTriangleIntersections']==0 for r in report), 'Deformed arm/leg surfaces intersect; see body-report.json'
 assert all(r['armChestTriangleIntersections']==0 for r in report), 'Deformed arms/hands intersect the chest; see body-report.json'

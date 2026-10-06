@@ -122,35 +122,33 @@ Original comparison character from
 [Quaternius — Ultimate Modular Women](https://quaternius.com/packs/ultimatemodularwomen.html)
 (CC0), with animations stripped and the skeleton posed procedurally.
 
-The new shared body uses [MakeHuman graphical assets](https://github.com/makehumancommunity/makehuman)
+Earlier shared-body experiments used [MakeHuman graphical assets](https://github.com/makehumancommunity/makehuman)
 (CC0), reshaped and rigged for rowing. Asset URLs and hashes are in
 `art/source/manifest.json`; the asset license is included alongside them.
 
 
 ## Character authoring and validation
 
-Blender 5.2.1 and the community [Blender MCP add-on](https://github.com/ahujasid/blender-mcp)
-were installed and used to author the rowing assets. The four additional
-characters began as image-generation references. June now has a dedicated
-faceted rebuild of the approved TRELLIS.2 reconstruction, using her original
-concept for the palette and facial details. The retained reconstruction inputs
-allow that rebuild to run locally without another inference request or paid API.
+The four characters share June's approved body, skeleton, skin weights and
+rowing animation. Kai, Sol and Ada retain their individually refined heads,
+with character-specific skin and top colours. A fixed chest variant is chosen
+per character in the source configuration; there is no runtime body morphing.
+The opening selector uses the original illustrations and saves the choice locally.
 
-- Editable Blender scenes, reference images and image prompts: `art/characters/`.
-- Shipped GLBs and model-rendered portraits: `public/characters/`.
-- Shared anatomical body: `scripts/anatomy.py` (MakeHuman CC0 assets in `art/source/`).
-- Character details and rig bake: `scripts/build-characters.py`.
-- June's rig from the approved sculpt: `scripts/build-final-june.mjs`.
-- Stroke sampling: `scripts/sample-stroke.mjs` (rerun after changing geometry).
-- Assessment, limitations and validation evidence: [art/characters/README.md](art/characters/README.md).
+- Editable shared source and configuration: `art/characters/shared-cast/`.
+- Losslessly compressed runtime GLBs: `public/characters/`.
+- Reusable workflow: [.agents/skills/rowing-character/SKILL.md](.agents/skills/rowing-character/SKILL.md).
+- Build commands, validation and limitations: [art/characters/README.md](art/characters/README.md).
+
+Use background Blender and headless Chromium. Rebuild from the approved body
+and retained head surfaces, inspect the result, then install the validated cast:
 
 ```sh
-# Open Blender with its MCP add-on enabled (once per Blender session).
-blender --python scripts/start-blender-mcp.py
-# In another terminal, regenerate the shared cast and June's dedicated rebuild.
 npm run characters:build
+# After visual review:
+npm run characters:install
 npm run characters:validate
-npm run characters:validate-mesh
+npm test
 npm run build
 ```
 

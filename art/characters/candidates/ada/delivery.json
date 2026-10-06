@@ -1,0 +1,727 @@
+{
+  "status": "Refinement complete; visual review accepted; runtime integration pending; not installed",
+  "boatFit": {
+    "catchAngle": 0.9,
+    "seatFinish": 0.3,
+    "pinY": 0.48,
+    "inboard": 0.75,
+    "gripRadius": 0.02
+  },
+  "finalGLB": {
+    "path": "art/characters/candidates/ada/ada.glb",
+    "bytes": 8289752,
+    "sha256": "5cd07c2c66b6c631766c3d77b98a6d6bf521e1c20e62c43ad9fcba33531f52d4"
+  },
+  "triangles": 50522,
+  "limitations": [
+    "Interpretation of one original illustration; unseen surfaces inferred",
+    "Retained joined fingers and deeply bent shorts remain deliberately angular",
+    "Uncompressed editable export is 8.29 MB with 147572 vertices; use verified lossless delivery compression",
+    "Desktop submission timing does not establish sustained GPU completion or Pixel 8 thermal performance"
+  ],
+  "assets": [
+    {
+      "path": "art/characters/candidates/ada/sculpt.blend",
+      "bytes": 2581025,
+      "sha256": "babd50c9d614cf6105adaf8f9f08f4e449c47222eee857a9d8306f429834d65f"
+    },
+    {
+      "path": "art/characters/candidates/ada/head-authored.blend",
+      "bytes": 267284,
+      "sha256": "dbc3187c1213959b1d869f919da0ef92455cec50f9f52ec15ea8431ce70dc43b"
+    },
+    {
+      "path": "art/characters/candidates/ada/standing.glb",
+      "bytes": 5347344,
+      "sha256": "e58be50f62d2323bf27f2b690ba994558169e51b8c7bf071ef4f2cfcd578ea2e"
+    },
+    {
+      "path": "art/characters/candidates/ada/ada.blend",
+      "bytes": 3435339,
+      "sha256": "84358cc9f19f4123714a42b4cdcfce60ef47ac86dfb4026cfe7f0a0fc7eba762"
+    },
+    {
+      "path": "art/characters/candidates/ada/ada.glb",
+      "bytes": 8289752,
+      "sha256": "5cd07c2c66b6c631766c3d77b98a6d6bf521e1c20e62c43ad9fcba33531f52d4"
+    },
+    {
+      "path": "art/characters/candidates/ada/anatomy.json",
+      "bytes": 3470,
+      "sha256": "74fb1c0fb36c285447677b2e6f845d74a0a65cf9653c888734705a19e865492e"
+    },
+    {
+      "path": "art/characters/candidates/ada/README.md",
+      "bytes": 7221,
+      "sha256": "8b56b5c9b3514a8fc3399152e0db002840c112a0ee9fec42fb4ccacc7ed3860c"
+    }
+  ],
+  "curatedInputs": [
+    {
+      "path": "validation/characters/ada/faceted-surface.ply",
+      "bytes": 570247,
+      "sha256": "d58f661463eca41dcda862a7af4211c8df41124ea17154c61eac143eba4b76d5"
+    },
+    {
+      "path": "validation/characters/ada/head-faceted-surface.ply",
+      "bytes": 285246,
+      "sha256": "2c06e06c4665ceba53d5089143d4b4459611800a01524417395e1d431601a161"
+    },
+    {
+      "path": "validation/characters/ada/head-colour-layout.npz",
+      "bytes": 751986,
+      "sha256": "b5c43e730cfb7502a6b672d0b4332c082441ae8fecfbade757d2a888eca24f61"
+    },
+    {
+      "path": "validation/characters/ada/source-provenance.json",
+      "bytes": 895,
+      "sha256": "2d8b38ec82164b4b01855596a1223aafb93850226641ec5cab5fbca5b8a9f8dd"
+    }
+  ],
+  "provenance": [
+    {
+      "path": "art/characters/ada-concept.png",
+      "bytes": 1586859,
+      "sha256": "8bd9d3a3a93f5ddb7989fe7e9bb1622c3d320cd14e0514ae3fd1bce1a017ecc1"
+    },
+    {
+      "path": "validation/characters/ada/original-head-crop.png",
+      "bytes": 80902,
+      "sha256": "546811410f42d6d3ef19fc60c4f7248469dded0a796e735f01d1f739c9fb0fe7"
+    },
+    {
+      "path": "validation/characters/ada/reconstructed.glb",
+      "bytes": 9953672,
+      "sha256": "8db7a28fc18517ca14972ebb336c93766354e39fca8c9af0021b19837b754bb5"
+    },
+    {
+      "path": "validation/characters/ada/head-reconstructed.glb",
+      "bytes": 9154816,
+      "sha256": "415a2b4092ef7343181878693bf7a5fd62fc91d23b4c35fcfae8b0c0331a456c"
+    }
+  ],
+  "authoring": [
+    {
+      "path": "scripts/ada-align-body.py",
+      "bytes": 890,
+      "sha256": "0b953e42d6184521968ad5ec48d422eeb01ace708c53dd55f23831e7ca93c7f0"
+    },
+    {
+      "path": "scripts/ada-assemble.py",
+      "bytes": 2850,
+      "sha256": "9a2477b148e32e379621dd0bb6f36f9014251c5d695a8016a3457c12db297f14"
+    },
+    {
+      "path": "scripts/ada-bind-native.py",
+      "bytes": 9136,
+      "sha256": "67574767ba982d952f2f295d3346626d3e44377dbe12be75029230a8fae003be"
+    },
+    {
+      "path": "scripts/ada-browser-review.mjs",
+      "bytes": 1050,
+      "sha256": "f59d1db1a6f9f983aab5b43dfddd02b1674e29a5bb4070bb4b6c1eab15ca767f"
+    },
+    {
+      "path": "scripts/ada-build-native.mjs",
+      "bytes": 607,
+      "sha256": "a967e1d9077ce53a0035809097efe8edc16471ce9618a38f2e887de4066ab4a2"
+    },
+    {
+      "path": "scripts/ada-build-sculpt.mjs",
+      "bytes": 827,
+      "sha256": "cfecb34848b404f59c58842c789de35796e1d5c53fa5b4db6d1f94b61429d2a4"
+    },
+    {
+      "path": "scripts/ada-check-landmarks.py",
+      "bytes": 1237,
+      "sha256": "afc7acea98c8b92c2cb2e825c98786624d5d58e62428ff93e52da5a2a5cefb8f"
+    },
+    {
+      "path": "scripts/ada-check-parity.py",
+      "bytes": 1829,
+      "sha256": "ec8153f00612ebfb9a4565311bd1f8a0a2532fe2fca80b0108dd3dfe0539fef0"
+    },
+    {
+      "path": "scripts/ada-close-surface.py",
+      "bytes": 5488,
+      "sha256": "a2263e0b4c99b914dc8391c210d310eea425687b7b57e259783b58354c0dfa4d"
+    },
+    {
+      "path": "scripts/ada-colour-body.py",
+      "bytes": 4922,
+      "sha256": "7ced649bcaf79fe5f63f0cbd9c47608e4f87be0220d63415f4c6e73d9d900579"
+    },
+    {
+      "path": "scripts/ada-colour-surface.py",
+      "bytes": 11532,
+      "sha256": "1432adf33eb18fb3ea0746e1d5a7ef6e928662537da5c5fe3358f8af8c5d93b6"
+    },
+    {
+      "path": "scripts/ada-facet-surface.py",
+      "bytes": 2199,
+      "sha256": "71a50a780a55a67ff43e0ede604fd1fc2181e7071569a358969059e14c0cea67"
+    },
+    {
+      "path": "scripts/ada-fit-grip.mjs",
+      "bytes": 2263,
+      "sha256": "380b1585d2a44d8576fee9d73270b77943d2ef7a26344cff2fdde5d2702d37dd"
+    },
+    {
+      "path": "scripts/ada-fit-grip.py",
+      "bytes": 4468,
+      "sha256": "02dfed28c6659cc956eeff93d780c88f56f2a96eade8f505e414e75f7eb81f9e"
+    },
+    {
+      "path": "scripts/ada-fit-seating.mjs",
+      "bytes": 3236,
+      "sha256": "60d34cf3f1d27d35e776dbe637a5cfeb1589a3c394205b4df1a953ee418e44cd"
+    },
+    {
+      "path": "scripts/ada-fit.mjs",
+      "bytes": 2036,
+      "sha256": "fcff205a4eb5785cd2f53ffd02ea6cc2dc4097b78cb23c76aee863b3be1d3a37"
+    },
+    {
+      "path": "scripts/ada-inspect-source.py",
+      "bytes": 1716,
+      "sha256": "a573935cdcd488cb1e9d01493d61581f855c19b450137526b50b60403b8637f0"
+    },
+    {
+      "path": "scripts/ada-inspect-stretch.mjs",
+      "bytes": 3171,
+      "sha256": "d82d02a3b3ef0c998419f24fbd1f2e0439520f9f84197ebf6e91b1e6a658a502"
+    },
+    {
+      "path": "scripts/ada-measure-sections.py",
+      "bytes": 853,
+      "sha256": "2a166d408426b7e97e964e4ac82186bea49b4cc99dd546123e891cbd0a4eaaca"
+    },
+    {
+      "path": "scripts/ada-refine-body.py",
+      "bytes": 1364,
+      "sha256": "81ef9eaea374eece79fe9f1607c05c5451c158ae1e39f9e175897f37c4e30c28"
+    },
+    {
+      "path": "scripts/ada-refine-hands.py",
+      "bytes": 1586,
+      "sha256": "b26e494f54e6d35cf98674f5ab65b14030f6dd1e2f536182ad812a855128c5b3"
+    },
+    {
+      "path": "scripts/ada-refine-head.py",
+      "bytes": 2084,
+      "sha256": "40366d35190bfc9c8fab5cd73d0d659e98887dd3eb7af88124476933efdc48fa"
+    },
+    {
+      "path": "scripts/ada-render-rig.py",
+      "bytes": 3463,
+      "sha256": "df74d2815bf7167ba21252fb3c96d00af9bb8fb5b15f10e37a0fdb3f5962a46b"
+    },
+    {
+      "path": "scripts/ada-retopologize-head.py",
+      "bytes": 1085,
+      "sha256": "678efd1e181779cd60bdf90af8d97623586757ec65b0c563d783f1fe7258df08"
+    },
+    {
+      "path": "scripts/ada-review.py",
+      "bytes": 3626,
+      "sha256": "464e95750880cff70429d06e7c5cf7837bfe406f2815782c23b06cb9dca91b53"
+    },
+    {
+      "path": "scripts/ada-sample-head-colour.py",
+      "bytes": 1365,
+      "sha256": "f3b62043c79b69f62111b30bf9e778472201ce9b52c30d04d96485322160cbe5"
+    },
+    {
+      "path": "scripts/ada-sample-native.mjs",
+      "bytes": 8919,
+      "sha256": "30c73e2d4ef9774bee2822a9b6e7325a117524f9a6315c5aa413a4a03df22071"
+    },
+    {
+      "path": "scripts/ada-save-sculpt.py",
+      "bytes": 1666,
+      "sha256": "b7b556dd8b19081e453d45851e277429fc4647e98c88165487f9d09c159fe161"
+    },
+    {
+      "path": "scripts/ada-validate-body.py",
+      "bytes": 4822,
+      "sha256": "d2eb2572910d859fadee89ef56733269bff7072d55dd7d3f2dfefe7b9dc31289"
+    },
+    {
+      "path": "scripts/ada-validate-grip.mjs",
+      "bytes": 6988,
+      "sha256": "0ff855fc32f3c85cfc165f5636be2c7a8f3af2768fd18ab8d65543e1c14aeb9b"
+    },
+    {
+      "path": "scripts/ada-validate-native.mjs",
+      "bytes": 10984,
+      "sha256": "bb372831c27b06d8dcfff7de40f1ba0a357d6a1a58c67d3361aaa24c7fa1816e"
+    },
+    {
+      "path": "scripts/ada-write-delivery.py",
+      "bytes": 2900,
+      "sha256": "4bc20152d1d1e15d0ba0b1731a17258f3883326a2a872b1c34f3cfc8253a4f44"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "validation/characters/ada/report.json",
+      "bytes": 844,
+      "sha256": "32e4fba7d05a764f5915ce691ea54589384e5b55b5de8f7a7b28c38b871ab0ea"
+    },
+    {
+      "path": "validation/characters/ada/measurements.json",
+      "bytes": 844,
+      "sha256": "32e4fba7d05a764f5915ce691ea54589384e5b55b5de8f7a7b28c38b871ab0ea"
+    },
+    {
+      "path": "validation/characters/ada/blender-parity.json",
+      "bytes": 288,
+      "sha256": "17dc5077c593629e714f4576a294f88697d2c317327b5e3ccec0ca42969a3d2c"
+    },
+    {
+      "path": "validation/characters/ada/body-report.json",
+      "bytes": 204,
+      "sha256": "d8536438f2a20c87fa748deed00f7692f1db34cd14f23ad8fb7cacaddbd3f8ce"
+    },
+    {
+      "path": "validation/characters/ada/grip-report.json",
+      "bytes": 2017,
+      "sha256": "bd9152717a3169b94b12e6da379aeafb665adfde8ec1a4be1d3eeea056b01d2a"
+    },
+    {
+      "path": "validation/characters/ada/binding.json",
+      "bytes": 238,
+      "sha256": "46e35705c6d4cf6f6ffcb61c2fbb98f908e4c6c30d08e0382a6c3a9310357229"
+    },
+    {
+      "path": "validation/characters/ada/landmarks.json",
+      "bytes": 2663,
+      "sha256": "8199a6d03d3000875b6cd72851e34bf7db7644dae472cd8bceee21b53c0bceb4"
+    },
+    {
+      "path": "validation/characters/ada/performance.json",
+      "bytes": 1109,
+      "sha256": "723f4587fdd22362571a067be783aab3226eba9eceef10fe7710281fb43d56db"
+    },
+    {
+      "path": "validation/characters/ada/palette.json",
+      "bytes": 1291,
+      "sha256": "0e1f5d2f84e2e46a8ad7fbfac4d126bf88014ed8b7b05b5e38bcccc91061ddde"
+    },
+    {
+      "path": "validation/characters/ada/head-placement.json",
+      "bytes": 327,
+      "sha256": "eae61f6354c3b50b1fc25e27cbbb03d0640f58498426e45e8e31b175457bcdeb"
+    },
+    {
+      "path": "validation/characters/ada/head-refinement.json",
+      "bytes": 206,
+      "sha256": "623f1d355e3f93397ed88ece7f1112ef599b4823072fafea600cfcf95c0b3834"
+    },
+    {
+      "path": "validation/characters/ada/head-retopology.json",
+      "bytes": 105,
+      "sha256": "e71f2de2981ab8b5b6536a42f07f53cb257bf871f78a3c93e631abb99dd03f4f"
+    },
+    {
+      "path": "validation/characters/ada/hand-refinement.json",
+      "bytes": 241,
+      "sha256": "e069f12a4292e04c820b4a261585305b6a9d39b121fdd1b22d3bf0b68eac9414"
+    },
+    {
+      "path": "validation/characters/ada/colour-layout-check.json",
+      "bytes": 378,
+      "sha256": "4329a944cbb4542ecd2fae9fc430c4d95e1d0b46745a7268ecc444edcdb782bc"
+    },
+    {
+      "path": "validation/characters/ada/seat-fit.json",
+      "bytes": 46632,
+      "sha256": "c5fb627e7dd66e1f3006ad883aca1ce7a37997083da5e1a2582c800e2843b6bf"
+    },
+    {
+      "path": "validation/characters/ada/index.html",
+      "bytes": 4371,
+      "sha256": "355ea7c411f3e1b8571160feb8e9d66330dfb5a1e4992c9f3b9d812bacab5ac5"
+    },
+    {
+      "path": "validation/characters/ada/README.md",
+      "bytes": 1001,
+      "sha256": "0ae4c5306e5c5872a430a39ceafc4d5297af3cc1dbf9c46f1fce5c0c60e0543a"
+    },
+    {
+      "path": "validation/characters/ada/before-rest/clay-front.png",
+      "bytes": 510046,
+      "sha256": "1c5f5f316b8a5a4c7d39041caae4a17a9ce92df33e69189b4f922ca687381866"
+    },
+    {
+      "path": "validation/characters/ada/before-rest/clay-profile.png",
+      "bytes": 494152,
+      "sha256": "ea092a8e0290a345d4aa888c7b03dea44a2949405d1a600bb1ec425dcde7fb8e"
+    },
+    {
+      "path": "validation/characters/ada/before-rest/clay-rear.png",
+      "bytes": 510679,
+      "sha256": "91c26087ebd135d3e7769f783c7799d37f94282869eba84cb4fa203b598bbe1e"
+    },
+    {
+      "path": "validation/characters/ada/before-rest/clay-three-quarter.png",
+      "bytes": 491856,
+      "sha256": "14526b86b4396cafe14c4655222df92b4994c53c367a1bcee4dc1f0cfaccd567"
+    },
+    {
+      "path": "validation/characters/ada/before-rest/colour-front.png",
+      "bytes": 517210,
+      "sha256": "1076b93f3b0a93b8a5df8ca01f5d0e5064a95b40bb35c378e9c7a5997d48759c"
+    },
+    {
+      "path": "validation/characters/ada/before-rest/colour-profile.png",
+      "bytes": 501238,
+      "sha256": "c87326b65ac729e58ef9a19915e92dd5e74fdc16ee9245c858f3a21a6d0a0c36"
+    },
+    {
+      "path": "validation/characters/ada/before-rest/colour-rear.png",
+      "bytes": 520460,
+      "sha256": "0672b7566212cd063a5c86f370b51471b201bad4cd3e1fff9df348bbf482516d"
+    },
+    {
+      "path": "validation/characters/ada/before-rest/colour-three-quarter.png",
+      "bytes": 499800,
+      "sha256": "070b844c146d7350f92da838405c364c6ae8eca2ef50f0b7182c7b7b4b707e4a"
+    },
+    {
+      "path": "validation/characters/ada/after/clay-front.png",
+      "bytes": 562588,
+      "sha256": "59535563351d4e7c2aac91bd43c88af1b28b2de3c94238f4359c238eb0225884"
+    },
+    {
+      "path": "validation/characters/ada/after/clay-profile.png",
+      "bytes": 529770,
+      "sha256": "5010c4fcf9eb0e7327a1a6b96ceffb912a6cd543135d0d6434d96ab7f5e4c4a0"
+    },
+    {
+      "path": "validation/characters/ada/after/clay-rear.png",
+      "bytes": 560790,
+      "sha256": "5d0ae5046011ec7369cf866c54ea53070055d3ccc5179032d63e87303f62bc64"
+    },
+    {
+      "path": "validation/characters/ada/after/clay-reference-angle.png",
+      "bytes": 560840,
+      "sha256": "e60bdc330039860914631e105ec2308bbfce556496a17b91b2328a21ecbd03f3"
+    },
+    {
+      "path": "validation/characters/ada/after/clay-three-quarter.png",
+      "bytes": 562161,
+      "sha256": "146f29d994fe04892b2881431c2b8267eb85c90c47a727e8e5104b01ab726e96"
+    },
+    {
+      "path": "validation/characters/ada/after/colour-front.png",
+      "bytes": 574904,
+      "sha256": "5623a5928097994e73e95552eb19810589fd6916d38e073f88422fe7f23fde48"
+    },
+    {
+      "path": "validation/characters/ada/after/colour-profile.png",
+      "bytes": 537544,
+      "sha256": "a5fc783609280abe85259c0ce3ada3f62d1d707293a9d4367bf86aa915d3e4da"
+    },
+    {
+      "path": "validation/characters/ada/after/colour-rear.png",
+      "bytes": 569842,
+      "sha256": "e4b78e72d9b11e5fc52d05217925df50bfe28cee81cccf34fa23175ae7ae2764"
+    },
+    {
+      "path": "validation/characters/ada/after/colour-reference-angle.png",
+      "bytes": 574100,
+      "sha256": "581417197ce39e886816bb5b790904b2775fe23f03bd61ab516d9d5c7c9122da"
+    },
+    {
+      "path": "validation/characters/ada/after/colour-three-quarter.png",
+      "bytes": 570538,
+      "sha256": "0c6ffc038f2c98f0476238316282059441f240ee21f9a524c25655dc3179fd9d"
+    },
+    {
+      "path": "validation/characters/ada/after-head/clay-front.png",
+      "bytes": 641812,
+      "sha256": "6ab785d10ad7eb2c211e63cfcc5db7eeffd3207ca62d7262fe7baf4fe7436bc3"
+    },
+    {
+      "path": "validation/characters/ada/after-head/clay-profile.png",
+      "bytes": 623869,
+      "sha256": "e554e17b020da07b5fad6b739eec84a0188b0aeeafd0139347b5b1e0673c1982"
+    },
+    {
+      "path": "validation/characters/ada/after-head/clay-rear.png",
+      "bytes": 617240,
+      "sha256": "6524188e906fc31d129281ac6a317d58610795a715976c07e3af0ab35824a956"
+    },
+    {
+      "path": "validation/characters/ada/after-head/clay-reference-angle.png",
+      "bytes": 601306,
+      "sha256": "5fde7c15ac44e94e0e462284daf44b6f565939c422e929eaafd0e559e3c0d2d2"
+    },
+    {
+      "path": "validation/characters/ada/after-head/clay-three-quarter.png",
+      "bytes": 605673,
+      "sha256": "d5c702d9cdcbbad9933319aa8ab64635452e201359f7c0b5cd8725098699a885"
+    },
+    {
+      "path": "validation/characters/ada/after-head/colour-front.png",
+      "bytes": 644533,
+      "sha256": "d71b26bb09a233368c5350fcb4422a6fcf13dccc045c52c29f5f82c3616b8b61"
+    },
+    {
+      "path": "validation/characters/ada/after-head/colour-profile.png",
+      "bytes": 624845,
+      "sha256": "98e2245222ad30ddbe0910da19987d09bb0d81e65437cc64e30e42ced75806ae"
+    },
+    {
+      "path": "validation/characters/ada/after-head/colour-rear.png",
+      "bytes": 615045,
+      "sha256": "0a4708435cf0e28a5b3f89f3ce1b1ff6d709d1e08c5f0ba0e216032276709fc4"
+    },
+    {
+      "path": "validation/characters/ada/after-head/colour-reference-angle.png",
+      "bytes": 606232,
+      "sha256": "1007cfa2677458891e6479bec656381b1407a5587f6dccde1bea61f542880b57"
+    },
+    {
+      "path": "validation/characters/ada/after-head/colour-three-quarter.png",
+      "bytes": 606211,
+      "sha256": "846087ae28423c34a44f2e8643a9337026f60bef613f0909773e7a90749eb264"
+    },
+    {
+      "path": "validation/characters/ada/final-review/0.00-feet.png",
+      "bytes": 386581,
+      "sha256": "a9ba061a8a539983c6eb7813913da82b73fbfe127fab127df89fd6e4b2549100"
+    },
+    {
+      "path": "validation/characters/ada/final-review/0.00-front.png",
+      "bytes": 419248,
+      "sha256": "523a339eeab7c25e27b6695f6353e25bb4c57adbc6da2b16dc8d55b6e1ac06e8"
+    },
+    {
+      "path": "validation/characters/ada/final-review/0.00-grip.png",
+      "bytes": 402136,
+      "sha256": "1702c43de8c30010e2ae4bd1d83f8158ef62d1472f7bfff6283ff4ab6c6c860c"
+    },
+    {
+      "path": "validation/characters/ada/final-review/0.00-rear.png",
+      "bytes": 404682,
+      "sha256": "c7a9b449e99491292c6be325a7fd366e5dfb29c309893b0e7a328c697b32bc13"
+    },
+    {
+      "path": "validation/characters/ada/final-review/0.00-seat.png",
+      "bytes": 406198,
+      "sha256": "23b0805a962f2a35a490af4a24343671c05926d753d73bedfe1d9d2e98f92c9d"
+    },
+    {
+      "path": "validation/characters/ada/final-review/0.00-side.png",
+      "bytes": 392784,
+      "sha256": "689afe6c51dbc0ae9c500e62e6f2ce443db94e55d5781937dc04918867770e7d"
+    },
+    {
+      "path": "validation/characters/ada/final-review/0.00-thumb.png",
+      "bytes": 369840,
+      "sha256": "1e372c6fa93e8b951d61d2e6909a5c5b8c7a90132bff7f5c089c00bbf37a9281"
+    },
+    {
+      "path": "validation/characters/ada/final-review/0.00-waist.png",
+      "bytes": 368643,
+      "sha256": "887ea3d7243f07e78f1b06c1196ca244d511fc677f5c99cae90b1fb45314a887"
+    },
+    {
+      "path": "validation/characters/ada/final-review/0.50-feet.png",
+      "bytes": 382712,
+      "sha256": "a5af10b274150cfc04af75c6f30505bcbe40b1eebe68854950028348f676331f"
+    },
+    {
+      "path": "validation/characters/ada/final-review/0.50-front.png",
+      "bytes": 411884,
+      "sha256": "cbbe68fa95732003c2374ba41330d246c63c8d87903cce0b1d7baa9a3bc868c6"
+    },
+    {
+      "path": "validation/characters/ada/final-review/0.50-grip.png",
+      "bytes": 415614,
+      "sha256": "a8201652c8863ac7ffd89b616650c1b244d48b6dda7c0d533ff1efd2d8adb02e"
+    },
+    {
+      "path": "validation/characters/ada/final-review/0.50-rear.png",
+      "bytes": 399756,
+      "sha256": "5f65891161a6215c7840669285d7755bb0fbf8bec1a3bde1a8f27676a9494b7d"
+    },
+    {
+      "path": "validation/characters/ada/final-review/0.50-seat.png",
+      "bytes": 408169,
+      "sha256": "6e2d7ce5bbfd289df1ffb00bfd1eaabecfbeb65a543f34bf327392ded3e15791"
+    },
+    {
+      "path": "validation/characters/ada/final-review/0.50-side.png",
+      "bytes": 397348,
+      "sha256": "0cfe383015bd63d5ea2390d8293f835d6b9262aeaebc1458813b78c733246b74"
+    },
+    {
+      "path": "validation/characters/ada/final-review/0.50-thumb.png",
+      "bytes": 380794,
+      "sha256": "f0a346c78eea83908078f7481329c59c14aa72354bacfcd6807748f38f558a08"
+    },
+    {
+      "path": "validation/characters/ada/final-review/0.50-waist.png",
+      "bytes": 374785,
+      "sha256": "d5b519db5fc73dff3b2c9b1552344b7a1eeb9a3b4ddab01fd160fc8c5d9de124"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.00-feet.png",
+      "bytes": 384302,
+      "sha256": "e4c81341c73b87da74c874fc2bc4832ce14b688fa08ffe407d225c3202e853c2"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.00-front.png",
+      "bytes": 412176,
+      "sha256": "83711d9cc593e60c48ed80947e7ad7f65f54d885142625f3d8479549e211cd76"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.00-grip.png",
+      "bytes": 421419,
+      "sha256": "d1f8ef0ab1406ada909e8856909fe69b46d8a4afe49b65318fe1c8080506fdb0"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.00-rear.png",
+      "bytes": 399748,
+      "sha256": "77c6264b350d5be3c90b29655a78801860defa1a546630399835c2876feb4488"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.00-seat.png",
+      "bytes": 411374,
+      "sha256": "986ea812bd8868ea5030ea7fdd3158c2e37113c0aa11f95e8c772e9fd2180596"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.00-side.png",
+      "bytes": 384542,
+      "sha256": "40324f3ff27ac76d137d11e078da1e0a5da9d72971336d401eb3dcec5cc66ca0"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.00-thumb.png",
+      "bytes": 304134,
+      "sha256": "5ec5a79110c5b56638a3a7bb0be309da9eac8e3ac02cf5cded2fed8a833d4bde"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.00-waist.png",
+      "bytes": 388845,
+      "sha256": "5b00535cf1a8c155c9f721de1eda396a49cd09d8fa0b6ae61c5273396b4ee8e9"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.40-feet.png",
+      "bytes": 384423,
+      "sha256": "4f958e1ac7df0673fa4621f94b94344db8ea56b2bbe5f2d5530b468ab9e4b44c"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.40-front.png",
+      "bytes": 414644,
+      "sha256": "c024990bfca24e544f19d276ec444241e0e6be527d3e73003ddb1b154271d8f6"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.40-grip.png",
+      "bytes": 413357,
+      "sha256": "084e5267c7e96c037eb565c4249fbb1a222c2e7b7e8541a8a793a0f9dd4a7fe4"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.40-rear.png",
+      "bytes": 398819,
+      "sha256": "d8634e8d29d2d2f250f2a45d0f0bc6233c8dd8fa24e0a23786b1cea8c221f6ea"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.40-seat.png",
+      "bytes": 405509,
+      "sha256": "ba0a6392e4d52f8fcc83125034bbd90aa4a5e0655c20436e35c256186b232e3f"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.40-side.png",
+      "bytes": 397478,
+      "sha256": "da820e3d9d83906dd475b584ba630ec19ff191570b552bbe0c5f252fd0c54cdf"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.40-thumb.png",
+      "bytes": 379388,
+      "sha256": "24da813160ab5fe2b4e9d46d103e22c4a8cde11f841d41aa16a67fc7e583310a"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.40-waist.png",
+      "bytes": 370323,
+      "sha256": "22aa3df16785dbb53b435fc83df4e2ad6d87ba023adf7b13294bb254ff980385"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.70-feet.png",
+      "bytes": 387990,
+      "sha256": "8bb5bdd875d21dd5e3d3ec086e13c261700d6a68eac1d5280d870f0d0ec94c22"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.70-front.png",
+      "bytes": 419995,
+      "sha256": "7ae31a14a01b2e04597604d71321a0dc10223bd3f37c0b0e6e6a629f282e6b64"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.70-grip.png",
+      "bytes": 401072,
+      "sha256": "6de44e2b736fd357e9976ea39e6f4457f5e3acacad889a359f171ad8cfb62f0b"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.70-rear.png",
+      "bytes": 404614,
+      "sha256": "2e4384ec1aaac2582ed5b84f7b6db3c94ff35e8d348e493e0e3fc0aa7b2c8bf3"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.70-seat.png",
+      "bytes": 408116,
+      "sha256": "7c7c3f2ccb6dfc5be0b0065d8b08d7973d805ff94f4020e76062c25f0b399de8"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.70-side.png",
+      "bytes": 394591,
+      "sha256": "7bdcbad31beeb28f5f717d890480f2800a9dd8ce8a6f3a24b0d890a037ca00a8"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.70-thumb.png",
+      "bytes": 371473,
+      "sha256": "c56cf25d9b82307d4d089e5ceb78e5b058233d069ee50cf7fe84e5e997a59f2f"
+    },
+    {
+      "path": "validation/characters/ada/final-review/1.70-waist.png",
+      "bytes": 369149,
+      "sha256": "52fa57edc222d08595931561ee93b7b5bcfeefdb5fc62d805724d57ecd252a20"
+    },
+    {
+      "path": "validation/characters/ada/browser-ada-0.png",
+      "bytes": 228500,
+      "sha256": "02a8aa27aaf48afcb116e167091cf098d39b3a9e3b051bd7f28788688df6f80a"
+    },
+    {
+      "path": "validation/characters/ada/browser-candidate-0.5.png",
+      "bytes": 271876,
+      "sha256": "ef4d0e5479635b751cb5aa388e47c2719cbe3ed1bd68fc51786099625e439d37"
+    },
+    {
+      "path": "validation/characters/ada/browser-candidate-0.png",
+      "bytes": 267270,
+      "sha256": "554fc91781cae151003d9faadf17655efd7314d3e2828b2437dce66443875ce3"
+    },
+    {
+      "path": "validation/characters/ada/browser-candidate-1.4.png",
+      "bytes": 253809,
+      "sha256": "7990bc0158334f417fa0ea60d90fbed38b4f5a02e64bdb126b5cf8061a061a62"
+    },
+    {
+      "path": "validation/characters/ada/browser-candidate-1.7.png",
+      "bytes": 262392,
+      "sha256": "665912edb446db42cc330e2e1641d837c792197a66a5db3354786182d8e0670e"
+    },
+    {
+      "path": "validation/characters/ada/browser-candidate-1.png",
+      "bytes": 260976,
+      "sha256": "a3193115d6a29dce30d77738658ba3ceaf1a568a421240a8779712dc32a87272"
+    },
+    {
+      "path": "validation/characters/ada/browser-june-0.png",
+      "bytes": 238319,
+      "sha256": "6cc503607e0074eed86d25e15a6cbaa44c693eaf1ad225eaafb6314692dd3d5d"
+    }
+  ]
+}

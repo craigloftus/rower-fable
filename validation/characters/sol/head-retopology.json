@@ -1,0 +1,5 @@
+{
+  "triangles": 4500,
+  "manifold": true,
+  "method": "Quadric reduction after broad plane authoring"
+}

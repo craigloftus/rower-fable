@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "protectedBodyCorners": 79856,
+  "maximumProtectedPositionDelta": 0,
+  "maximumBodyWeightDelta": 0,
+  "changedChestVertices": 0,
+  "maximumChestDisplacement": 0.0,
+  "neckCutSourceHeight": 0.302,
+  "eyeHeight": 1.0779263973236084,
+  "headUniformScale": 0.92,
+  "headTranslation": [
+    0.027616819366812706,
+    -0.0010094677563756704,
+    0.0
+  ],
+  "verticalHeadShift": 0.031146645545959473,
+  "maximumPosteriorNeckFairing": 0.007507606098555514,
+  "neckBridgeTriangles": 869,
+  "neckTopologyCheck": {
+    "passed": true,
+    "edges": 1538,
+    "boundaryEdges": 0,
+    "nonManifoldEdges": 0
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "headless": true,
+  "errors": [],
+  "characters": [
+    {
+      "id": "kai",
+      "sha256": "d1e376fbb3bebf9a8c9e039998fb54e896d29f5036404ce55ffd9192ad1f69d9",
+      "reloadPersisted": true
+    },
+    {
+      "id": "june",
+      "sha256": "74f5d840917b91df867cbe1085636b0baef605fca8f97add9baccb2b34c5b2c4",
+      "reloadPersisted": true
+    },
+    {
+      "id": "sol",
+      "sha256": "c45fc5b409178e09d19d19a4e37aef525a9d73b0b37c8e059d8002dbc6a5da3a",
+      "reloadPersisted": true
+    },
+    {
+      "id": "ada",
+      "sha256": "3c86bea633af6e2fd1a46e79e869360c60dc29871d8e6c0b5f8c1514c445d8f0",
+      "reloadPersisted": true
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import { fitRowingPose as fitPreviousGripPose } from './reconstruction/fresh-rig/pre-recovery-fix/rowing-fit.js';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Boat } from '../src/boat.js';
 import { Boat as PreviousBoat } from './boat/before.js';
@@ -36,7 +37,7 @@ const bodyPass=['body','seat','sculpt','reconstruction','skinning','bind','nativ
 class PreviousBody {
   constructor(scene, path=`validation/${baseline==='body'?'v2':baseline}/june-before.glb`, volume=false) {
     this.ready=false;
-    new GLTFLoader().load(`${import.meta.env.BASE_URL}${path}?review=${Date.now()}`,gltf=>{
+    new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).load(`${import.meta.env.BASE_URL}${path}?review=${Date.now()}`,gltf=>{
       scene.add(gltf.scene);
       gltf.scene.traverse(o=>{if(o.isMesh)o.frustumCulled=false;if(volume && o.isSkinnedMesh)useDualQuaternion(o);});
       if(!volume)prepareCharacterSkinning(gltf.scene);
@@ -60,7 +61,7 @@ class BindBody {
   constructor(scene,source) {
     this.ready=false;
     const path=source?'june-final/mesh.glb':'rigged/june.glb';
-    new GLTFLoader().load(`${import.meta.env.BASE_URL}validation/reconstruction/${path}`,gltf=>{
+    new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).load(`${import.meta.env.BASE_URL}validation/reconstruction/${path}`,gltf=>{
       const model=gltf.scene;
       if(source){
         model.rotation.y=-Math.PI/2;model.scale.setScalar(1.8);

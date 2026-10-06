@@ -1,0 +1,42 @@
+[
+  {
+    "id": "kai",
+    "assetSha256": "3a779482841161bc834f0e92504cfc7e21bf8dc1821e4ac5e59d618e5be3fe75",
+    "poses": 161,
+    "armLegTriangleIntersections": 0,
+    "armChestTriangleIntersections": 0,
+    "candidates": 0,
+    "firstCollisions": [],
+    "firstChestCollisions": []
+  },
+  {
+    "id": "june",
+    "assetSha256": "4fb4c46dc3e6c058a0753eabd921f93427565300ac022e8abc9567c834c527e4",
+    "poses": 161,
+    "armLegTriangleIntersections": 0,
+    "armChestTriangleIntersections": 0,
+    "candidates": 0,
+    "firstCollisions": [],
+    "firstChestCollisions": []
+  },
+  {
+    "id": "sol",
+    "assetSha256": "fede2326038418b6c26c0597384cfaf163135ea478ab20b05bf5b8bee5cba006",
+    "poses": 161,
+    "armLegTriangleIntersections": 0,
+    "armChestTriangleIntersections": 0,
+    "candidates": 0,
+    "firstCollisions": [],
+    "firstChestCollisions": []
+  },
+  {
+    "id": "ada",
+    "assetSha256": "54c567cdeadda016d0ae3ffee870e59be720052db500ffd1ec5fa881bdea4296",
+    "poses": 161,
+    "armLegTriangleIntersections": 0,
+    "armChestTriangleIntersections": 0,
+    "candidates": 0,
+    "firstCollisions": [],
+    "firstChestCollisions": []
+  }
+]

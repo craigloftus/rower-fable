@@ -1,0 +1,11 @@
+{
+  "input": "art/characters/shared-cast/ada.glb",
+  "output": "validation/characters/installed/ada/ada.glb",
+  "sourceSha256": "4bc5a1c1505f129dd0c0075192938e218873d39edf462ff04ebd2a3b0028b2c6",
+  "sha256": "3c86bea633af6e2fd1a46e79e869360c60dc29871d8e6c0b5f8c1514c445d8f0",
+  "sourceBytes": 5649164,
+  "bytes": 2650384,
+  "savedPercent": 53.08360670711632,
+  "lossless": true,
+  "trianglesRemoved": 0
+}

@@ -1,0 +1,7 @@
+{
+  "source": "refined-body.ply",
+  "region": "Left outside finger joint; original thumb and distal finger tips retained",
+  "maximumSourceDisplacement": 0.0011,
+  "maximumRigDisplacement": 0.00198,
+  "method": "Local Taubin rounding, capped at 1.1mm source / 1.98mm rig; no replacement geometry"
+}

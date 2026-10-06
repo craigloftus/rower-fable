@@ -1,0 +1,7 @@
+{
+  "authoritativeInput": "head-colour-layout.npz",
+  "compactReplayByteIdentical": true,
+  "standingSha256": "e58be50f62d2323bf27f2b690ba994558169e51b8c7bf071ef4f2cfcd578ea2e",
+  "compactBytes": 751986,
+  "interpretation": "Equal-distance source sample ties can change tiny colour-cut vertices after packing; final export and all checks use the deterministic compact input."
+}
